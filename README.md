@@ -20,7 +20,7 @@ TBD
 
 - projekt II (20p):
 
-- prace domowe (40p = 2 x 7p + 4 x 6p)
+- prace domowe (40p = 2 x 6p + 4 x 7p)
 	- za każdą pracę domową uzyskuje się do 6p lub 7p
 
 - wejściówki (6p = 3 x 2p)
