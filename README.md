@@ -23,12 +23,12 @@ Wstęp do eksploracji danych składa się z:
 </colgroup>
 <tbody>
   <tr>
-    <td>#</td>
-    <td>DATA</td>
-    <td>WYKŁAD</td>
-    <td>LABORATORIUM</td>
-    <td>PROJEKT</td>
-    <td>SKŁADOWA</td>
+    <td><b>#</b></td>
+    <td><b>DATA</b></td>
+    <td><b>WYKŁAD</b></td>
+    <td><b>LABORATORIUM</b></td>
+    <td><b>PROJEKT</b></td>
+    <td><b>SKŁADOWA</b></td>
   </tr>
   <tr>
     <td>1</td>
