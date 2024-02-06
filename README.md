@@ -1,6 +1,6 @@
 ### Wstęp do eksploracji danych
 
-Semestr letni 2023/24 [@kozaka93](https://github.com/kozaka93) [@HubertR21](https://github.com/HubertR21) 
+Semestr letni 2023/24 [@kozaka93](https://github.com/kozaka93) [@HubertR21](https://github.com/HubertR21) [@maciejchrabaszcz ](https://github.com/maciejchrabaszcz )
 
 Materiały z zajęć *Wstęp do eksploracji danych* prowadzonych na Wydziale Matematyki i Nauk Informacyjnych Politechniki Warszawskiej.
 
