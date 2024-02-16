@@ -33,9 +33,9 @@ Wstęp do eksploracji danych składa się z:
   <tr>
     <td>1</td>
     <td>21-02</td>
-    <td>Wstęp, eksploracja danych, narzędzia, zasady zaliczenia</td>
-    <td>R: wstęp i proton + GitHub</td>
-    <td>Przedstawienie tematyki projektu</td>
+    <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/blob/main/lectures/L1-Intro.pdf">Wstęp, eksploracja danych, narzędzia, zasady zaliczenia</a></td>
+    <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/tree/main/labs/lab01">R: wstęp i proton + GitHub</a></td>
+    <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/tree/main/projects/project1">Przedstawienie tematyki projektu</a></td>
     <td></td>
   </tr>
   <tr>
