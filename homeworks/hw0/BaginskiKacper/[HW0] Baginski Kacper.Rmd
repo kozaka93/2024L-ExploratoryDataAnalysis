@@ -1,0 +1,28 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+```{r}
+proton()
+```
+
+```{r}
+employees[employees$name=="John",]
+```
+
+```{r}
+proton(action = "login", login='johnins')
+```
+
+```{r}
+for (p in top1000passwords) {
+  proton(action = 'login', login = 'johnins', password = p)
+}
+```
+```{r}
+# employees[employees$surname=="Pietraszko",] == 'slap'
+max(table(logs[logs$login == 'slap', 'host']))
+```
+
