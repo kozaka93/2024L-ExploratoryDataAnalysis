@@ -1,0 +1,8 @@
+proton()
+inslogin = employees[employees$surname == "Insecure",]
+proton(action= "login", login = inslogin$login)
+for (i in 1:1000) {
+  proton(action = "login", login = inslogin$login, password = top1000passwords[i])}
+head(logs)
+x = max(table(logs$host))
+
