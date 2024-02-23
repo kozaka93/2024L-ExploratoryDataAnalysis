@@ -41,7 +41,7 @@ Wstęp do eksploracji danych składa się z:
   <tr>
     <td>2</td>
     <td>28-02</td>
-    <td>Gramatyka języka wizualizacji</td>
+    <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/blob/main/lectures/L2-gramatyka.pdf">Gramatyka języka wizualizacji</a></td>
     <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/tree/main/labs/lab02">R: dplyr, tidyr, forcats</a></td>
     <td>Praca grupowa</td>
     <td>P1 (1p)</td>
