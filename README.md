@@ -52,7 +52,7 @@ Wstęp do eksploracji danych składa się z:
     <td>Sposoby badania rozkładu jednej zmiennej (ilościowej i jakościowej) Sposoby badania rozkładu dwóch i więcej zmiennych</td>
     <td>R: ggplot2 - wstęp i gramatyka</td>
     <td>Konsultacje</td>
-    <td>HW1 (6p)</td>
+    <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/issues/61">HW1 </a>(6p)</td>
   </tr>
   <tr>
     <td>4</td>
