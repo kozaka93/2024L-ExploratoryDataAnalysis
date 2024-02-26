@@ -80,12 +80,11 @@ Za projekt można otrzymać od 0 do 24 punktów, z czego:
 Podczas prezentacji z każdego zespołu musi być obecna co najmniej jedna osoba. Nieobecność całego zespołu podczas sesji plakatowej skutkuje brakiem punktów za prezentację (-4 pkt) oraz możliwością zdobycia maksymalnie 80% za plakat (12 pkt).
 
 ## Przykłady danych
-
-https://imsdb.com - Baza danych z surowymi skryptami filmów - trzeba się trochę napracować aby zrobić z nich ramkę danych.
-https://github.com/morethanbooks/projects/tree/master/LotR - Dane grafowe z Władcy Pierścieni
-https://github.com/mathbeveridge/asoiaf - Dane grafowe z Pieśni Lodu i Ognia
-https://github.com/srobz/How-I-Analyzed-Your-Mother - Projekt analizujący serial How I Met Your Mother
-https://fangj.github.io/friends/ - Skrypty odcinków z Friends. Bardzo surowe, zbieranie danych będzie ciężkie.
+-   https://imsdb.com - Baza danych z surowymi skryptami filmów - trzeba się trochę napracować aby zrobić z nich ramkę danych.
+-   https://github.com/morethanbooks/projects/tree/master/LotR - Dane grafowe z Władcy Pierścieni
+-   https://github.com/mathbeveridge/asoiaf - Dane grafowe z Pieśni Lodu i Ognia
+-   https://github.com/srobz/How-I-Analyzed-Your-Mother - Projekt analizujący serial How I Met Your Mother
+-   https://fangj.github.io/friends/ - Skrypty odcinków z Friends. Bardzo surowe, zbieranie danych będzie ciężkie.
 
 
 **Uwagi**
