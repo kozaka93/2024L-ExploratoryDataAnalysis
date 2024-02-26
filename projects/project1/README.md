@@ -85,6 +85,10 @@ Podczas prezentacji z każdego zespołu musi być obecna co najmniej jedna osoba
 -   https://github.com/mathbeveridge/asoiaf - Dane grafowe z Pieśni Lodu i Ognia
 -   https://github.com/srobz/How-I-Analyzed-Your-Mother - Projekt analizujący serial How I Met Your Mother
 -   https://fangj.github.io/friends/ - Skrypty odcinków z Friends. Bardzo surowe, zbieranie danych będzie ciężkie.
+-   https://www.kaggle.com/datasets/andrezaza/clapper-massive-rotten-tomatoes-movies-and-reviews - Zbiór danych o filmach z portalu Rotten Tomatoes.
+-   https://www.kaggle.com/datasets/farrosalferro/rotten-tomatoes-top-movies - Zbiór danych o najlepszych filmach na podstawie portalu Rotten Tomatoes.
+-   https://www.kaggle.com/datasets/asaniczka/amazon-kindle-books-dataset-2023-130k-books - Zbiór danych o książkach z Amazon Kindle.
+-   https://www.kaggle.com/datasets/ashutoshdevpura/imdb-top-10000-movies-updated-august-2023 - Zbiór danych o filmach z serwisu IMDB.
 
 
 **Uwagi**
