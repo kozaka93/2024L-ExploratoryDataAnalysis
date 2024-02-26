@@ -81,7 +81,11 @@ Podczas prezentacji z każdego zespołu musi być obecna co najmniej jedna osoba
 
 ## Przykłady danych
 
-TBD
+https://imsdb.com - Baza danych z surowymi skryptami filmów - trzeba się trochę napracować aby zrobić z nich ramkę danych.
+https://github.com/morethanbooks/projects/tree/master/LotR - Dane grafowe z Władcy Pierścieni
+https://github.com/mathbeveridge/asoiaf - Dane grafowe z Pieśni Lodu i Ognia
+https://github.com/srobz/How-I-Analyzed-Your-Mother - Projekt analizujący serial How I Met Your Mother
+https://fangj.github.io/friends/ - Skrypty odcinków z Friends. Bardzo surowe, zbieranie danych będzie ciężkie.
 
 
 **Uwagi**
