@@ -106,17 +106,16 @@ data %>%
 zad7 <- data %>%
   filter(Year %in% seq(2007,2017))%>%
   group_by(Year,Vehicle.Style)%>%
-  summarise(Ilosc = n())%>%
+  summarise(Popularnosc.avg = mean(Popularity))%>%
   group_by(Year)%>%
-  filter(Ilosc == max(Ilosc))
+  filter(Popularnosc.avg == max(Popularnosc.avg))
 zad7
 zad7%>%
   group_by(Vehicle.Style)%>%
   summarise(Ilosc = n())
 
-# Odp.: srednio styl dla lat odpowiednio 2007-2017 to: 2007 - 4dr SUV i Extended Cab Pickup
-#2008/2009/2014/2017 - 4dr SUV, 2010-2013 i 2015-2016 - Sedan
-#przez te 10 lat najczesciej wystapil styl Sedan
+# Odp.:  Cargo Minivan (2007 i 2015,2016), Crew Cab Pickup (2008), Extended Cab Pickup (2009/10),  Cargo Van (2012/13/14), Passenger Van (2012/13/17)
+# 2 pytanie. CargoMinivan, Cargo Van, Passenger Van
 
 
 # Zadanie 8 ---------------------------------------------------------------
