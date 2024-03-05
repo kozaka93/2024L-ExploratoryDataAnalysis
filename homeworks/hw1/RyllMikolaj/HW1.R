@@ -102,7 +102,7 @@ data %>%
   arrange(-L_100KM) %>% 
   select(Year, Make, L_100KM) 
 
-# Odp.: Bugatti z 2008 roku, 29.4 L/100km
+# Odp.: Bugatti z 2008 i 2009 roku, 29.4 L/100km
 
 
 # Zadanie 7 ---------------------------------------------------------------
@@ -112,7 +112,7 @@ data %>%
 most_popular_styles <- data %>%
   filter(Year >= 2007 & Year <= 2017) %>%
   group_by(Year, Vehicle.Style) %>%
-  summarize(Avg_Popularity = mean(Popularity)) %>%
+  summarize(Avg_Popularity = mean(Popularity, na.rm = TRUE)) %>%
   group_by(Year) %>%
   filter(Avg_Popularity == max(Avg_Popularity))
 
