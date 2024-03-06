@@ -41,8 +41,8 @@ Wstęp do eksploracji danych składa się z:
   <tr>
     <td>2</td>
     <td>28-02</td>
-    <td>Gramatyka języka wizualizacji</td>
-    <td>R: dplyr, tidyr, forcats</td>
+    <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/blob/main/lectures/L2-gramatyka.pdf">Gramatyka języka wizualizacji</a></td>
+    <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/tree/main/labs/lab02">R: dplyr, tidyr, forcats</a></td>
     <td>Praca grupowa</td>
     <td>P1 (1p)</td>
   </tr>
@@ -50,9 +50,9 @@ Wstęp do eksploracji danych składa się z:
     <td>3</td>
     <td>06-03</td>
     <td>Sposoby badania rozkładu jednej zmiennej (ilościowej i jakościowej) Sposoby badania rozkładu dwóch i więcej zmiennych</td>
-    <td>R: ggplot2 - wstęp i gramatyka</td>
+    <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/tree/main/labs/lab03">R: ggplot2 - wstęp i gramatyka</a></td>
     <td>Konsultacje</td>
-    <td>HW1 (6p)</td>
+    <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/issues/61">HW1 </a>(6p)</td>
   </tr>
   <tr>
     <td>4</td>
