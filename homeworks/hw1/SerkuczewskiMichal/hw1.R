@@ -162,12 +162,12 @@ quan09 <- quantile(zad9$city.mpg,0.9,na.rm = TRUE)
 # Zadanie 10 --------------------------------------------------------------
 # Jaki jest drugi najbardziej popularny model marki Porsche,
 # który posiada nie więcej niż 300 koni mechanicznych?
-(data%>%
+data%>%
   filter(Make=="Porsche",Engine.HP<=300)%>%
-  arrange(desc(Popularity)))[2,"Model"] 
+  arrange(desc(Popularity))%>%select(Model)%>%distinct()
 
 
-# Odp.:Model 944
+# Odp.:Model 718 Cayman, 944, 968, Boxster, Cayenne, Cayman S, Cayman, Macan bo wszystkie mają ten sam stopień popularności
 
 
 # Zadanie 11 --------------------------------------------------------------
