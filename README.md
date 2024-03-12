@@ -58,7 +58,7 @@ Wstęp do eksploracji danych składa się z:
     <td>4</td>
     <td>13-03</td>
     <td>Kolory i skale</td>
-    <td>R: ggplot2 - modyfikacje wykresów, stylów w ggplot2</td>
+    <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/tree/main/labs/lab04">R: ggplot2 - modyfikacje wykresów, stylów w ggplot2</a></td>
     <td>Prosta eksploracja danych, konkretne pomysły na wykresy, prototypy wykresów</td>
     <td>P1 (2p)</td>
   </tr>
