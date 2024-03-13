@@ -1,4 +1,4 @@
-spotify <- read.csv("spotify_2023.csv")
+spotify <- read.csv("spotify-2023.csv")
 
 # Zadanie 1 ---------------------------------------------------------------
 # Jak wygląda rozkład liczby odtworzeń piosenek opublikowanych w roku 2023 w pierwszym kwartale 
