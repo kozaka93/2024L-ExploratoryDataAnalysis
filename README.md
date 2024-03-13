@@ -68,7 +68,7 @@ Wstęp do eksploracji danych składa się z:
     <td>Mapy - czy to takie skomplikowane?</td>
     <td>R: maps</td>
     <td>Konsultacje</td>
-    <td>HW2 (7p)</td>
+    <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/issues/122">HW2 </a>(7p)</td>
   </tr>
   <tr>
     <td>6</td>
