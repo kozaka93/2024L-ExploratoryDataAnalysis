@@ -65,7 +65,7 @@ Wstęp do eksploracji danych składa się z:
   <tr>
     <td>5</td>
     <td>20-03</td>
-    <td>Mapy - czy to takie skomplikowane?</td>
+    <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/blob/main/lectures/L5-maps.pdf">Mapy - czy to takie skomplikowane?</a></td>
     <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/tree/main/labs/lab05">R: maps</a></td>
     <td>Konsultacje</td>
     <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/issues/122">HW2 </a>(7p)</td>
