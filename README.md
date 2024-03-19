@@ -84,7 +84,7 @@ Wstęp do eksploracji danych składa się z:
     <td>Oddanie Projektu 1</td>
     <td>R: generowanie raportów z analizą danych</td>
     <td>Oddanie Projektu 1<br></td>
-    <td>HW3 (7p)<br>P1 (19p)</td>
+    <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/issues/131">HW3</a> (7p)<br>P1 (19p)</td>
   </tr>
   <tr>
     <td>8</td>
