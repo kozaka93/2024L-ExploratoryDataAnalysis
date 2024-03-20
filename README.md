@@ -41,34 +41,34 @@ Wstęp do eksploracji danych składa się z:
   <tr>
     <td>2</td>
     <td>28-02</td>
-    <td>Gramatyka języka wizualizacji</td>
-    <td>R: dplyr, tidyr, forcats</td>
+    <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/blob/main/lectures/L2-gramatyka.pdf">Gramatyka języka wizualizacji</a></td>
+    <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/tree/main/labs/lab02">R: dplyr, tidyr, forcats</a></td>
     <td>Praca grupowa</td>
     <td>P1 (1p)</td>
   </tr>
   <tr>
     <td>3</td>
     <td>06-03</td>
-    <td>Sposoby badania rozkładu jednej zmiennej (ilościowej i jakościowej) Sposoby badania rozkładu dwóch i więcej zmiennych</td>
-    <td>R: ggplot2 - wstęp i gramatyka</td>
+    <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/blob/main/lectures/L3-variables-distributions.pdf">Sposoby badania rozkładu jednej zmiennej (ilościowej i jakościowej) Sposoby badania rozkładu dwóch i więcej zmiennych</a></td>
+    <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/tree/main/labs/lab03">R: ggplot2 - wstęp i gramatyka</a></td>
     <td>Konsultacje</td>
-    <td>HW1 (6p)</td>
+    <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/issues/61">HW1 </a>(6p)</td>
   </tr>
   <tr>
     <td>4</td>
     <td>13-03</td>
-    <td>Kolory i skale</td>
-    <td>R: ggplot2 - modyfikacje wykresów, stylów w ggplot2</td>
+    <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/blob/main/lectures/L4-color-scales.pdf">Kolory i skale</a></td>
+    <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/tree/main/labs/lab04">R: ggplot2 - modyfikacje wykresów, stylów w ggplot2</a></td>
     <td>Prosta eksploracja danych, konkretne pomysły na wykresy, prototypy wykresów</td>
     <td>P1 (2p)</td>
   </tr>
   <tr>
     <td>5</td>
     <td>20-03</td>
-    <td>Mapy - czy to takie skomplikowane?</td>
-    <td>R: maps</td>
+    <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/blob/main/lectures/L5-maps.pdf">Mapy - czy to takie skomplikowane?</a></td>
+    <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/tree/main/labs/lab05">R: maps</a></td>
     <td>Konsultacje</td>
-    <td>HW2 (7p)</td>
+    <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/issues/122">HW2 </a>(7p)</td>
   </tr>
   <tr>
     <td>6</td>
@@ -84,7 +84,7 @@ Wstęp do eksploracji danych składa się z:
     <td>Oddanie Projektu 1</td>
     <td>R: generowanie raportów z analizą danych</td>
     <td>Oddanie Projektu 1<br></td>
-    <td>HW3 (7p)<br>P1 (19p)</td>
+    <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/issues/131">HW3</a> (7p)<br>P1 (19p)</td>
   </tr>
   <tr>
     <td>8</td>
