@@ -12,7 +12,7 @@ library(SmarterPoland)
 # Zadania są zamieszczone w pliku .pdf w folderze lab5.
 # Dane potrzebne do odtworzenia wizualizacji wczytujemy następująco:
 
-df <- read.csv(file = "https://raw.githubusercontent.com/MI2-Education/2023Z-DataVisualizationTechniques/main/homeworks/hw1/house_data.csv", 
+df <- read.csv(file = "https://raw.githubusercontent.com/kozaka93/2024L-ExploratoryDataAnalysis/main/labs/lab06/house_data.csv", 
                encoding = "UTF-8")
 
 
