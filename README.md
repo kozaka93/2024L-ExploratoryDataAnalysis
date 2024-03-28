@@ -73,7 +73,7 @@ Wstęp do eksploracji danych składa się z:
   <tr>
     <td>6</td>
     <td>27-03</td>
-    <td>Nie popełniaj tych błędów!</td>
+    <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/blob/main/lectures/L6-mistakes.pdf">Nie popełniaj tych błędów!</a></td>
     <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/tree/main/labs/lab06">R: ggplot2 - zaawansowany oraz rozszerzenia: patchwork, ggrepel</a></td>
     <td>Gotowe wykresy, projekt plakatu</td>
     <td>P1 (2p)</td>
