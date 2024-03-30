@@ -3,7 +3,7 @@
 
 Pierwszy projekt poświęcony jest eksploracji danych dotyczących filmów, seriali, książek, oraz audiobooków. Jego celem jest przygotowanie plakatu w formacie A2 (+ .pdf), który przedstawi graficznie ciekawe informacje.
 
-Wykresy mogą być wykonane w dowolnym narzędziu i złożone w plakat z użyciem dowolnej techniki. Podczas *Wykładu 7 i Projektu 7 (03-04-2024)* zespoły przedstawiają krótkie prezentacje swojej pracy.
+Wykresy mogą być wykonane w dowolnym narzędziu i złożone w plakat z użyciem dowolnej techniki. Podczas *Wykładu <s>7</s> 8 i Projektu <s>7</s> 8 <s>(03-04-2024)</s> (10-04-2024)* zespoły przedstawiają krótkie prezentacje swojej pracy.
 
 Plakat powinien składać się ze zbioru przynajmniej trzech spójnych tematycznie wykresów oraz komentarzy/opisów do wykresów. Projekt wykonuje się w zespole 3 osobowym. Kody źródłowe wykresów i plakat w postaci elektronicznej należy umieścić na GitHubie.
 
@@ -98,7 +98,7 @@ Podczas prezentacji z każdego zespołu musi być obecna co najmniej jedna osoba
 
 ## Oddanie projektu
 
-Czas na wykonanie projektu jest do **02-04-2024** - do tego dnia (włącznie) będą przyjmowane Pull Requests na GitHub.
+Czas na wykonanie projektu jest do <s>**02-04-2024**</s> **09-04-2024** - do tego dnia (włącznie) będą przyjmowane Pull Requests na GitHub.
 
 W PR o nazwie `[projekt1] Nazwisko1_Nazwisko2_Nazwisko3` należy zamieścić folder o nazwie `nazwisko1_nazwisko2_nazwisko3` zawierający:
 
@@ -111,7 +111,7 @@ Przykład poprawnego folderu [`nazwisko1_nazwisko2_nazwisko3`](https://github.co
 
 PR robi jedna osoba z zespołu. Folder należy umieścić w [../projects/project1](https://github.com/kozaka93/2024L-ExploratoryDataAnalysis).
 
-Należy wydrukować plakat i przynieść go na Wykład **7**. 
+Należy wydrukować plakat i przynieść go na Wykład <s>**7**</s> **8**. 
 
 Uwagi:
 
