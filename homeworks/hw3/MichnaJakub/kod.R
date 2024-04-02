@@ -50,10 +50,5 @@ scale_fill_manual(values = c(
        y = "Odstek osób, które udzieliły daną odpowiedź")
 
 
-dane <- data.frame(
-  kategoria = c("bardzo długa kategoria 1", "bardzo długa kategoria 2", "krótka1", "krótka2"),
-  wartosc = c(10, 20, 30, 40)
-)
-
 
        
