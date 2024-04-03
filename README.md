@@ -83,7 +83,7 @@ Wstęp do eksploracji danych składa się z:
     <td>03-04</td>
     <td>Wizualizacja grafów - jak nie zgubić się w gąszczu wierzchołków i krawędzi</td>
     <td>R: igraph</td>
-    <td>Przedstawienie tematyki projektu<br></td>
+    <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/tree/main/projects/project2">Przedstawienie tematyki projektu</a></td>
     <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/issues/131">HW3</a> (7p)</td>
   </tr>
   <tr>
