@@ -73,26 +73,26 @@ Wstęp do eksploracji danych składa się z:
   <tr>
     <td>6</td>
     <td>27-03</td>
-    <td>Nie popełniaj tych błędów!</td>
-    <td>R: ggplot2 - zaawansowany oraz rozszerzenia: patchwork, ggrepel</td>
+    <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/blob/main/lectures/L6-mistakes.pdf">Nie popełniaj tych błędów!</a></td>
+    <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/tree/main/labs/lab06">R: ggplot2 - zaawansowany oraz rozszerzenia: patchwork, ggrepel</a></td>
     <td>Gotowe wykresy, projekt plakatu</td>
     <td>P1 (2p)</td>
   </tr>
   <tr>
     <td>7</td>
     <td>03-04</td>
-    <td>Oddanie Projektu 1</td>
-    <td>R: generowanie raportów z analizą danych</td>
-    <td>Oddanie Projektu 1<br></td>
-    <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/issues/131">HW3</a> (7p)<br>P1 (19p)</td>
+    <td>Wizualizacja grafów - jak nie zgubić się w gąszczu wierzchołków i krawędzi</td>
+    <td>R: igraph</td>
+    <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/tree/main/projects/project2">Przedstawienie tematyki projektu</a></td>
+    <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/issues/131">HW3</a> (7p)</td>
   </tr>
   <tr>
     <td>8</td>
     <td>10-04</td>
-    <td>Wizualizacja grafów - jak nie zgubić się w gąszczu wierzchołków i krawędzi</td>
-    <td>R: igraph</td>
-    <td>Przedstawienie tematyki projektu</td>
-    <td></td>
+    <td>Oddanie Projektu 1</td>
+    <td>R: generowanie raportów z analizą danych</td>
+    <td>Oddanie Projektu 1</td>
+    <td>P1 (19p)</td>
   </tr>
   <tr>
     <td>9</td>
