@@ -2,7 +2,7 @@
 
 W projekcie postanowiliśmy przeanalizować, jakie filmy najwięcej zarabiają. W tym celu przeanalizowaliśmy zarobki w ramach wybranych gatunków, przyjrzeliśmy się zależności między recenzjami a zarobkami oraz przeanalizowaliśmy zarobki kolejnych części serii filmowych.
 
-![Krzyżanowski Lipiński Ryll](Plakat.png)
+![Krzyżanowski Lipiński Ryll](Krzyzanowski_Lipinski_Ryll.png)
 
 Źródła:
 - https://www.kaggle.com/datasets/andrezaza/clapper-massive-rotten-tomatoes-movies-and-reviews
