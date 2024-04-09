@@ -1,4 +1,4 @@
-Tytuł: How I Met Your Mother
+## Tytuł: How I Met Your Mother 
 
 Nasz plakat pokazuje zażyłośc relacji pomiędzy 5 głównymi bohaterami serialu 'How I Met Your Mother'. 
 Pokazujemy na nim wykresy opisujące ich wyrażanie emocji, siłę relacji. Analizujemy również skrypt
