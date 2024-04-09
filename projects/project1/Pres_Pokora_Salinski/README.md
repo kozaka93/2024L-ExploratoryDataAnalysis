@@ -39,4 +39,4 @@ In our project, after exploring the dataset, we decided to focus on a few things
 
 ## Overview of the poster
 
-![poster](poster.png)
+![poster](pres_pokora_salinski.png)
