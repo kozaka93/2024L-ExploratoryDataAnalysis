@@ -1,0 +1,209 @@
+SNo,Season,Episode,DateAired,Title,Director,Writers,Viewers,IMDB_Rating,Votes
+1,1,1,"September 19, 2005",Pilot,Pamela Fryman,"Carter Bays,Craig Thomas",10.94,8.5,4935
+2,1,2,"September 26, 2005",Purple Giraffe,Pamela Fryman,"Carter Bays,Craig Thomas",10.4,8.2,3708
+3,1,3,"October 3, 2005",Sweet Taste of Liberty,Pamela Fryman,"Phil Lord,Chris Miller",10.44,8.2,3514
+4,1,4,"October 10, 2005",Return of the Shirt,Pamela Fryman,Kourtney Kang,9.84,8,3298
+5,1,5,"October 17, 2005",Okay Awesome,Pamela Fryman,Chris Harris,10.14,8.3,3412
+6,1,6,"October 24, 2005",Slutty Pumpkin,Pamela Fryman,Brenda Hsueh,10.89,8.1,3292
+7,1,7,"November 7, 2005",Matchmaker,Pamela Fryman,"Sam Johnson,Chris Marcil",10.55,7.7,3095
+8,1,8,"November 14, 2005",The Duel,Pamela Fryman,Gloria Calderon Kellett,10.35,8.2,3057
+9,1,9,"November 21, 2005",Belly Full of Turkey,Pamela Fryman,"Phil Lord,Chris Miller",10.29,8.1,3070
+10,1,10,"November 28, 2005",The Pineapple Incident,Pamela Fryman,"Carter Bays,Craig Thomas",12.27,9.2,4667
+11,1,11,"December 19, 2005",The Limo,Pamela Fryman,"Sam Johnson,Chris Marcil",10.36,8.3,3190
+12,1,12,"January 9, 2006",The Wedding,Pamela Fryman,Kourtney Kang,11.49,8.1,2988
+13,1,13,"January 23, 2006","Drumroll, Please",Pamela Fryman,Gloria Calderon Kellett,10.82,8.7,3384
+14,1,14,"February 6, 2006","Zip, Zip, Zip",Pamela Fryman,Brenda Hsueh,10.94,8.2,2906
+15,1,15,"February 27, 2006",Game Night,Pamela Fryman,Chris Harris,9.82,9.1,3780
+16,1,16,"March 6, 2006",Cupcake,Pamela Fryman,Maria Ferrari,10.15,7.9,2806
+17,1,17,"March 20, 2006",Life Among the Gorillas,Pamela Fryman,"Carter Bays,Craig Thomas",9.8,7.7,2793
+18,1,18,"April 10, 2006",Nothing Good Happens After 2 A.M.,Pamela Fryman,"Carter Bays,Craig Thomas",7.65,8.5,3066
+19,1,19,"April 24, 2006",Mary the Paralegal,Pamela Fryman,Chris Harris,7.6,8.8,3337
+20,1,20,"May 1, 2006",Best Prom Ever,Pamela Fryman,Ira Ungerleider,7.24,7.9,2790
+21,1,21,"May 8, 2006",Milk,Pamela Fryman,"Carter Bays,Craig Thomas",8.07,8.1,2794
+22,1,22,"May 15, 2006",Come On,Pamela Fryman,"Carter Bays,Craig Thomas",8.64,8.9,3455
+23,2,1,"September 18, 2006",Where Were We?,Pamela Fryman,"Carter Bays,Craig Thomas",10.48,8.2,2788
+24,2,2,"September 25, 2006",The Scorpion and the Toad,Rob Greenberg,Chris Harris,9.14,8.2,2725
+25,2,3,"October 2, 2006",Brunch,Pamela Fryman,Stephen Lloyd,9.32,8.5,2833
+26,2,4,"October 9, 2006",Ted Mosby: Architect,Pamela Fryman,Kristen Newman,9.09,8.8,3213
+27,2,5,"October 16, 2006",World's Greatest Couple,Pamela Fryman,Brenda Hsueh,9.05,8.8,3033
+28,2,6,"October 23, 2006",Aldrin Justice,Pamela Fryman,Jamie Rhonheimer,9.59,8.1,2724
+29,2,7,"November 6, 2006",Swarley,Pamela Fryman,Greg Malins,8.22,9,3806
+30,2,8,"November 13, 2006",Atlantic City,Pamela Fryman,Maria Ferrari,9.33,8,2661
+31,2,9,"November 20, 2006",Slap Bet,Pamela Fryman,Kourtney Kang,8.85,9.5,5571
+32,2,10,"November 27, 2006",Single Stamina,Pamela Fryman,Kristen Newman,9.85,8.2,2725
+33,2,11,"December 11, 2006",How Lily Stole Christmas,Pamela Fryman,Brenda Hsueh,8.81,8.1,2696
+34,2,12,"January 8, 2007",First Time in New York,Pamela Fryman,Gloria Calderon Kellett,8.37,8.2,2773
+35,2,13,"January 22, 2007",Columns,Rob Greenberg,Matt Kuhn,9.42,8,2564
+36,2,14,"February 5, 2007",Monday Night Football,Rob Greenberg,"Carter Bays,Craig Thomas",10.61,8.4,2744
+37,2,15,"February 12, 2007",Lucky Penny,Pamela Fryman,Jamie Rhonheimer,9.68,8.4,2680
+38,2,16,"February 19, 2007",Stuff,Pamela Fryman,Kourtney Kang,8.95,8.5,2811
+39,2,17,"February 26, 2007","Arrivederci, Fiero",Pamela Fryman,Chris Harris,9.33,8.3,2775
+40,2,18,"March 19, 2007",Moving Day,Pamela Fryman,Maria Ferrari,7.27,8.1,2561
+41,2,19,"April 9, 2007",Bachelor Party,Pamela Fryman,"Carter Bays,Craig Thomas",9.9,8.4,2690
+42,2,20,"April 30, 2007",Showdown,Pamela Fryman,Gloria Calderon Kellett,7.24,8.9,2936
+43,2,21,"May 7, 2007",Something Borrowed,Pamela Fryman,Greg Malins,7.69,8.8,2779
+44,2,22,"May 14, 2007",Something Blue,Pamela Fryman,"Carter Bays,Craig Thomas",9.9,8.8,2832
+45,3,1,"September 24, 2007",Wait for It,Pamela Fryman,"Carter Bays,Craig Thomas",8.12,8.3,2836
+46,3,2,"October 1, 2007",We're Not from Here,Pamela Fryman,Chris Harris,7.88,7.7,2512
+47,3,3,"October 8, 2007",Third Wheel,Pamela Fryman,David Hemingson,7.96,8.1,2609
+48,3,4,"October 15, 2007",Little Boys,Rob Greenberg,Kourtney Kang,7.71,7.8,2506
+49,3,5,"October 22, 2007",How I Met Everyone Else,Pamela Fryman,Gloria Calderon Kellett,8.5,9,3468
+50,3,6,"October 29, 2007",I'm Not That Guy,Pamela Fryman,Jonathan Groff,8.55,8.1,2483
+51,3,7,"November 5, 2007",Dowisetrepla,Pamela Fryman,Brenda Hsueh,8.77,8,2522
+52,3,8,"November 12, 2007",Spoiler Alert,Pamela Fryman,Stephen Lloyd,8.58,9.1,3450
+53,3,9,"November 19, 2007",Slapsgiving,Pamela Fryman,Matt Kuhn,8.06,9,3321
+54,3,10,"November 26, 2007",The Yips,Pamela Fryman,Jamie Rhonheimer,7.91,8,2549
+55,3,11,"December 10, 2007",The Platinum Rule,Pamela Fryman,"Carter Bays,Craig Thomas",8.49,8.5,2656
+56,3,12,"March 17, 2008",No Tomorrow,Pamela Fryman,"Carter Bays,Craig Thomas",9.73,8.2,2570
+57,3,13,"March 24, 2008",Ten Sessions,Pamela Fryman,"Chris Harris, Carter Bays,Craig Thomas",10.67,8.8,3072
+58,3,14,"March 31, 2008",The Bracket,Pamela Fryman,Joe Kelly,9.5,8.7,2695
+59,3,15,"April 14, 2008",The Chain of Screaming,Pamela Fryman,"Carter Bays,Craig Thomas",7.99,8,2463
+60,3,16,"April 21, 2008",Sandcastles in the Sand,Pamela Fryman,Kourtney Kang,8.45,8.3,2707
+61,3,17,"April 28, 2008",The Goat,Pamela Fryman,Stephen Lloyd,8.84,8.2,2481
+62,3,18,"May 5, 2008",Rebound Bro,Pamela Fryman,Jamie Rhonheimer,8.36,8.1,2450
+63,3,19,"May 12, 2008",Everything Must Go,Pamela Fryman,"Jonathan Groff,Chris Harris",8.93,7.8,2460
+64,3,20,"May 19, 2008",Miracles,Pamela Fryman,"Carter Bays,Craig Thomas",7.99,8.7,2667
+65,4,1,"September 22, 2008",Do I Know You?,Pamela Fryman,"Carter Bays,Craig Thomas",9.79,8.6,2866
+66,4,2,"September 29, 2008",The Best Burger in New York,Pamela Fryman,"Carter Bays,Craig Thomas",8.72,8.5,2989
+67,4,3,"October 6, 2008",I Heart NJ,Pamela Fryman,Greg Malins,8.97,7.7,2454
+68,4,4,"October 13, 2008",Intervention,Michael Shea,Stephen Lloyd,9.25,8.8,2920
+69,4,5,"October 20, 2008",Shelter Island,Pamela Fryman,Chris Harris,9.45,8.3,2556
+70,4,6,"November 3, 2008",Happily Ever After,Pamela Fryman,Jamie Rhonheimer,9.4,8,2442
+71,4,7,"November 10, 2008",Not a Father's Day,Pamela Fryman,Robia Rashid,9.79,7.9,2390
+72,4,8,"November 17, 2008",Woooo!,Pamela Fryman,"Carter Bays,Craig Thomas",9.99,8.1,2562
+73,4,9,"November 24, 2008",The Naked Man,Pamela Fryman,Joe Kelly,10.04,9.2,4075
+74,4,10,"December 8, 2008",The Fight,Pamela Fryman,Theresa Mulligan Rosenthal,10.49,8.3,2526
+75,4,11,"December 15, 2008",Little Minnesota,Pamela Fryman,Chuck Tatham,11.44,8.1,2495
+76,4,12,"January 12, 2009",Benefits,Pamela Fryman,Kourtney Kang,11.76,8.6,2693
+77,4,13,"January 19, 2009",Three Days of Snow,Pamela Fryman,Matt Kuhn,10.69,8.5,2649
+78,4,14,"February 2, 2009",The Possimpible,Pamela Fryman,Jonathan Groff,10.3,8.4,2551
+79,4,15,"March 2, 2009",The Stinsons,Pamela Fryman,"Carter Bays,Craig Thomas",11.08,8.3,2604
+80,4,16,"March 9, 2009","Sorry, Bro",Pamela Fryman,"Craig Gerard,Matthew Zinman",8.51,7.8,2466
+81,4,17,"March 16, 2009",The Front Porch,Rob Greenberg,Chris Harris,9.29,8.4,2550
+82,4,18,"March 23, 2009",Old King Clancy,Pamela Fryman,Jamie Rhonheimer,7.36,7.7,2352
+83,4,19,"March 30, 2009",Murtaugh,Pamela Fryman,Joe Kelly,9.2,8.5,2551
+84,4,20,"April 13, 2009",Mosbius Designs,Pamela Fryman,Kourtney Kang,9.56,7.7,2380
+85,4,21,"April 27, 2009",The Three Days Rule,Pamela Fryman,Greg Malins,8.87,8.7,2660
+86,4,22,"May 4, 2009","Right Place, Right Time",Pamela Fryman,Stephen Lloyd,8.89,8.2,2472
+87,4,23,"May 11, 2009",As Fast as She Can,Pamela Fryman,"Carter Bays,Craig Thomas",8.7,7.7,2396
+88,4,24,"May 18, 2009",The Leap,Pamela Fryman,"Carter Bays,Craig Thomas",8.73,8.8,2827
+89,5,1,"September 21, 2009",Definitions,Pamela Fryman,"Carter Bays,Craig Thomas",9.09,8.5,2727
+90,5,2,"September 28, 2009",Double Date,Pamela Fryman,Matt Kuhn,8.73,8.1,2446
+91,5,3,"October 5, 2009",Robin 101,Pamela Fryman,"Carter Bays,Craig Thomas",8.23,8.4,2526
+92,5,4,"October 12, 2009",The Sexless Innkeeper,Pamela Fryman,Kourtney Kang,8.56,8,2580
+93,5,5,"October 19, 2009",Duel Citizenship,Pamela Fryman,Chuck Tatham,8.07,7.8,2393
+94,5,6,"November 2, 2009",Bagpipes,Pamela Fryman,Robia Rashid,8.82,7.8,2318
+95,5,7,"November 9, 2009",The Rough Patch,Pamela Fryman,Chris Harris,8.82,7.8,2446
+96,5,8,"November 16, 2009",The Playbook,Pamela Fryman,"Carter Bays,Craig Thomas",8.44,9.4,5262
+97,5,9,"November 23, 2009",Slapsgiving 2: Revenge of the Slap,Pamela Fryman,Jamie Rhonheimer,8.75,8,2533
+98,5,10,"December 7, 2009",The Window,Pamela Fryman,Joe Kelly,8.79,8.1,2467
+99,5,11,"December 14, 2009",Last Cigarette Ever,Pamela Fryman,Theresa Mulligan Rosenthal,9.65,7.8,2584
+100,5,12,"January 11, 2010",Girls Versus Suits,Pamela Fryman,"Carter Bays,Craig Thomas",9.78,9.1,4141
+101,5,13,"January 18, 2010",Jenkins,Neil Patrick Harris,Greg Malins,10.52,8.6,2717
+102,5,14,"February 1, 2010",Perfect Week,Pamela Fryman,"Craig Gerard,Matthew Zinman",9.28,8.9,2947
+103,5,15,"February 8, 2010",Rabbit or Duck,Pamela Fryman,"Carter Bays,Craig Thomas",10,8,2426
+104,5,16,"March 1, 2010",Hooked,Pamela Fryman,Kourtney Kang,10.37,7.8,2382
+105,5,17,"March 8, 2010",Of Course,Pamela Fryman,Matt Kuhn,10.06,8.3,2664
+106,5,18,"March 22, 2010",Say Cheese,Pamela Fryman,Robia Rashid,8.37,8.2,2444
+107,5,19,"April 12, 2010",Zoo or False,Pamela Fryman,Stephen Lloyd,6.88,7.6,2384
+108,5,20,"April 19, 2010",Home Wreckers,Pamela Fryman,Chris Harris,7.71,7.9,2372
+109,5,21,"May 3, 2010",Twin Beds,Pamela Fryman,Theresa Mulligan Rosenthal,7.7,7.8,2316
+110,5,22,"May 10, 2010",Robots Versus Wrestlers,Rob Greenberg,Jamie Rhonheimer,8.16,8.2,2454
+111,5,23,"May 17, 2010",The Wedding Bride,Pamela Fryman,Stephen Lloyd,7.69,8.1,2590
+112,5,24,"May 24, 2010",Doppelgangers,Pamela Fryman,"Carter Bays,Craig Thomas",8.18,8.5,2508
+113,6,1,"September 20, 2010",Big Days,Pamela Fryman,"Carter Bays,Craig Thomas",8.79,8.2,2620
+114,6,2,"September 27, 2010",Cleaning House,Pamela Fryman,Stephen Lloyd,9,8.3,2619
+115,6,3,"October 4, 2010",Unfinished,Pamela Fryman,Jamie Rhonheimer,8.6,7.8,2342
+116,6,4,"October 11, 2010",Subway Wars,Pamela Fryman,Chris Harris,8.48,8.6,2698
+117,6,5,"October 18, 2010",Architect of Destruction,Pamela Fryman,"Carter Bays,Craig Thomas",8.05,7.8,2296
+118,6,6,"October 25, 2010",Baby Talk,Pamela Fryman,Joe Kelly,8.29,7.7,2307
+119,6,7,"November 1, 2010",Canning Randy,Pamela Fryman,Chuck Tatham,8.88,7.7,2272
+120,6,8,"November 8, 2010",Natural History,Pamela Fryman,"Carter Bays,Craig Thomas",8.87,8.1,2383
+121,6,9,"November 15, 2010",Glitter,Pamela Fryman,Kourtney Kang,8.87,8.6,2804
+122,6,10,"November 22, 2010",Blitzgiving,Pamela Fryman,Theresa Mulligan Rosenthal,8.73,9.1,3762
+123,6,11,"December 6, 2010",The Mermaid Theory,Pamela Fryman,Robia Rashid,9.26,8,2416
+124,6,12,"December 13, 2010",False Positive,Pamela Fryman,"Craig Gerard,Matthew Zinman",9.7,8.2,2368
+125,6,13,"January 3, 2011",Bad News,Pamela Fryman,Jennifer Hendriks,10.15,8.9,3414
+126,6,14,"January 17, 2011",Last Words,Pamela Fryman,"Carter Bays,Craig Thomas",10.54,8.6,2830
+127,6,15,"February 7, 2011",Oh Honey,Pamela Fryman,"Carter Bays,Craig Thomas",10,8.8,3174
+128,6,16,"February 14, 2011",Desperation Day,Pamela Fryman,Tami Sagher,9.51,8.1,2327
+129,6,17,"February 21, 2011",Garbage Island,Michael Shea,Tom Ruprecht,9.33,7.7,2200
+130,6,18,"February 28, 2011",A Change of Heart,Pamela Fryman,Matt Kuhn,9.24,8.3,2411
+131,6,19,"March 21, 2011",Legendaddy,Pamela Fryman,"Dan Gregor,Doug Mand",8.03,8.3,2543
+132,6,20,"April 11, 2011",The Exploding Meatball Sub,Pamela Fryman,Stephen Lloyd,6.87,7.7,2225
+133,6,21,"April 18, 2011",Hopeless,Pamela Fryman,Chris Harris,6.49,8,2225
+134,6,22,"May 2, 2011",The Perfect Cocktail,Pamela Fryman,Joe Kelly,6.77,7.9,2240
+135,6,23,"May 9, 2011",Landmarks,Pamela Fryman,"Carter Bays,Craig Thomas",6.41,7.8,2182
+136,6,24,"May 16, 2011",Challenge Accepted,Pamela Fryman,"Carter Bays,Craig Thomas",7.15,8.5,2565
+137,7,1,"September 19, 2011",The Best Man,Pamela Fryman,"Carter Bays,Craig Thomas",11,8.6,3262
+138,7,2,"September 19, 2011",The Naked Truth,Pamela Fryman,Stephen Lloyd,12.22,8.1,2587
+139,7,3,"September 26, 2011",Ducky Tie,Rob Greenberg,"Carter Bays,Craig Thomas",10.5,8.9,3260
+140,7,4,"October 3, 2011",The Stinson Missile Crisis,Pamela Fryman,Kourtney Kang,10.39,8.1,2440
+141,7,5,"October 10, 2011",Field Trip,Pamela Fryman,Jamie Rhonheimer,8.89,7.5,2315
+142,7,6,"October 17, 2011",Mystery vs. History,Pamela Fryman,Chuck Tatham,9.81,7.8,2416
+143,7,7,"October 24, 2011",Noretta,Pamela Fryman,Matt Kuhn,9.87,7.7,2411
+144,7,8,"October 31, 2011",The Slutty Pumpkin Returns,Pamela Fryman,Tami Sagher,10.49,7.5,2478
+145,7,9,"November 7, 2011",Disaster Averted,Michael Shea,Robia Rashid,10.28,8.3,2584
+146,7,10,"November 14, 2011",Tick Tick Tick…,Pamela Fryman,Chris Harris,10.42,9,3642
+147,7,11,"November 21, 2011",The Rebound Girl,Pamela Fryman,"Carter Bays,Craig Thomas",10.01,8,2456
+148,7,12,"December 5, 2011",Symphony of Illumination,Pamela Fryman,Joe Kelly,11.51,8.8,3302
+149,7,13,"January 2, 2012",Tailgate,Pamela Fryman,"Carter Bays,Craig Thomas",10.14,7.8,2452
+150,7,14,"January 16, 2012",46 Minutes,Pamela Fryman,"Dan Gregor,Doug Mand",10.08,7.7,2522
+151,7,15,"February 6, 2012",The Burning Beekeeper,Pamela Fryman,"Carter Bays,Craig Thomas",9.98,7.3,2660
+152,7,16,"February 13, 2012",The Drunk Train,Pamela Fryman,"Craig Gerard,Matthew Zinman",9.01,8.1,2517
+153,7,17,"February 20, 2012",No Pressure,Pamela Fryman,George Sloan,9.68,8.4,2647
+154,7,18,"February 27, 2012",Karma,Pamela Fryman,Stephen Lloyd,9.07,8,2330
+155,7,19,"March 19, 2012",The Broath,Pamela Fryman,"Carter Bays,Craig Thomas",8.15,8.6,2738
+156,7,20,"April 9, 2012",Trilogy Time,Pamela Fryman,Kourtney Kang,8,8.6,2629
+157,7,21,"April 16, 2012",Now We're Even,Pamela Fryman,Chuck Tatham,7.24,8,2254
+158,7,22,"April 30, 2012",Good Crazy,Pamela Fryman,"Carter Bays,Craig Thomas",7.99,7.8,2189
+159,7,23,"May 14, 2012","The Magician's Code, Part 1",Pamela Fryman,Jennifer Hendriks,8.58,8.5,2650
+160,7,24,"May 14, 2012","The Magician's Code, Part 2",Pamela Fryman,"Carter Bays,Craig Thomas",8.58,8.9,3097
+161,8,1,"September 24, 2012",Farhampton,Pamela Fryman,"Carter Bays,Craig Thomas",8.84,8.6,4102
+162,8,2,"October 1, 2012",The Pre-Nup,Pamela Fryman,"Carter Bays,Craig Thomas",8.17,7.4,2678
+163,8,3,"October 8, 2012",Nannies,Pamela Fryman,Chuck Tatham,7.82,7.4,2465
+164,8,4,"October 15, 2012",Who Wants to Be a Godparent?,Pamela Fryman,Matt Kuhn,7.93,7.5,2552
+165,8,5,"November 05, 2012",The Autumn of Break-Ups,Pamela Fryman,Kourtney Kang,7.22,7.5,2542
+166,8,6,"November 12, 2012",Splitsville,Pamela Fryman,Stephen Lloyd,7.95,7.6,2335
+167,8,7,"November 19, 2012",The Stamp Tramp,Pamela Fryman,Tami Sagher,7.45,7.4,2262
+168,8,8,"November 26, 2012",Twelve Horny Women,Pamela Fryman,"Eric Falconer,Romanski",8.73,7.6,2322
+169,8,9,"December 3, 2012",Lobster Crawl,Pamela Fryman,Barbara Adler,8.26,7.5,2302
+170,8,10,"December 10, 2012",The Over-Correction,Pamela Fryman,"Craig Gerard,Matthew Zinman",8.82,8.1,2380
+171,8,11,"December 17, 2012","The Final Page, Part 1",Pamela Fryman,"Dan Gregor,Doug Mand",8.7,8.6,2922
+172,8,12,"December 17, 2012","The Final Page, Part 2",Pamela Fryman,"Carter Bays,Craig Thomas",8.7,9.4,5373
+173,8,13,"January 14, 2013",Band or DJ?,Pamela Fryman,"Carter Bays,Craig Thomas",10.51,7.9,2457
+174,8,14,"January 21, 2013",Ring Up!,Pamela Fryman,Jennifer Hendriks,10.07,7.9,2447
+175,8,15,"February 4, 2013",P.S. I Love You,Pamela Fryman,"Carter Bays,Craig Thomas",10.3,8.2,2831
+176,8,16,"February 11, 2013",Bad Crazy,Pamela Fryman,"Carter Bays,Craig Thomas",8.98,7.6,2274
+177,8,17,"February 18, 2013",The Ashtray,Pamela Fryman,"Carter Bays,Craig Thomas",8.85,7.8,2295
+178,8,18,"February 25, 2013",Weekend at Barney's,Pamela Fryman,George Sloan,8.59,8.1,2484
+179,8,19,"March 18, 2013",The Fortress,Michael Shea,Stephen Lloyd,7.44,8,2278
+180,8,20,"March 25, 2013",The Time Travelers,Pamela Fryman,"Carter Bays,Craig Thomas",6.99,8.3,3610
+181,8,21,"April 15, 2013",Romeward Bound,Pamela Fryman,Chuck Tatham,6.58,7.4,2228
+182,8,22,"April 29, 2013",The Bro Mitzvah,Pamela Fryman,Chris Harris,7.06,8.7,2957
+183,8,23,"May 6, 2013",Something Old,Pamela Fryman,"Carter Bays,Craig Thomas",6.99,7.6,2405
+184,8,24,"May 13, 2013",Something New,Pamela Fryman,"Carter Bays,Craig Thomas",8.57,8.8,3421
+185,9,1,"September 23, 2013",The Locket,Pamela Fryman,"Carter Bays,Craig Thomas",9.4,7.8,3194
+186,9,2,"September 23, 2013",Coming Back,Pamela Fryman,"Carter Bays,Craig Thomas",9.4,7.7,2787
+187,9,3,"September 30, 2013",Last Time in New York,Pamela Fryman,"Craig Gerard,Matthew Zinman",7.87,7.6,2646
+188,9,4,"October 7, 2013",The Broken Code,Pamela Fryman,Matt Kuhn,7.53,7.3,2550
+189,9,5,"October 14, 2013",The Poker Game,Pamela Fryman,"Dan Gregor,Doug Mand",7.98,7.2,2531
+190,9,6,"October 21, 2013",Knight Vision,Pamela Fryman,Chris Harris,7.64,7.5,2510
+191,9,7,"October 28, 2013",No Questions Asked,Pamela Fryman,Stephen Lloyd,7.63,7.4,2546
+192,9,8,"November 4, 2013",The Lighthouse,Pamela Fryman,Rachel Axler,8.67,7.3,2570
+193,9,9,"November 11, 2013",Platonish,Pamela Fryman,George Sloan,8.08,8.3,2947
+194,9,10,"November 18, 2013",Mom and Dad,Pamela Fryman,"Carter Bays,Craig Thomas",8.11,6.8,2672
+195,9,11,"November 25, 2013",Bedtime Stories,Pamela Fryman,"Carter Bays,Craig Thomas",7.64,5.7,4422
+196,9,12,"December 2, 2013",The Rehearsal Dinner,Pamela Fryman,Chuck Tatham,8.04,7.8,2793
+197,9,13,"December 16, 2013",Bass Player Wanted,Pamela Fryman,"Carter Bays,Craig Thomas",7.71,8.3,2860
+198,9,14,"January 13, 2014",Slapsgiving 3: Slappointment in Slapmarra,Pamela Fryman,"Carter Bays,Craig Thomas",8.59,5.9,4509
+199,9,15,"January 20, 2014",Unpause,Pamela Fryman,Chris Harris,8.83,8.4,2983
+200,9,16,"January 27, 2014",How Your Mother Met Me,Pamela Fryman,"Carter Bays,Craig Thomas",10.81,9.5,8123
+201,9,17,"February 03, 2014",Sunrise,Pamela Fryman,"Carter Bays,Craig Thomas",9.98,8.2,3118
+202,9,18,"February 24, 2014",Rally,Pamela Fryman,"Carter Bays,Craig Thomas",9.28,8,2570
+203,9,19,"March 3, 2014",Vesuvius,Pamela Fryman,Barbara Adler,9.11,7.7,2615
+204,9,20,"March 10, 2014",Daisy,Pamela Fryman,"Carter Bays,Craig Thomas",7.7,8.5,2890
+205,9,21,"March 17, 2014",Gary Blauman,Pamela Fryman,Kourtney Kang,7.78,8.3,2981
+206,9,22,"March 24, 2014",The End of the Aisle,Pamela Fryman,"Carter Bays,Craig Thomas",9.04,8.9,3848
+207,9,23,"March 31, 2014","Last Forever, Part 1",Pamela Fryman,"Carter Bays,Craig Thomas",13.13,6.7,8625
+208,9,24,"March 31, 2014","Last Forever, Part 2",Pamela Fryman,"Carter Bays,Craig Thomas",13.13,5.5,15760
