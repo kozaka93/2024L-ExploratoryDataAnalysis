@@ -1,0 +1,13 @@
+---
+title: "Projekt1"
+output: html_document
+date: "2024-04-09"
+---
+
+Autorzy: Igor Lechoszest, Paweł Kowalski, Mateusz Kiszka
+
+Źródła:
+
+<https://www.kaggle.com/datasets/fabriziocominetti/the-office-lines/data> <https://www.kaggle.com/datasets/nasirkhalid24/the-office-us-complete-dialoguetranscript1> <https://www.kaggle.com/datasets/chazzer/the-office-quotes-dataset/data?t=talking_head.csv>
+
+![](Plakat)
