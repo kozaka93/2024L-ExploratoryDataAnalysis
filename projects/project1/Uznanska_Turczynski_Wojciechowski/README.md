@@ -5,7 +5,7 @@ W naszym projekcie postanowiliśmy zbadać ciekawe fakty dotyczące śmierci i m
 Autorzy: Aleksandra Uznańska, Maciej Turczyński, Maksymilian Wojciechowski
 
 Nasze źródła:
-https://data.world/aendrew/game-of-thrones-deaths
-https://www.kaggle.com/code/mmmarchetti/game-of-thrones-network-analysis/input
+-https://data.world/aendrew/game-of-thrones-deaths
+-https://www.kaggle.com/code/mmmarchetti/game-of-thrones-network-analysis/input
 
 ![plakat](Uznanska_Turczynski_Wojciechowski.png)
