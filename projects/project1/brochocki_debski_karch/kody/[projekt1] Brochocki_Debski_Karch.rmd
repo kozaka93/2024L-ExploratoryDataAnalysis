@@ -1,0 +1,448 @@
+---
+title: "James Bond"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(openxlsx)
+library(dplyr)
+library(ggplot2)
+library(stringr)
+library(tidyr)
+library(maps)
+library(mapdata)
+
+Country <- read.xlsx("Bond_location.xlsx")
+bdf <- read.csv("bondgirlfilm.csv", sep = ";")
+bab <- read.csv("bondactorbox.csv", sep = ";")
+btime <- read.csv("Bond_time.csv", sep = ";")
+Women<- read.xlsx("Bond_kobiety.xlsx")
+Cars<- read.xlsx("Bond_cars&trucks.xlsx")
+Movies<-read.xlsx("Bond_filmy.xlsx")
+Kill_count<-read.xlsx("James_Bond_movie_body_counts.xlsx")
+Time<-read.xlsx("Bond_time.xlsx")
+Rotten<-read.xlsx("Bond_rotten_tomatoes.xlsx")
+Movies<-Movies%>%
+  mutate(Year=as.double(Year))
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ft<-inner_join(Movies %>% select(-Year),Time,by="Film")   
+ggplot(ft,aes(y=Time_min,x=Year,shape=Bond.actor))+
+  geom_point(size=3, color = "white")+
+  geom_smooth(aes(group = 1),method="lm",se=F,show.legend = F,color="white")+
+  labs(title = "Year of production and duration of the film",
+       y="Time in minutes",
+       x="Year",shape="Bond actor")+
+  theme_bw()+
+  theme(panel.background = element_rect(fill="black"),
+        panel.grid = element_blank(),
+        plot.background =element_rect(fill="black"),
+        text = element_text(color="white"),
+        axis.text=element_text(color="white"),
+        axis.line=element_line(color="white"),
+        axis.ticks =element_line(color="white"),
+        panel.border = element_rect(color="white"), 
+        legend.background = element_rect(fill="black"))
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+rf<-inner_join(Movies %>% select(-Year),Rotten,by="Film")  
+ggplot(rf,aes(x=Box.office_millions_Adjusted_2005,y=`Rotten_Tomatoes.(%)`,shape=Bond.actor))+
+  geom_point(size=3, color="white")+
+  geom_smooth(aes(group = 1),method="lm",se=F,show.legend = F,color="white")+
+  labs(title = "Movie rating and Box Office of the film",
+       y="Movie rating in percents",
+       x="Box office in millions (adjusted 2005)",
+       shape="Bond actor")+
+  theme_bw()+
+  theme(panel.background = element_rect(fill="black"),
+        panel.grid = element_blank(),
+        plot.background =element_rect(fill="black"),
+        text = element_text(color="white"),
+        axis.text=element_text(color="white"),
+        axis.line=element_line(color="white"),
+        axis.ticks =element_line(color="white"),
+        panel.border = element_rect(color="white"), 
+        legend.background = element_rect(fill="black"), )
+```
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+df<-Cars %>% 
+  mutate(Make1 = str_extract(Vehicle, "^[^ ]+")) %>% 
+  mutate(Make=sub("-.*","",Make1))%>%
+  group_by(Make) %>% 
+  summarise(n=n()) %>% mutate(Make2=case_when(Make==c('Land','Range') ~ 'Land-Rover', 
+                                              Make=="Aston" ~'Aston Martin',
+                                              Make=="Rolls" ~ 'Rolls-Royce',
+                                              TRUE ~ Make ))%>% mutate(.by=Make2,SUM=sum(n))%>%distinct(Make2,SUM)%>%
+  top_n(10,SUM)
+
+p1<-ggplot(df,aes(x=reorder(Make2,-SUM),y=SUM)) + 
+  geom_col(fill="white") +
+  labs(x="Make",
+       y = "Number of occurrences",
+       color= "Make",
+       title = "The most popular makes in James Bond movies")+theme_bw()+
+  theme(panel.background = element_rect(fill="black"),
+        panel.grid = element_blank(),
+        plot.background =element_rect(fill="black"),text = element_text(color="white"),
+        axis.text=element_text(color="white"),
+        axis.line=element_line(color="white"),
+        axis.ticks =element_line(color="white"),
+        panel.border = element_rect(color="white"))+ 
+  scale_x_discrete(guide = guide_axis(angle = 15))
+p1
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+df1<-Cars %>% 
+  mutate(Make = str_extract(Vehicle, "^[^ ]+")) %>% 
+  select(Movie,Make, Owner) %>% 
+  group_by(Owner,Make) %>% 
+  summarise(n=n()) 
+
+odp2<-df1 %>% 
+  arrange(desc(n)) %>%
+  filter(Owner=='MI6')
+
+
+p2<-ggplot(odp2,aes(x=reorder(Make,n),y=n)) + 
+  geom_col(fill='white') + 
+  labs(x = "Make",
+       y = "Number of occurrences",
+       color= "Make",
+       title = "The most popular makes for MI6")+ 
+coord_flip()+
+  theme_bw()+
+  theme(panel.background = element_rect(fill="black"),
+        panel.grid = element_blank(),
+        plot.background =element_rect(fill="black"),
+        text = element_text(color="white"),
+        axis.text=element_text(color="white"),
+        axis.line=element_line(color="white"),
+        axis.ticks =element_line(color="white"),
+        panel.border = element_rect(color="white"))
+p2
+```
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+df2<-Time %>% 
+  full_join(Kill_count, by=c('Film'='Film')) %>% 
+  mutate(Kill_per_hour=60*(Bond.kills/Time_min)) %>%
+  mutate(.by=(Bond.actor), Mean_actor= mean(Kill_per_hour,na.rm=T)) %>%
+  distinct(Bond.actor,Mean_actor) %>%top_n(6,Mean_actor)
+
+p3<-df2%>% ggplot(aes(x=reorder(Bond.actor,-Mean_actor),y=Mean_actor)) + 
+  geom_col(fill='white') +
+  labs(x = "Actor",
+       y = "Kills",
+       fill= "Bond actor:",
+       title = "Average number of kills per 1h film",
+       subtitle = "For actors playing the role of James Bond")+theme_bw()+
+  theme(panel.background = element_rect(fill="black"),
+        panel.grid = element_blank(),
+        plot.background =element_rect(fill="black"),
+        text = element_text(color="white"),
+        axis.text=element_text(color="white"),
+        axis.line=element_line(color="white"),
+        axis.ticks =element_line(color="white"),
+        panel.border = element_rect(color="white"))
+p3
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+df3a<-Movies%>%
+  mutate(.by=c(Bond.actor),Money=mean(Box.office_millions_Actual))%>%
+  distinct(Bond.actor,Money)
+
+p4<-ggplot(df3a,aes(x=reorder(Bond.actor,-Money),y=Money))+
+  geom_col(fill='white') +
+  labs(y = "Average of Box Office in millions $",
+       x = "Actor",
+       title = "Average Box Office result for each Bond")+theme_bw()+
+  theme(panel.background = element_rect(fill="black"),
+        panel.grid = element_blank(),
+        plot.background =element_rect(fill="black"),
+        text = element_text(color="white"),
+        axis.text=element_text(color="white"),
+        axis.line=element_line(color="white"),
+        axis.ticks =element_line(color="white"),
+        panel.border = element_rect(color="white"))
+
+p4
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+df3b<-Movies%>%
+  full_join(Rotten, by=c('Film'='Film','Year'='Year'))%>%
+  mutate(.by=(Bond.actor),Mean_score=mean(`Rotten_Tomatoes.(%)`)) %>%
+  distinct(Bond.actor,Mean_score)
+p5<-ggplot(df3b,aes(x=reorder(Bond.actor,-Mean_score),y=Mean_score))+
+  geom_col(fill="white") + 
+  labs(y = "Average (%)",
+       x = "Actor",
+         fill= "Bond actor",
+       title = "Average rating on Rotten Tomatoes for each Bond")+theme_bw()+
+  theme(panel.background = element_rect(fill="black"),
+        panel.grid = element_blank(),
+        plot.background =element_rect(fill="black"),
+        text = element_text(color="white"),
+        axis.text=element_text(color="white"),
+        axis.line=element_line(color="white"),
+        axis.ticks =element_line(color="white"),
+        panel.border = element_rect(color="white"))
+p5
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+p6<-ggplot(Rotten,aes(x=`Rotten_Tomatoes.(%)`)) +
+  geom_histogram(bins=10,fill='white',color='grey')+
+  labs(y = "Number of films",
+       x = "Rating",
+       title = "Density rating on Rotten Tomatoes")+
+  theme_bw()+
+  theme(panel.background = element_rect(fill="black"),
+        panel.grid = element_blank(),
+        plot.background =element_rect(fill="black"),
+        text = element_text(color="white"),
+        axis.text=element_text(color="white"),
+        axis.line=element_line(color="white"),
+        axis.ticks =element_line(color="white"),
+        panel.border = element_rect(color="white"))
+
+p6
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# in 1. 6.8
+# in 2. 7-28
+# in 3. 30-110
+# in 4. 135-250
+df4<-Movies%>%
+  full_join(Rotten, by=c('Film'='Film','Year'='Year')) %>%
+  select(Film,Budget_millions_Actual,`Rotten_Tomatoes.(%)`) %>%
+  mutate(Budget=case_when(Budget_millions_Actual < quantile(Budget_millions_Actual,0.25) ~ '[0,7]',
+                        (Budget_millions_Actual >=quantile(Budget_millions_Actual,0.25)& Budget_millions_Actual <quantile(Budget_millions_Actual,0.5)) ~ '[7,30]',
+                        (Budget_millions_Actual >=quantile(Budget_millions_Actual,0.5) & Budget_millions_Actual <quantile(Budget_millions_Actual,0.75))  ~ '[30,110]',
+                        (Budget_millions_Actual >=quantile(Budget_millions_Actual,0.75) & Budget_millions_Actual <=quantile(Budget_millions_Actual,1))  ~ '[110,250]'))%>%
+mutate(Budget1=case_when(Budget_millions_Actual < quantile(Budget_millions_Actual,0.25) ~ 1,
+                        (Budget_millions_Actual >=quantile(Budget_millions_Actual,0.25)& Budget_millions_Actual <quantile(Budget_millions_Actual,0.5)) ~ 2,
+                        (Budget_millions_Actual >=quantile(Budget_millions_Actual,0.5) & Budget_millions_Actual <quantile(Budget_millions_Actual,0.75))  ~ 3,
+                        (Budget_millions_Actual >=quantile(Budget_millions_Actual,0.75) & Budget_millions_Actual <=quantile(Budget_millions_Actual,1))  ~ 4))
+         
+p7<-ggplot(df4,aes(x=reorder(Budget,Budget1),y=`Rotten_Tomatoes.(%)`))+
+  geom_boxplot(fill = "white", color = "#aaaaaa") + 
+  scale_x_discrete()+
+  stat_summary(fun=mean, geom="point", shape=4, size=2.5)+
+  labs(y = "Rating (%)",
+       x = "Budget quartiles",
+       fill= "Budget (mln)",
+       title = "Rating on Rotten Tomatoes and budget")+theme_bw()+
+  theme(panel.background = element_rect(fill="black"),
+        panel.grid = element_blank(),
+        plot.background =element_rect(fill="black"),
+        text = element_text(color="white"),
+        axis.text=element_text(color="white"),
+        axis.line=element_line(color="white"),
+        axis.ticks =element_line(color="white"),
+        panel.border = element_rect(color="white"), 
+        legend.background = element_rect(fill="black"))
+p7
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+df5<- Rotten%>%
+  full_join(Time, by=c('Film'='Film','Year'='Year')) %>%
+  mutate(time=case_when(Time_min < quantile(Time_min,0.34) ~ '0.34',
+                        (Time_min >=quantile(Time_min,0.34) & Time_min <quantile(Time_min,0.66)) ~ '0.66',
+                        Time_min>= quantile(Time_min,0.66) ~ '1')) 
+
+p8<-ggplot(df5,aes(y=`Rotten_Tomatoes.(%)`,x=time)) +
+  geom_boxplot(fill = "white", color = "#aaaaaa") + 
+  stat_summary(fun=mean, geom="point", shape=4, size=2.5) +
+  scale_x_discrete()+
+  labs(y = "Rating (%)",
+       x= "Time quantiles",
+       fill= "Time in minutes",
+       title = "Duration of film and rating on Rotten Tomatoes")+theme_bw()+
+  theme(panel.background = element_rect(fill="black"),
+        panel.grid = element_blank(),
+        plot.background =element_rect(fill="black"),
+        text = element_text(color="white"),
+        axis.text=element_text(color="white"),
+        axis.line=element_line(color="white"),
+        axis.ticks =element_line(color="white"),
+        panel.border = element_rect(color="white"),
+        legend.background = element_rect(fill="black"))
+p7
+
+p8
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+bdf2 <- bdf %>% inner_join(bab[,c(1,3)],join_by(Film == Title)) %>% 
+  mutate(N_sex_parts = str_count(Sexual.partners, fixed(")"))) %>% 
+  inner_join(btime[,c(1,3)],join_by(Film)) %>% 
+  group_by(`Bond.actor`) %>% 
+  summarise(n_ppfilm = sum(N_sex_parts)/n(), n_pph = 60*sum(N_sex_parts)/sum(Time_min))
+
+bdf2 %>% arrange(-n_ppfilm) %>% ggplot(mapping = aes(reorder(`Bond.actor`,-`n_ppfilm`), `n_ppfilm`)) +
+  geom_col(fill = "white",color="black")+
+  guides(fill = "none")+
+  labs(title = "Number of Sexual partners per film",
+         subtitle = "For each main actor",
+         x = "Bond Actor",
+         y = "Number of partners")+theme_bw()+
+  theme(panel.background = element_rect(fill="black"),
+        panel.grid = element_blank(),
+        plot.background =element_rect(fill="black"),
+        text = element_text(color="white"),
+        axis.text=element_text(color="white"),
+        axis.line=element_line(color="white"),
+        axis.ticks =element_line(color="white"),
+        panel.border = element_rect(color="white"))
+
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+bdf2 %>% arrange(-n_pph) %>% ggplot(mapping = aes(`Bond.actor`, `n_pph`)) +
+  geom_col(fill = "white")+
+  guides(fill = "none")+
+  labs(title = "Number of Sexual partners per hour on screen",
+       subtitle = "For each main actor",
+       x = "Bond Actor",
+       y = "Number of partners per hour")+
+  theme_bw()+
+  theme(panel.background = element_rect(fill="black"),
+        panel.grid = element_blank(),
+        plot.background =element_rect(fill="black"),
+        text = element_text(color="white"),
+        axis.text=element_text(color="white"),
+        axis.line=element_line(color="white"),
+        axis.ticks =element_line(color="white"),
+        panel.border = element_rect(color="white"))
+
+
+
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+bmusic <- read.csv("Bond_music.csv", sep = ";") %>% 
+  mutate(UK.peak.position = as.double(UK.peak.position),US.peak.position = as.double(US.peak.position)) %>% 
+  mutate(Film = str_remove(Film, "\n")) %>% 
+  group_by(Film, Year) %>% 
+  summarise(max_us = min(US.peak.position, na.rm = TRUE), 
+            max_uk = min(UK.peak.position, na.rm = TRUE)) %>% 
+  arrange(Year)
+bmusicplot <- pivot_longer(bmusic, cols = c("max_us", "max_uk"))
+bmusicplot %>% ggplot(mapping = aes(x = Year, y = value, color = name))+
+  geom_smooth(se = F)+
+  geom_point()+
+  scale_y_reverse()+
+  scale_color_discrete(name="Best position on the charts",
+                      labels=c("in UK", "in US"))+
+  labs(title = "Placing of different Bond songs on US and UK charts",
+       subtitle = "Per year, averaged",
+       x = "Year",
+       y = "Place on the charts")+theme_bw()+
+  theme(panel.background = element_rect(fill="black"),
+        panel.grid = element_blank(),
+        plot.background =element_rect(fill="black"),
+        text = element_text(color="white"),
+        axis.text=element_text(color="white"),
+        axis.line=element_line(color="white"),
+        axis.ticks =element_line(color="white"),
+        panel.border = element_rect(color="white"), 
+        legend.background = element_rect(fill="black"))
+
+
+```
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+agrCountry <- Country %>%  
+  select(Country) %>% 
+  group_by(Country) %>% 
+  summarise(n = n())
+
+w1 <- map_data("world") %>% 
+  full_join(agrCountry, by = join_by(region == Country)) %>% 
+  mutate(n = replace_na(n,0)) %>% 
+  mutate(n = case_when(n==0~"Was not in",.default = "Was in")) %>% 
+  filter(long <=220)
+
+w1 %>% filter(region!="Antarctica")%>% 
+  ggplot(aes(x = long, y = lat, group = group, fill = n)) + 
+  geom_polygon() +
+  scale_fill_manual(values = c("#eaaa45", "#666666")) +
+  theme_minimal() +
+  labs(title = "Occurrence of Bond across the world",
+       x = "",
+       y = "",
+       fill = "Bond")+
+  coord_map("mollweide") +
+  coord_fixed(1.3,ylim=c(-60, 90))+
+  theme(panel.background = element_rect(fill="black"),
+        panel.grid = element_blank(),
+        plot.background =element_rect(fill="black"),
+        axis.text=element_text(color="black"),
+        legend.text = element_text(color = "white"),
+        text = element_text(color="white"))
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+Keels <- Kill_count %>% 
+  inner_join(btime, by = "Film") %>% 
+  group_by(Bond.actor) %>% 
+  summarise(n_keels_pf = sum(Bond.kills)/n(), 
+            n_keels_ph = 60*sum(Bond.kills)/sum(Time_min))
+
+GirlKill <- bdf2 %>%  full_join(Keels, by = join_by(`Bond.actor`== Bond.actor))
+GirlKill %>% 
+  ggplot(aes(y = n_keels_pf, x = n_ppfilm, shape = `Bond.actor`))+
+  geom_point(size=3, color = "white")+
+  geom_smooth(aes(group = 1),method="lm",se=F,show.legend = F,color="white")+
+  labs(title = "The best plot v1",
+       y="Kills committed by James",
+       x="Amount of concubines per film",
+       shape="Bond actor")+
+  theme_bw()+
+  theme(panel.background = element_rect(fill="black"),
+        panel.grid = element_blank(),
+        plot.background =element_rect(fill="black"),
+        text = element_text(color="white"),
+        axis.text=element_text(color="white"),
+        axis.line=element_line(color="white"),
+        axis.ticks =element_line(color="white"),
+        panel.border = element_rect(color="white"),
+        legend.background = element_rect(fill="black"))
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+GirlKill %>% ggplot(aes(y = n_keels_ph, x = n_pph, shape = `Bond.actor`))+
+  geom_point(size=3, color = "white")+
+  geom_smooth(aes(group = 1),method="lm",se=F,show.legend = F,color="white")+
+  labs(title = "The best plot v2",
+       y="Kills committed by James",
+       x="Amount of concubines per hour",
+       shape="Bond actor")+
+  theme_bw()+
+  theme(panel.background = element_rect(fill="black"),
+        panel.grid = element_blank(),
+        plot.background =element_rect(fill="black"),
+        text = element_text(color="white"),
+        axis.text=element_text(color="white"),
+        axis.line=element_line(color="white"),
+        axis.ticks =element_line(color="white"),
+        panel.border = element_rect(color="white"),
+        legend.background = element_rect(fill="black"))
+```
