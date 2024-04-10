@@ -90,7 +90,7 @@ Wstęp do eksploracji danych składa się z:
     <td>8</td>
     <td>10-04</td>
     <td>Oddanie Projektu 1</td>
-    <td>R: generowanie raportów z analizą danych</td>
+    <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/tree/main/labs/lab08">R: generowanie raportów z analizą danych</a></td>
     <td>Oddanie Projektu 1</td>
     <td>P1 (19p)</td>
   </tr>
