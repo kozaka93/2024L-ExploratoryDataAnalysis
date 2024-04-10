@@ -100,7 +100,7 @@ Wstęp do eksploracji danych składa się z:
     <td>Raportowanie</td>
     <td>R: plotly - wizualizacje interaktywne</td>
     <td>Pomysł, źródło danych</td>
-    <td>HW4 (7p)<br>P2 (1p)</td>
+    <td>P2 (1p)</td>
   </tr>
   <tr>
     <td>10</td>
@@ -108,7 +108,7 @@ Wstęp do eksploracji danych składa się z:
     <td>Dashboardy </td>
     <td>R: Shiny - część 1</td>
     <td>Konsultacje</td>
-    <td></td>
+    <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/issues/261"> HW4 </a>(7p)</td>
   </tr>
   <tr>
     <td>11</td>
