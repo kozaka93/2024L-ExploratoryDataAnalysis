@@ -98,7 +98,7 @@ Wstęp do eksploracji danych składa się z:
     <td>9</td>
     <td>17-04</td>
     <td>Raportowanie</td>
-    <td>R: plotly - wizualizacje interaktywne</td>
+    <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/tree/main/labs/lab09">R: plotly - wizualizacje interaktywne</a></td>
     <td>Pomysł, źródło danych</td>
     <td>P2 (1p)</td>
   </tr>
