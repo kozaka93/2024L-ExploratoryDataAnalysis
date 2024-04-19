@@ -106,7 +106,7 @@ Wstęp do eksploracji danych składa się z:
     <td>10</td>
     <td>24-04</td>
     <td>Dashboardy </td>
-    <td>R: Shiny - część 1</td>
+    <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/tree/main/labs/lab10">R: Shiny </a>- część 1</td>
     <td>Konsultacje</td>
     <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/issues/261"> HW4 </a>(7p)</td>
   </tr>
