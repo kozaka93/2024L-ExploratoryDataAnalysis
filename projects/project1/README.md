@@ -1,5 +1,77 @@
-
 # P1: Film, serial, książka, audiobook
+                 
+Autorzy: Gałat Julia, Guttman Jan, Idczak Aleksandra
+
+<img src="png/galat_guttman_idczak.jpg" align="center" width="600"/>
+
+Autorzy: Bartosiewicz Piotr, Krawiec Krzysztof, Orzechowska Weronika 
+
+<img src="png/Orzechowska_Krawiec_Bartosiewicz.png" align="center" width="600"/>
+
+Autorzy: Bagiński Kacper, Balcerzak Marta, Ovcharenko Oleksandra
+
+<img src="png/ovcharenko_balcerzak_baginski.png" align="center" width="600"/>
+
+Autorzy: Brochocki Mateusz, Dębski Michał, Karch Aleksander
+
+<img src="png/brochocki_debski_karch.png" align="center" width="600"/>
+
+Autorzy: Gajda Natalia, Kapciak Łukasz
+
+<img src="png/gajda_kapciak.png" align="center" width="600"/>
+
+Autorzy: Gromada Patrycja, Podgórski Mateusz, Strzelczyk Julia
+
+<img src="png/strzelczyk_gromada_podgorski.png" align="center" width="600"/>
+
+Autorzy: Koczorowski Maciej, Le Bihan Julia, Maślak Krzysztof
+
+<img src="png/LeBihan_Maslak_Koczorowski.png" align="center" width="600"/>
+
+Autorzy: Pokora	Bartosz, Preś Ewelina, Saliński	Franciszek
+
+<img src="png/pres_pokora_salinski.png" align="center" width="600"/>
+
+Autorzy: Cholewiński Kacper, Szymański Bartosz, Tabian Maksymilian
+
+<img src="png/Cholewinski_Szymanski_Tabian.png" align="center" width="600"/>
+
+Autorzy: Krawczyk Maria, Łuczkiewicz Izabela, Wojtkowiak Oliwia
+
+<img src="png/Luczkiewicz_Krawczyk_Wojtkowiak.png" align="center" width="600"/>
+
+Autorzy: Krzyżanowski Adrian, Lipowski Jędrzej,  Ryll Mikołaj
+
+<img src="png/Krzyzanowski_Lipinski_Ryll.png" align="center" width="600"/>
+
+Autorzy: Kiszka	Mateusz, Kowalski Paweł, Lechoszest Igor
+
+<img src="png/kowalski_kiszka_lechoszest.png" align="center" width="600"/>
+
+Autorzy: Podbielski Bruno, Wyszomierski Łukasz, Żebiałowicz Alicja
+
+<img src="png/Zebialowicz_Podbielski_Wyszomierski.jpg" align="center" width="600"/>
+
+Autorzy: Lipińska Małgorzata, Mączka Marek, Sień Magdalena
+
+<img src="png/Lipinska_Maczka_Sien.png" align="center" width="600"/>
+
+Autorzy: Turczyński Maciej, Uznańska Aleksandra, Wojciechowski Maksymilian
+
+<img src="png/Uznanska_Turczynski_Wojciechowski.png" align="center" width="600"/>
+
+Autorzy: Markowski Piotr, Michna Jakub, Zając Karolina
+
+<img src="png/Zajac_Michna_Markowski.png" align="center" width="600"/>
+
+Autorzy: Pokropek Daniel, Serkuczewski Michał, Wołczyk Michał
+
+<img src="png/Pokropek_Serkuczewski_Wolczyk.png" align="center" width="600"/>
+
+
+### Opis projektu
+
+
 
 Pierwszy projekt poświęcony jest eksploracji danych dotyczących filmów, seriali, książek, oraz audiobooków. Jego celem jest przygotowanie plakatu w formacie A2 (+ .pdf), który przedstawi graficznie ciekawe informacje.
 
