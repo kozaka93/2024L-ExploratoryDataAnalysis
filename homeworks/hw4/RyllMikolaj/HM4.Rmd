@@ -1,0 +1,64 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+## Tematyka
+
+Graf przedstawia współpracę między studentami podczas realizowania przedmiotu 
+"Computer and Network Security" na UniwersytecieBen Guriona w 2012 roku.
+
+Wierzchołkami są studenci. Krawędź między dwoma studentami istnieje wtedy i tylko wtedy, gdy
+współpracowali ze sobą podczas wykonywania pracy domowej. Istnieją trzy rodzaje współpracy:
+czas (wspólna nauka), partnerzy (wspólny projekt) oraz komputer (wspólny sprzęt).
+
+
+## Dane
+
+Dane, na podstawie których powstała wizualizacja, pochodzą z serwisu [Netzschleuder](https://networks.skewed.de/net/student_cooperation).
+
+
+## Wizualizacja
+
+Wizualizacja powstała przy wykorzystaniu poniższego kodu w języku R:
+
+```{r}
+library(igraph)
+library(tidygraph)
+library(ggraph)
+library(dplyr)
+
+graph <- read_graph("student_cooperation.gml", format = "gml")
+
+tg <- as_tbl_graph(graph)
+
+tg <- tg %>%
+  activate(edges) %>%
+  mutate(Współpraca = if_else(type == 'Computer', 'Komputer', 
+                              if_else(type == 'Partners', 
+                                      'Partnerzy', 'Czas')))
+
+ggraph(tg) +
+  geom_edge_link(aes(color = Współpraca), width = 0.75) +
+  geom_node_point(color = 'black', size = 0.3) +
+  scale_size_continuous(range = c(1, 5)) +
+  scale_color_identity() +
+  theme_void()
+```
+
+
+## Wnioski
+
+Współpraca między studentami najczęściej polegała na współpracy podczas wspólnego projektu.
+W grafie występuję wiele trójelementowych oraz czteroelemtowych podklik ze wszystkimi krawędziami
+w kolorze niebieskim. Wynika to z charakteru pracy grupowej.
+
+Występuje wiele krawędzi w kolorze czerwonym, co oznacza, że studenci chętnie spędzali czas
+ze sobą podczas wykonywania pracy domowej.
+
+Krawędzi w kolorze zielonym jest tylko 8. Może to wynikać między
+innymi z tego, że każdy student miał swój sprzęt lub praca domowa nie wymagała komputera.
