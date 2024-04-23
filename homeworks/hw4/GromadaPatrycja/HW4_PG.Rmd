@@ -1,0 +1,169 @@
+---
+title: "Praca domowa 4 z Eksploracji Danych"
+author: "Patrycja Gromada"
+date: "2024-04-22"
+output: html_document
+---
+
+## O wizualizacji
+
+### Opis
+
+Poniższa wizualizacja to interaktywna mapa świata pokazująca liczność populacji danego kraju w 2021 roku.
+
+```{r message = FALSE, echo = FALSE}
+### UWAGA ####
+# Aby kod zadziałał, w chunku 2 potrzebny jest plik countries.geojson
+# który można pobrać ze strony:
+#   https://github.com/datasets/geo-countries/blob/master/data/countries.geojson
+  
+```
+
+```{r, warning = FALSE, message = FALSE, echo=FALSE}
+library(ggplot2)
+library(maps)
+library(mapdata)
+library(dplyr)
+library(scales)  
+library(leaflet)
+library(geojsonio)
+```
+
+```{r echo=FALSE}
+
+#Wczytuje tutaj z pliku ponieważ na githubie nie znalazłam
+#pliku raw, ani też link nie działał
+
+coun2 <- geojsonio::geojson_read("countries.geojson", what = "sp")
+
+
+csv <- read.csv('https://raw.githubusercontent.com/datasets/population/main/data/population.csv')
+csv <- csv %>% filter(Year == 2021)
+
+#Przygotowanie ramki danych w obiekcie geojson
+coun2@data <- coun2@data %>% left_join(csv, by = c("ISO_A3" = "Country.Code"))
+
+
+```
+
+```{r echo=FALSE}
+#Przygotowania
+
+bins <- c(0, 500000, 5000000, 20000000, 50000000, 100000000, Inf)
+pal <- colorBin("YlOrRd", domain = coun2$Value, bins = bins)
+
+labels <- sprintf(
+  "<strong>%s</strong><br/>%s people in 2021",
+  coun2$ADMIN, format(coun2$Value, big.mark = ",", scientific = FALSE)) %>% lapply(htmltools::HTML)
+
+```
+
+```{r echo=FALSE}
+#Generowanie wykresu
+
+m <- leaflet(coun2) %>%
+  setView(0,20,2) %>% 
+  addTiles() %>% 
+  addPolygons() %>% 
+addPolygons(
+      fillColor = ~pal(Value),
+      weight = 2,
+      opacity = 1,
+      color = "white",
+      dashArray = "3",
+      fillOpacity = 0.7,
+      highlightOptions = highlightOptions(
+        weight = 5,
+        color = "#666",
+        dashArray = "",
+        fillOpacity = 0.7,
+        bringToFront = TRUE),
+      label = labels,
+      labelOptions = labelOptions(
+        style = list("font-weight" = "normal", padding = "3px 8px"),
+        textsize = "15px",
+        direction = "auto")) %>%
+  
+ addLegend(pal = pal, values = ~Value, opacity = 0.7, title = "Population in countries in 2021",
+                position = "bottomright")
+
+```
+
+```{r echo = FALSE}
+#Wyświetlanie wykresu
+m
+```
+
+### Wnioski
+
+Możemy zauważyć, że kraje, których liczność przekraczała 100 milionów mieszakańców to min. Rosja, Nigeria, Egipt, Etiopia, USA, Brazylia, Meksyk, Indonezja, Chiny, Indie, Pakistan.
+
+W Polsce w 2021 roku liczba ludności wyniosła 37,75 milionów.
+
+## Źródła
+
+Obiekt geojson całego świata wraz z nazwami państw: <https://github.com/datasets/geo-countries/blob/master/data/countries.geojson> (Dane z <https://rstudio.github.io/leaflet/json/countries.geojson> nie zawierały nazwy państw)
+
+Dane z licznością popululacji w danym kraju: <https://github.com/datasets/population/blob/main/data/population.csv>
+
+## Bonus
+
+Poniżej znajduje się mapa statyczna z licznością populacji w danym stanie USA (dane bezwględne) jak i mapa ukazująca procentowy udział populacji stanu.
+
+Wstawiam to jako bonus, ponieważ próbowałam zrobić mapę w ggplocie, a następnie za pomocą funkcji ggplotly dodać interaktywność do nich, ale koniec końców ggplotly nie potrafiło dobrze wyświetlić etykietek pojawiających się po najechaniu. Umieściłam je, ponieważ inaczej moja praca całkowicie zmarnowałaby się.
+
+```{r echo=FALSE}
+
+#Przygotowanie
+
+states <- map_data("state")
+
+# Dodatkowe źródło danych
+pop_and_area <- read.csv("https://gist.githubusercontent.com/bradoyler/0fd473541083cfa9ea6b5da57b08461c/raw/fa5f59ff1ce7ad9ff792e223b9ac05c564b7c0fe/us-state-populations.csv")
+
+pop_and_area <- pop_and_area %>% select(-code)
+pop_and_area$state <- tolower(pop_and_area$state)
+
+total_us_population <- sum(pop_and_area$pop_2014)
+
+pop_and_area <- pop_and_area %>%
+  mutate(percent_pop = (pop_2014 / total_us_population) * 100)
+
+us_population <- states %>%
+  left_join(pop_and_area, by = c("region" = "state"))
+
+us_base <- ggplot(data = us_population, aes(x = long, y = lat, group = group))
+
+```
+
+```{r echo=FALSE}
+#Statyczny
+us <- us_base +
+  geom_polygon(aes(fill = pop_2014), color = "white") +
+  geom_polygon(color = "black", fill = NA) +
+  theme_void() + 
+  coord_map("albers", 25, 50)+
+  labs(title = "Populacja w USA",
+       subtitle = "Dane z roku 2014",
+       fill = "Liczba") +
+  scale_fill_fermenter(palette = "OrRd", trans = "log10", direction = 1)
+
+us
+```
+
+```{r echo = FALSE}
+#Wykres procent
+
+us_percent <- us_base +
+  geom_polygon(aes(fill = percent_pop), color = "white") +
+  geom_polygon(color = "black", fill = NA) +
+  theme_void() +
+  coord_map("albers", 25, 50) +
+  labs(title = "Procent populacji w USA",
+       subtitle = "Dane z roku 2014",
+       fill = "% populacji") +
+  scale_fill_fermenter(palette = "Purples", trans = "log10", direction = 1)
+
+
+us_percent
+```
