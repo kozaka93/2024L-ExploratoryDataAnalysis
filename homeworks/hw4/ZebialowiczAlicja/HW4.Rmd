@@ -1,0 +1,98 @@
+---
+title: 'Raport z zadania domowego 4'
+author: "Alicja Żebiałowicz"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: hide
+    theme: united
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+## Tematyka
+
+Wizualizacja dotyczy wszystkich zanotowanych przypadków COVID-19 w USA
+od 21.01.2020 do 13.05.2022.
+
+## Źródło
+
+Dane pochodzą z
+<https://www.kaggle.com/datasets/fireballbyedimyrnmom/us-counties-covid-19-dataset>
+
+## Wizualizacja
+
+```{r setup, include=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(maps)
+library(dplyr)
+library(leaflet)
+library(geojsonio)
+```
+
+```{r}
+
+options(scipen = 12)
+
+states <- geojsonio::geojson_read("https://rstudio.github.io/leaflet/json/us-states.geojson", what = "sp")
+
+df <- read.csv("C:\\Users\\zebia\\Desktop\\Studia\\Studia 4. semestr\\Wstęp do eksploracji danych\\Homework 4\\us-counties.csv")
+
+df <- df %>% 
+  group_by(state) %>% 
+  summarise(covid_cases = sum(cases) / 1000000)
+
+states@data <- states@data %>% 
+  left_join(df, by = c("name" = "state"))
+
+bins <- c(0, 50, 100, 200, 500, 1000, 2000, 2500, Inf)
+pal <- colorBin("YlOrRd", domain = states$covid_cases, bins = bins)
+
+labels <- sprintf(
+  "<strong>%s</strong><br/>%g millions of cases",
+  states$name, states$covid_cases
+) %>% lapply(htmltools::HTML)
+
+m <- leaflet(states) %>%
+  setView(-96, 37.8, 4) %>%
+  addTiles() %>% 
+  addPolygons(
+  fillColor = ~pal(covid_cases),
+  weight = 2,
+  opacity = 1,
+  color = "white",
+  dashArray = "3",
+  fillOpacity = 0.7,
+  highlightOptions = highlightOptions(
+    weight = 5,
+    color = "#666",
+    dashArray = "",
+    fillOpacity = 0.7,
+    bringToFront = TRUE),
+  label = labels,
+  labelOptions = labelOptions(
+    style = list("font-weight" = "normal", padding = "3px 8px"),
+    textsize = "15px",
+    direction = "auto")) %>% 
+  addLegend(pal = pal, values = ~covid_cases, opacity = 0.7, 
+            title = "COVID-19 cases in USA in millions",
+            position = "bottomright")
+
+m
+```
+
+## Wnioski
+
+Najwięcej przypadków COVID-19 zanotowano kolejno w stanach:
+
+1.  Kalifornia
+2.  Teksas
+3.  Floryda
+4.  Nowy Jork
+
+Nie są to specjalnie zaskakujące statystyki, ponieważ taka też jest
+kolejność w najbardziej zaludnionych stanach, a logicznym jest, że im
+więcej osób, tym więcej osób zarażonych.
