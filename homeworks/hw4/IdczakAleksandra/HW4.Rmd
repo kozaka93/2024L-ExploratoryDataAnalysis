@@ -1,0 +1,94 @@
+---
+title: "HW4"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: hide
+    theme: united
+date: "2024-04-20"
+---
+
+## HW4, Aleksandra Idczak
+
+Wizualizacja, którą przygotowałam przedstawia stopę bezrobocia w krajach europejskich w 2023 roku.
+
+Stopa bezrobocia opisuje stosunek liczby osób bezrobotnych do liczby osób aktywnych zawodowo.
+
+Źródło danych:
+
+<https://ec.europa.eu/eurostat/databrowser/view/tps00203/default/table?lang=en&category=t_labour.t_employ.t_lfsi.t_une>
+
+### Kod
+
+```{r setup, include=FALSE, message=FALSE}
+
+library(geojsonio)
+library(leaflet)
+library(ggplot2)
+library(dplyr)
+library(tidyverse)
+library(htmltools)
+```
+
+```{r, echo=FALSE}
+data <- read.csv("https://raw.githubusercontent.com/olaidczak/europe-map-data/main/unemployment-data.csv")
+europe <- geojsonio::geojson_read("https://raw.githubusercontent.com/olaidczak/europe-map-data/main/europe.geojson", what = "sp")
+
+data1 <- data %>% 
+  arrange(country)
+```
+
+```{r, echo=FALSE}
+m1 <- leaflet(europe) %>% 
+  fitBounds(-10, 35, 30, 70) %>%
+  addTiles()
+
+bins <- c(2.6,3.6,4.3,5.5,6.4,7.3,12.1)
+pal <- colorBin("YlGnBu", domain = data1$X2023, bins = bins, na.color = "gray")
+labels <- 1:length(data1$X2023)
+for (i in 1:length(data1$X2023)){
+  if (is.na(data1$X2023[[i]])==TRUE){
+    a <- sprintf("<strong>%s</strong><br/> no data",data1$country[[i]]) %>% lapply(htmltools::HTML)
+  }else{
+    a <- sprintf("<strong>%s</strong><br/>%g unemployment rate",data1$country[[i]], data1$X2023[[i]]) %>% lapply(htmltools::HTML)}
+  labels[i] = a
+  }
+```
+
+```{r, echo=FALSE}
+m2 <- m1 %>% 
+  addPolygons(
+    fillColor = ~pal(data1$X2023),
+    weight = 2,
+    opacity = 1,
+    color = "white",
+    dashArray = "1",
+    fillOpacity = 0.7,
+    highlightOptions = highlightOptions(
+      weight = 4,
+      color = "#666",
+      dashArray = "",
+      fillOpacity = 0.7,
+      bringToFront = TRUE),
+    label = labels,
+    labelOptions = labelOptions(
+      style = list("font-weight" = "normal", padding = "3px 8px"),
+      textsize = "15px",
+      direction = "auto")) %>% 
+    addLegend(pal = pal, values = ~data1$X2023, opacity = 0.7, title = "Unemployment rate",
+          position = "bottomleft")
+```
+
+### Wizualizacja
+
+#### Unemployment rate in Europe, 2023
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+m2
+
+```
+
+### Wnioski
+
+W większości krajów europejskich stopa bezrobocia wynosi ponad 4%. Kraje z najniższą stopą bezrobocia to kolejno: Czechy (2.6%), Polska (2.8%) i Niemcy (3%). Największa stopa bezrobocia jest w Hiszpanii i wynosi 12.1%. W krajach nadbałtyckich stopa bezrobocia jest niższa (najwięcej - Szwecja 7.7%) niż w krajach śródziemnomorskich. Z krajów wyspiarskich największa stopa bezrobocia jest na Cyprze - 6.1%, a najniższa na Malcie - 3.1%.
