@@ -1,0 +1,109 @@
+---
+title: "Hausaufgabe 4"
+author: "Aleksander Karch"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  dev = "pdf",
+  fig.width = 12,
+  fig.height = 8
+)
+  
+  library(dplyr)
+  library(igraph)
+  library(ggraph)
+```
+
+# Temat pracy
+
+Zajmiemy się prezentacją danych dotyczących wspólnego występowania bohaterów serii *Gra o Tron* w książce *Nawałnica Mieczy*. Jako "wspólne występowanie" będziemy (dosyć arbitralnie) rozumieć występowanie dwóch bohaterów w tekście w odległości co najwyżej 15 słów.
+
+Dane zostały wzięte z [tej strony](https://networks.skewed.de/net/game_thrones#None_draw)
+
+W celu prezentacji tych danych posłużymy się grafem.
+
+```{r graph, include=FALSE}
+got <- read_graph("network.gml", format = "gml")
+tg <- tidygraph::as_tbl_graph(got) %>% 
+  tidygraph::activate(nodes)
+tg
+
+edge_list <- tg %>%
+  tidygraph::activate(edges) %>%
+  data.frame()
+
+node_list <- tg %>%
+  tidygraph::activate(nodes) %>%
+  data.frame()
+
+node_list$stopien <- rep(0, nrow(node_list))
+node_list$id <- node_list$id + 1
+
+for (i in 1:nrow(node_list)) {
+  node_list$stopien[i] <- sum(edge_list$from == node_list$id[i]) + sum(edge_list$to == node_list$id[i])
+}
+head(edge_list)
+head(node_list)
+```
+
+Na naszym grafie rozmiar wierzchołka będzie proporcjonalny do jego stopnia (tj. Im więcej bohater ma wspólnych wystąpień z innymi bohaterami, tym większy reprezentujący go punkt).\
+Każda krawędź powie nam natomiast, czy bohater A występował (przynajmniej raz) wspólnie z bohaterem B. Jeśli tak, to zostaną oni połączeni krawędzią.
+
+```{r graph2, warning=FALSE}
+ig <-
+  graph_from_data_frame(d = edge_list,
+                        vertices = node_list,
+                        directed = FALSE)
+
+file <- knitr::fig_path('.png')
+
+ragg::agg_png(file, width = 2000, height = 1600, res = 170)
+ig %>%
+  ggraph(layout = "stress") +
+  geom_edge_link(
+    colour   = "black",
+    lineend  = "round",
+    linejoin = 'round',
+    n = 100,
+    alpha = 0.3
+  ) +
+  geom_node_point(
+    aes(size = stopien),
+    fill = "orange",
+    color = 'red',
+    alpha = 0.9,
+    shape = 21
+  ) +
+  geom_node_text(
+    aes(label = name,
+        size = stopien + 10),
+    repel         = TRUE,
+    point.padding = unit(0.2, "lines"),
+    colour        = "darkred"
+  ) +
+  theme_graph(background = "white",
+              foreground = 'white') +
+  guides(
+    edge_width = FALSE,
+    edge_alpha = FALSE,
+    size = guide_legend(title = "Stopień Wierzchołka"),
+    scale = 'none'
+  ) +
+  labs(title = 'Bohaterowie Gry o Tron i ich interakcje')
+  invisible(dev.off())
+knitr::include_graphics(file)
+
+```
+
+# Wnioski
+
+Co można powiedzieć na podstawie tego grafu o bohaterach *Gry o Tron*?
+
+Ważniejsi bohaterowie w powieści (Tyrion, Jon, Arya) z reguły występują wspólnie ze sporą ilością innych bohaterów. Co ciekawe, widzimy pewne "środowisko" - mianowicie wiele postaci występuje wspólnie tylko z Daenerys i ewentualnie z innymi postaciami, które są połączone z "główną" częścią grafu właśnie przez nią.
+
+Jest to jedyna tak dobrze widoczna "odnoga" grafu (dużo mniejszą można zobaczyć przy Davos).
+
+Podobną strukturę możemy zauważyć przy bohaterach z północy (Jon Snow, Mance, Samwell), jednakże jest ona znacznie lepiej połączona z resztą grafu.
