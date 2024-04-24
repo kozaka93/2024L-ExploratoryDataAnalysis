@@ -1,0 +1,53 @@
+---
+title: "Populacja ludzi w miastach w Polsce"
+date: "2024-04-19"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: hide
+    theme: united
+---
+
+
+```{r setup, include=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# Tutaj warto wczytać biblioteki, których używamy, dodatkowo w opcjach chunk można ustawić message = FALSE.
+
+library(plotly)
+library(ggplot2)
+library(dplyr)
+library(maps)
+library(mapproj)
+```
+
+## Wizualizacja
+
+Wizualizacja przedstawia populacje ludzi w poszczególnych miastach w Polsce. Do wygenerowania mapy użyłam pakietu plotly oraz ggplot.
+
+
+```{r, warning= FALSE}
+
+Poland <- map_data("world") %>% filter(region=="Poland")
+data <- world.cities %>% filter(country.etc=="Poland")
+colnames(data)[3] <- "population"
+
+p <- ggplot() +
+  geom_polygon(data = Poland, aes(x=long, y = lat, group = group), fill="white", alpha=0.3,color = "black") +
+  geom_point( data=data, aes(x=long, y=lat, color=population, text = name, size = population)) +
+  scale_size_continuous(range=c(1,12)) +
+  scale_color_gradient(low = "lightblue", high = "navy") +
+  theme_bw() + coord_map() +
+  labs(title = "Population in each city in Poland",color = "Population", x ="", y = "")
+
+
+```
+
+```{r pressure, echo=FALSE}
+ggplotly(p,tooltip = c("text","size"))
+```
+
+## Wnioski
+
+Wnioski są dość trywialne. Najbardziej zaludnionym miastem w Polsce jest Warszawa, a następnie miasta wojewódzkie. Warto zauważyć, że na zachodzie Polski liczba ludności w miastach wojewódzkich jest większa niż na wschodzie. W Rzeszowie znajduję się tylko ok. 160tys ludzi gdy w Poznaniu jest ich ok. 570tys.
