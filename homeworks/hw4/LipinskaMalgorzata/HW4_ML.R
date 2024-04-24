@@ -76,4 +76,4 @@ plot(
   vertex.frame.color='white',
   vertex.label.dist = 1
 )
-title(main = "Ruch lotniczy w stanach w styczniu 1990r.")
+title(main = "Ruch lotniczy w wybranych stanach w styczniu 1990r.")
