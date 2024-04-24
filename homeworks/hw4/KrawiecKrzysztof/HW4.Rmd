@@ -1,0 +1,142 @@
+---
+title: "Raport z gęstości zaludnienia w Polsce w 2023 roku"
+date: "2024-04-22"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: hide
+    theme: united
+---
+
+# Raport z gęstości zaludnienia w Polsce w 2023 roku
+
+## Wczytanie odpowiednich bibliotek
+
+```{r setup, include=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(ggplot2)
+library(maps)
+library(mapdata)
+library(dplyr)
+library(readxl)
+library(leaflet)
+library(geojsonio)
+
+```
+
+## Opis zadania
+
+Postanowiłem wykonać mapę interaktywną, która zobrazuje jaka jest gęstość zaludnienia w Polsce w województwach w 2023 roku - z podziałem na kobiety i na mężczyzn.
+
+## Linki źródłowe
+
+Mapa Polski z podziałem na województwa w formacie .geojson
+
+<https://github.com/ppatrzyk/polska-geojson?tab=readme-ov-file&fbclid=IwZXh0bgNhZW0CMTAAAR1yArLaeiPFqqzzoKS8zt1tNWR_rdhCxUflwHPuqfAhIo_OXLuQHxJwWvA_aem_AU5tYSJAssUIjAtYFpqRoMuJuliTBiu0xCwb8LAlRi4uruGJbLsiG3MN2d5usOoD0HlFzi36ZroYuEcGNQ4BI5Ej>
+
+Dane tabelaryczne z GUSu
+
+<https://stat.gov.pl/obszary-tematyczne/ludnosc/ludnosc/powierzchnia-i-ludnosc-w-przekroju-terytorialnym-w-2023-roku,7,20.html>
+
+## Wczytanie data frameów pobranych z githuba i strony GUSU
+
+```{r}
+
+wojewodztwa <- geojson_read("wojewodztwa-medium.geojson", what = "sp")
+
+populacja_wojewodztwa_2023 <- read_excel("demografia2023.xlsx", sheet = "demografia2023")
+
+```
+
+## Dostoswanie ramek danych
+
+1.  **Stworzenie kolumn z gęstościami**
+
+```{r}
+
+populacja_wojewodztwa_2023 <- populacja_wojewodztwa_2023 %>% 
+  mutate(Ogółem = Ogółem * 1000,
+         gestosc = round(Ogółem/`Powierzchnia w km^2`),
+         gestosc_mezczyzn = round(Mężczyźni * 1000 / `Powierzchnia w km^2`),
+         gestosc_kobiet = round(Kobiety * 1000 / `Powierzchnia w km^2`))
+
+```
+
+2.  **Złączenie tabeli z nazwami województw z pliku geojson tak, aby kolejność była zachowana i odpowiednie województwa miały swoje gęstości**
+
+```{r}
+
+data.frame(wojewodztwa$nazwa) -> nazwy_wojewodztw
+
+full_join(nazwy_wojewodztw, populacja_wojewodztwa_2023, 
+          by = c("wojewodztwa.nazwa" = "Województwo")) -> populacja_wojewodztwa_2023
+
+```
+
+## Tworzenie mapy
+
+1.  ***kubełki*** - najpierw tworzę wektor, który decyduje o przedziałach kubełków, do których będą wpadać poszczególne gęstości województw. Na ich podstawie zostaną dopasowane kolory w addPolygon.
+
+2.  ***kolory*** - mając dane gęstości zaludnienia dla każdego województwa dopasowujemy mu kolor w zależności do jakiego kubełka wpada.
+
+```{r}
+
+bins <- c(50, 100, 120, 150, 200, 350, 400)
+
+pal <- colorBin("YlOrRd", domain = populacja_wojewodztwa_2023$gestosc, bins = bins)
+
+```
+
+3.  ***mapa*** - tworzę leafletową mape, dostosowuje widok tak, aby wyświetlała się Polska na środku, dodaję widżet z kaflami o kolorach województw takich, jakie zostały przyporządkowane w poprzednim kroku.
+
+4.  ***interakcja*** - dodaję do mapy interakcje: podświetlenie konturów, gdy się najedzie myszką oraz wyświetlenie tekstu:
+
+```{r}
+
+labels <- sprintf(
+  "<strong>%s</strong><br/>Gęstość zaludnienia ogółem: %g os/m<sup>2</sup><br/>Gęstość zaludnienia kobiet: %g os/m<sup>2</sup><br/>Gęstość zaludnienia mężczyzn: %g os/m<sup>2</sup>",
+  wojewodztwa$nazwa, populacja_wojewodztwa_2023$gestosc, populacja_wojewodztwa_2023$gestosc_kobiet, populacja_wojewodztwa_2023$gestosc_mezczyzn
+) %>% lapply(htmltools::HTML)
+
+```
+
+5.  ***legenda*** - dodaję do mapy legendę z zaznaczonymi przedziałami kubełków i ich kolorami.
+
+```{r}
+
+leaflet(wojewodztwa) %>% 
+  setView(18.96020, 52, 6.25) %>% 
+  addTiles() %>%
+  addPolygons(
+    fillColor = ~pal(populacja_wojewodztwa_2023$gestosc),
+    stroke = TRUE,
+    color = "white",
+    weight = 1.5,
+    opacity = 0.8,
+    fill = TRUE,
+    dashArray = "1",
+    fillOpacity = 0.7,
+    smoothFactor = 1.5,
+    highlightOptions = highlightOptions(
+      weight = 3,
+      color = "gray",
+      dashArray = "",
+      fillOpacity = 0.7,
+      bringToFront = TRUE),
+    label = labels,
+    labelOptions = labelOptions(
+      style = list("font-weight" = "normal", padding = "3px 8px"),
+      textsize = "15px",
+      direction = "auto")) %>% 
+    addLegend(pal = pal, values = ~populacja_wojewodztwa_2023$gestosc, 
+              opacity = 0.7, 
+              title = "Gęstość zaludnienia",
+              position = "bottomleft")
+
+```
+
+## Analiza mapy
+
+Możemy dostrzec na mapie parę rodzajów kolorów. Jasno żółte odcienie dominują we wschodniej, północno-wschodniej i północno-zachodniej części Polski, co obrazuje, że tam żyje najmniej osób w przeliczeniu na kilometr kwadratowy. Obszarami o największej gęstości są kolejno: Śląsk, Małopolska i Mazowsze. W każdym województwie jest większa gęstość kobiet, niż mężczyzn. Największa dysproporcja jest na Śląsku - różnica aż o 13. Dysproporcja pomiędzy największą gęstością na Śląsku i najmniejszą na podlasiu i mazurach wynosi aż 295 osób na kilometr kwadratowy!
