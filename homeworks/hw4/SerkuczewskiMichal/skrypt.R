@@ -20,7 +20,11 @@ state_dict <- data.frame(
 )
 
 data <- data %>% 
-  select(address,city,latitude,longitude,name,province)
+  select(address,city,latitude,longitude,name,province)%>%
+  mutate(name = toupper(name))
+
+data$name[data$name=='SONIC DRIVE IN'] <- 'SONIC DRIVE-IN'
+
 states <- left_join(states, state_dict, by = c("region" = "state_full"))
 
 
@@ -48,7 +52,7 @@ df_for_map %>%
   ggplot(mapping = aes(x = long,y=lat,group = group))+
   geom_polygon(aes(fill = name), color = "black", linewidth = 0.3) +
   geom_text(data = df_for_labels,aes(label = count_restaurants),color = 'darkred',size =5, hjust = 0.5, vjust = 0)+
-  labs(x='',y='',title = 'W jakich stanach dominuje sieć jakich fast foodów?')
+  labs(x='',y='',title = 'W jakich stanach dominuje sieć jakich fast foodów?',fill = 'Nazwa fast food\'u')
 
 
   
