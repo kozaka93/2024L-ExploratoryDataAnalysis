@@ -1,0 +1,40 @@
+---
+title: "Praca Domowa 4"
+author: "Kacper Bagiński"
+date: "2024-04-23"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(leaflet)
+library(dplyr)
+library(geojsonio)
+library(sp)
+library(htmltools)
+
+```
+
+# Mapa współczynnika *zabójstw* w 2021.
+
+```{r map, echo = FALSE}
+source("map_code.r")
+htmlwidgets::saveWidget(m, "leaflet_map.html", selfcontained = TRUE)
+knitr::include_graphics("leaflet_map.html")
+```
+
+### Uwagi
+
+Większość mapek w internecie używa *homicide* w znaczeniu *intentional homicide* (celowe zabójstwo innej osoby, np. postrzał). Natomiast dane, których użyłem uwzględniają każdy sposób zabicia, np. wypadek samochodowy, bądź też samobójstwo. Przez co dane na mojej mapce są wyższe niż spodziewane.
+
+Co do podziałki, to stwierdziłem, że dane są na tyle zróżnicowane, że użycie skali liniowej nie ma za bardzo sensu.
+
+### Wnioski
+
+W Amerykach (w szczególności w Ameryce Południowej) są o wiele wyższe współczynniki zabójstw niż np. w Europie co raczej nie zaskakuje. Co ciekawe najwyższe statystyki zabójstw w Europie mają Łotwa, Słowacja i Litwa.
+
+### Źródła danych:
+
+-   współczynniki zabójstw - <https://data.un.org/DocumentData.aspx?id=491>
+
+-   geojson - <https://geojson-maps.kyd.au>
