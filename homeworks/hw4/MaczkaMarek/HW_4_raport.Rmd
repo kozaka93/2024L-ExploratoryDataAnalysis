@@ -1,0 +1,175 @@
+---
+title: "Praca domowa nr 4"
+subtitle: "Wstęp do eksploracji danych, IV semestr, Wydział MiNI PW"
+author: "Marek Mączka"
+date: "2024-04-23"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: hide
+    theme: united
+---
+
+```{r setup, include=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# Wczytanie bibliotek, których używamy
+
+library(dplyr)
+library(leaflet)
+library(stringr)
+library(htmlwidgets)
+library(htmltools)
+
+```
+
+# Wprowadzenie
+
+Celem pracy domowej jest sprawdzenie umiejętności przygotowywania wizualizacji grafu, mapy, albo obu za jednym razem z pomocą narzędzi dostępnych w ramach języka R.
+
+Wizualizacja bazuje na rzeczywistych (nie wygenerowanych sztucznie) danych.
+
+Dane znalazłem i pozyskałem ze strony **Chicago Data Portal**. Znajdują się one pod linkiem:
+
+<https://data.cityofchicago.org/Buildings/Building-Violations/22u3-xenr/about_data>.
+
+Opisy ramki i kolumn w tymże raporcie, pochodzą właśnie z tej strony.
+
+Plik z danymi zawiera naruszenia wydane przez Departament Budownictwa od 2006 r. do chwili obecnej. Znajdują się w nim przypadki, w których pozwany został uznany za odpowiedzialnego, jak również takie, w których pozwany nie został uznany za odpowiedzialnego.
+
+# Obróbka ramki
+
+Dla umożliwienia działania raportu pozwoliłem sobie zmniejszyć znalezioną ramkę do wygodniejszych rozmiarów.
+Zapisałem ją do pliku **Building_Violations_small.csv**. Ten właśnie plik zamieściłem w folderze z raportem i to z niego będziemy dalej korzystać. Poniżej znajduje się kod, który do tego wykorzystałem. Nie jest to wywoływana część tego raportu.
+
+```{r eval=FALSE, include=TRUE}
+violations <- read.csv("Building_Violations_20240418.csv", header = TRUE)
+
+violations <- violations %>%
+  mutate(VIOLATION.DATE = as.Date(VIOLATION.DATE, format = c("%m/%d/%Y"))) %>%
+  filter(grepl(pattern = "2023-01-1", VIOLATION.DATE))
+
+write.csv(violations, "Building_Violations_small.csv", row.names = FALSE)
+```
+
+# Współpraca z kodem
+
+Wczytujemy pomniejszoną ramkę z danymi.
+```{r}
+
+violations <- read.csv("Building_Violations_small.csv", header = TRUE)
+
+```
+
+Pomniejszona ramka, tak jak i oryginalna posiada 26 kolumn, m. in.:
+
+-   **ID** - identyfikator naruszenia
+-   **VIOLATION.DATE** - data stwierdzenia naruszenia
+-   **VIOLATION.STATUS**
+    1.  Complied (zgodny) = naruszenia zostały usunięte;
+    2.  Open (otwarty) = naruszenia nie zostały usunięte;
+    3.  No Entry (brak dostępu) = inspektor nie mógł uzyskać dostępu do obiektu w celu przeprowadzenia inspekcji.
+-   **VIOLATION.DESCRIPTION** - opis naruszenia
+-   **VIOLATION.INSPECTOR.COMMENTS** - uwagi inspektora ds. naruszeń
+-   **DEPARTMENT.BUREAU** - dział biura nadzoru naruszeń
+-   **ADDRESS** - szczegółowy adres
+-   **LATITUDE** - szerokość geograficzna położenia budynku, w którym stwierdzono naruszenie
+-   **LONGITUDE** - szerokość geograficzna położenia budynku, w którym stwierdzono naruszenie
+
+To właśnie powyższe kolumny wykorzystałem do realizacji pracy domowej.
+
+## Wybór dnia
+
+Gwoli urozmaicenia interaktywności mapy dodałem możliwość wyboru dnia do analizy. Z uwagi na utrzymanie pliku z danymi małym ograniczyłem opcje do dni od 10. do 19. stycznia 2023 roku. Można zmienić wybór dnia w pliku raportu. :D
+Ja wybrałem dzień 18. stycznia.
+
+```{r}
+day = 18
+```
+
+## Przygotowanie danych do wyświetlenia
+
+Z ramki z naruszeniami, wybieram te rekordy, które zostały spostrzeżone w wybrany wyżej dzień. Ograniczam również wybór do kolumn, które będą mi później potrzebne.
+
+```{r}
+punkciki <- violations %>% 
+  filter(VIOLATION.DATE == paste0("2023-01-", day)) %>% 
+  select(LONGITUDE, LATITUDE, ID, VIOLATION.DESCRIPTION, ADDRESS, 
+         DEPARTMENT.BUREAU, VIOLATION.INSPECTOR.COMMENTS, VIOLATION.STATUS)
+```
+
+Zapamiętuję również ilość naruszeń z tego dnia.
+
+```{r}
+number <- dim(punkciki)[1]
+```
+
+## Wyświetlenie mapy
+
+Na mapie zaznaczone są na kolor niebieski przypinką z symbolem budynku punkty, w których zostały zaobserwone naruszenia wybranego dnia. 
+
+Po najechaniu i kliknięcią myszką na któryś z punktów pojawi się chmurka z informacjami takimi jak:
+-   adres, 
+-   dział biura, którego dotyczy naruszenie, 
+-   naruszenie, które zostało popełnione, 
+-   obecny status naprawy naruszeń 
+-   oraz komentarze inspektora.
+
+W prawym górnym rogu pod tytułem mapy znajduje się również informacja o liczbie naruszeń tego dnia.
+
+Mapa jest w języku angielskim z uwagi na fakt chęci zachowania spójności. Dane są w języku angielskim i niepotrzebnie uciążliwe byłoby tłumaczenie ich na język polski.
+
+Mapa ma możliwość przybliżania oraz oddalania (przy czym drugie w ograniczonym zakresie). Przyciski do tego znajdują się w lewym górnym rogu.
+
+Z uwagi na fakt, że niektóre z naruszeń są przypisane pod ten sam adres, użyłem opcji wyświelania **clusterOptions = TRUE**. Punkty wówczas są grupowane oraz po odpowiednim przybliżeniu, te z nachodzących na siebie po kliknięciu rozchodzą się jak pajęczyna/sieć wokół swojego domyślnego położenia.
+
+```{r message=FALSE, warning=FALSE}
+# stworzenie ikonki przypinki
+ikonka <- makeAwesomeIcon(
+  icon = "building",
+  iconColor = "black",
+  markerColor = "blue",
+  library = "fa"
+)
+
+mapka <- punkciki %>% 
+  leaflet(options = leafletOptions(minZoom = 10)) %>%
+  setView(-87.71, 41.83, 10) %>%
+  addProviderTiles(providers$OpenStreetMap.HOT) %>%
+  addAwesomeMarkers(lng = ~LONGITUDE, 
+                   lat = ~LATITUDE,
+                   icon = ikonka,
+                   clusterOptions = TRUE,
+                   popup = paste("<b> Address: </b>", 
+                                 str_to_title(punkciki$ADDRESS),"<br>", 
+                                 "<b> Department: </b>", 
+                                 str_to_title(punkciki$DEPARTMENT.BUREAU), "<br>",
+                                 "<b> Violation: </b>", 
+                                 str_to_sentence(punkciki$VIOLATION.DESCRIPTION),
+                                 "<br>",
+                                 "<b> Status: </b>", 
+                                 str_to_title(punkciki$VIOLATION.STATUS), "<br>",
+                                 "<b> Inspector comments: </b> <br>",
+                                 str_to_sentence(punkciki$VIOLATION.INSPECTOR.COMMENTS))) %>% 
+  # ustawienie ograniczeń wyświetlania mapy
+  setMaxBounds(lng1 = -87.94,
+               lat1 = 41.64454,
+               lng2 = -87.52414, 
+               lat2 = 42.3) %>% 
+  # dodanie tytułu
+  addControl(HTML(paste0("<h2> Building violations in Chicago</h2> <h5> Found on January ", 
+                         day,", 2023 </h5>")), position = "topright") %>% 
+  # dodanie informacji o liczbie naruszeń
+  addControl(HTML(paste("<b>Number of violations: </b><br>", number)), 
+             position = "topright")
+
+```
+
+```{r warning = FALSE, message=FALSE, fig.height = 8, fig.width = 10}
+mapka
+```
+
+# Wnioski
+
+Można spostrzec, że 18. stycznia 2023 roku najwięcej naruszeń (129) zostało zgłoszonych w południowej części miasta. Najmniej (6) zaś w centralnym dystrykcie miasta. Wczytując się w odpowiednie naruszenie, możemy dowiedzieć się, że w apartamencie 306 w kuchni za lodówką zostały spotrzeżone żywe karaluchy :O
