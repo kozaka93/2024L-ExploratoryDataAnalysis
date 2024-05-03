@@ -1,0 +1,114 @@
+---
+title: "HW4"
+author: "Kacper Cholewiński"
+date: "2024-04-21"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(dplyr)
+library(leaflet)
+library(geojsonio)
+
+```
+
+# Opis wizualizacji
+
+Wizualizacja przedstawia interaktywną mapę Stanów Zjednoczonych z zaznaczonym procentowym udziałem starszych dorosłych jedzących conajmniej dwa owoce dziennie.
+
+## Źródło danych
+
+Dane pochodzą ze strony katalogu danych rządowych USA (https://catalog.data.gov/dataset/alzheimers-disease-and-healthy-aging-data), gdzie zebrano informacje na temat choroby Alzheimera i innych danych medycznych mieszkańców stanów zjednoczonych. W podanym pliku znajdują się informacje o procentowym udziale ludności w spożywaniu co najmniej dwóch owoców dziennie.
+
+## Kod
+
+### Wyodrębnienie danych
+```{r}
+
+states <- geojsonio::geojson_read("https://rstudio.github.io/leaflet/json/us-states.geojson", what = "sp")
+
+df <- read.csv("https://data.cdc.gov/api/views/hfr9-rurv/rows.csv?accessType=DOWNLOAD")
+
+df1 <- df %>%
+  filter(Data_Value_Type == "Percentage",
+         Question == "Percentage of older adults who are eating 2 or more fruits daily",
+         Stratification1 == "Overall",
+         Stratification2 == "",
+         Geolocation != "", 
+         LocationDesc %in% states$name) %>% 
+  select(LocationDesc, Data_Value, Geolocation) %>% 
+  group_by(LocationDesc) %>%
+  summarise(mean = mean(Data_Value))
+
+
+
+```
+
+### Tworzenie wizualizacji
+
+You can also embed plots, for example:
+
+```{r}
+
+df1$mean -> states$density
+
+bins <- c(16.6, 20, 23.3, 26.6, 30, 33.3, 36.6, 40, Inf)
+pal <- colorBin("Blues", domain = states$density, bins = bins)
+
+m <- leaflet(states) %>%
+  setView(-96, 37.8, 4) %>%
+  addTiles() %>% 
+  addPolygons() %>%
+  addPolygons(
+  fillColor = ~pal(density),
+  weight = 2,
+  opacity = 1,
+  color = "white",
+  dashArray = "5",
+  fillOpacity = 0.7) %>% 
+  addPolygons(
+  fillColor = ~pal(density),
+  weight = 2,
+  opacity = 1,
+  color = "white",
+  dashArray = "3",
+  fillOpacity = 0.7,
+  highlightOptions = highlightOptions(
+    weight = 5,
+    color = "#666",
+    dashArray = "",
+    fillOpacity = 0.7,
+    bringToFront = TRUE))
+
+labels <- sprintf(
+  "<strong>%s</strong><br/>%g &#37 </sup>",
+  states$name, states$density
+) %>% lapply(htmltools::HTML)
+
+m <- m %>% addPolygons(
+  fillColor = ~pal(density),
+  weight = 2,
+  opacity = 1,
+  color = "yellow",
+  dashArray = "5",
+  fillOpacity = 0.7,
+  highlightOptions = highlightOptions(
+    weight = 5,
+    color = "purple",
+    dashArray = "",
+    fillOpacity = 0.7,
+    bringToFront = TRUE),
+  label = labels,
+  labelOptions = labelOptions(
+    style = list("font-weight" = "normal", padding = "3px 8px"),
+    textsize = "13px",
+    direction = "auto"))
+
+m %>% addLegend(pal = pal, values = ~density, opacity = 0.7, title = NULL,
+                position = "bottomright")
+
+```
