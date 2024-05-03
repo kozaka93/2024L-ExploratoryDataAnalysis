@@ -1,0 +1,87 @@
+---
+title: "Raport"
+author: "Maksymilian Wojciechowski"
+date: "2024-04-23"
+output: html_document
+---
+
+## Data set
+
+W mojej pracy domowej użyłem Data set'u dotyczącego sieci połączeń między terrorystami odpowiedzialnymi za atak z 11 września 2001 roku. Link do danych <https://aaronclauset.github.io/datacode.htm>.
+
+## Kodzik i graf
+```{r setup, include=FALSE, message=FALSE}
+library(igraph)
+library(tidygraph)
+library(ggraph)
+library(tidyverse)
+library(tidygraph)
+library(visNetwork)
+```
+
+Wgranie danych
+```{r}
+t_groups <-
+  read.table("terrorists/terrorist_groups.txt",
+             sep = "\t",
+             header = FALSE)
+t_names <-
+  read.table("terrorists/terrorist_names.txt",
+             sep = "\t",
+             header = FALSE)
+t_pairs <-
+  read.table("terrorists/terrorist_pairs.txt",
+             sep = "\t",
+             header = FALSE)  
+```
+Usuwanie duplikatów krawędzi
+```{r}
+listG <- c()
+list <- c()
+for (i in 1:nrow(t_pairs)){
+  list <- append(list, paste(t_pairs$V2[i], t_pairs$V1[i]))
+  if(!(paste(t_pairs$V1[i], t_pairs$V2[i]) %in% list)){
+    listG <- append(listG, TRUE)
+  }
+  else{
+    listG <- append(listG, FALSE)
+  }
+}
+t_pairs <- t_pairs[listG,]
+```
+Przygotowanie danych do grafu
+```{r}
+df <- inner_join(t_pairs, t_groups, by = "V1" )
+df <- df %>% mutate(V1 = t_names$V2[V1],
+                    V2.x = t_names$V2[V2.x])
+colnames(df) <- c("out", "in", "group")
+
+nodes <- data.frame(id = t_names$V1, label = t_names$V2, 
+                    group = as.character(t_groups$V2))
+edges <- data.frame(from = t_pairs$V1, to = t_pairs$V2)
+
+```
+Generowanie grafu
+```{r}
+visNetwork(nodes, edges, width = "100%", height = "600px",
+           main = "Sieć znajomości między terrorystami z 9/11") %>%
+  visLayout(randomSeed = 1000) %>%
+  visEdges(color = "black") %>% 
+  addFontAwesome() %>%
+  visGroups(groupname = "0", color = "red") %>%
+  visGroups(groupname = "1", color = "blue") %>%
+  visGroups(groupname = "2", color = "yellow") %>%
+  visGroups(groupname = "3", color = "green") %>%
+  visGroups(groupname = "4", color = "purple") %>%
+  visOptions(highlightNearest = list(enabled = TRUE, hover = TRUE), 
+             nodesIdSelection = TRUE) %>%
+  visInteraction(navigationButtons = TRUE)
+
+```
+
+## Wnioski i Uwagi
+Kolor wierzchołków na grafie pokazuje przynależność do 5 różnych grup, nie udało mi się jaednak znaleść informacji co to za grupy, a dodwanie legendy z ponumerowanymi kolorami raczej nic by nie dodało. <br>
+Dzięki podświetlaniu i możliwości wyboru poszczególnych zamachowców z łatwością możemy wywniokować iż tak zwanym "Master mindem" całej operacji był Mohamed Atta. On, jego "znajomi" i "znajomi jego znajomych" tworzą prawie cały graf. Dodatkowo można spekulować że grupa czerwona to szefowie, zaś fioletowi to najniżej postawieni członkowie.
+
+
+<br><br><br><br><br>
