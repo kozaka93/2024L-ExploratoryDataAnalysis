@@ -1,0 +1,110 @@
+---
+title: "Średnie zarobki brutto w Polsce w poszczególnych województwach"
+author: "Bartosz Szymański"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## 1. Tematyka
+Celem wizualizacji było przedstawienie średnich zarobków brutto w 2022 roku w Polsce z podziałem na poszczególne województwa za pomocą interaktywnego wykresu.
+
+## 2. Dane
+Dane wykorzystane podczas tworzenia mapy pochodziły z dwóch źródeł. Wartość średnich miesięcznych zarobków zostały pozyskane ze strony Głównego Urzędu Statystycznego (link 1). Dodatkowo do utworzenia wykresów wykorzystana została mapa województw w formacie geojson pochodząca z githuba (link 2) (utworzona na podstawie danych z GUS oraz System Informacji Przestrzennej Wrocławia).
+
+	link 1: https://bdl.stat.gov.pl/bdl/metadane/cechy/2497?back=True
+
+	link 2: https://github.com/ppatrzyk/polska-geojson?tab=readme-ov-file
+
+
+
+```{r kod, echo = TRUE, include= FALSE}
+library(readxl)
+library(leaflet)
+library(maps)
+library(dplyr)
+library(geojsonio)
+
+dane <- read_excel('exceldane.xlsx')
+dane2 <- dane %>% 
+  mutate(Zarobki = as.numeric(Zarobki))
+wojewodztwa <- geojsonio::geojson_read("https://raw.githubusercontent.com/ppatrzyk/polska-geojson/master/wojewodztwa/wojewodztwa-medium.geojson", what = "sp")
+
+
+mapa <-  leaflet(wojewodztwa) %>%
+  addTiles()
+mapa
+mapa %>% addPolygons()
+
+
+przedzialy <- c(0, 5750, 6000, 6250, 6500, 6750, 7000, Inf)
+kolorki <- colorBin("Reds", domain = dane2$Zarobki, bins = przedzialy)
+
+dane_polaczone <- left_join(wojewodztwa@data, dane2, by = c("nazwa" = "Nazwa,"))
+
+
+mapa %>% addPolygons(
+  fillColor = ~kolorki(dane_polaczone$Zarobki),
+  weight = 1,
+  opacity = 1,
+  color = "white",
+  dashArray = "1",
+  fillOpacity = 0.5)
+
+# Dodanie interakcji
+
+mapa %>% addPolygons(
+  fillColor = ~kolorki(dane_polaczone$Zarobki),
+  weight = 2,
+  opacity = 1,
+  color = "white",
+  dashArray = "2",
+  fillOpacity = 0.7,
+  highlightOptions = highlightOptions(
+    weight = 4,
+    color = "darkgrey",
+    dashArray = "",
+    fillOpacity = 0.7,
+    bringToFront = TRUE))
+
+labels <- sprintf(
+  "<strong>Wojewwódzwo %s</strong><br/>%g zł",
+  dane_polaczone$nazwa, dane_polaczone$Zarobki
+) %>% lapply(htmltools::HTML)
+
+  mapa <- mapa %>% addPolygons(
+  fillColor = ~kolorki(dane_polaczone$Zarobki),
+  weight = 2,
+  opacity = 1,
+  color = "white",
+  dashArray = "2",
+  fillOpacity = 0.7,
+  highlightOptions = highlightOptions(
+    weight = 5,
+    color = "darkgrey",
+    dashArray = "",
+    fillOpacity = 0.7,
+    bringToFront = TRUE),
+  label = labels,
+  labelOptions = labelOptions(
+    style = list("font-weight" = "normal", padding = "3px 8px"),
+    textsize = "15px",
+    direction = "auto"))
+mapa
+
+mapa %>% addLegend(pal = kolorki, values = ~dane_polaczone$Zarobki, opacity = 0.7, title = 'Średnie zarobki brutto w 2022 r.',
+                position = "bottomleft")
+
+
+
+```
+## 3. Wykres
+
+```{r wykres, echo = FALSE}
+mapa %>% addLegend(pal = kolorki, values = ~dane_polaczone$Zarobki, opacity = 0.7, title = 'Średnie zarobki brutto w 2022 r.',
+                position = "bottomleft")
+```
+
+## 4. Wnioski
+Z wizualizacji dowiadujemy się, że zdecydowanie największe średnie zarobki są w województwie mazowieckim, gdzie wynosiły one niespełna osiem tysięcy złotych. Na drugą i trzecią najwyższą pensję możemy liczyć kolejno w województwie dolnośląskim i małopolskim, gdzie zarobimy średnio o około 1000 złotych mniej. Zdecydowanie najsłabiej wypadło województwo podkarpackie oraz warmińsko-mazurskie, gdzie średnio zarabia się poniżej 5700 złotych brutto. Podsumowując, dzięki stworzonej wizualizacji możemy porównań zarobki w poszczególnych województwach i dowiedzieć się jak z dużymi dysproporcjami w pensjach mamy doczynienia.
