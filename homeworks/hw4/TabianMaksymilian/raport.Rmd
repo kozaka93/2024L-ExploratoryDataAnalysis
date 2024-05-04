@@ -1,0 +1,122 @@
+---
+title: "Zadanie domowe 4"
+author: "Maksymilian Tabian"
+date: "2024-04-23"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: show
+    theme: united
+    
+---
+
+```{r setup, include=FALSE, message = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(ggplot2)
+library(leaflet)
+library(geojsonio)
+```
+
+# 1. Wstęp
+Wizualizacja skupia się na spożyciu alkoholu na świecie z podziałem na państwa.
+Po najechaniu na odpowiednie państwo, wyświetla się jego nazwa, a także spożycie czystego alkoholu (w litrach na osobę / na rok) i dodatkowo wiek, w którym można legalnie zakupić alkohol.
+Dane pochodzą ze stron : 
+
+<https://worldpopulationreview.com/country-rankings/alcohol-consumption-by-country> 
+
+<https://worldpopulationreview.com/country-rankings/drinking-age-by-country>
+
+Plik geojson z mapą świata pochodzi z repozytorium:
+
+<https://github.com/datasets/geo-countries/blob/master/data/countries.geojson>
+
+# 2. Kod i wizualizacja
+
+### Przygotowanie danych
+
+Korzystam z następujących bibliotek:
+```{r, eval = FALSE}
+library(dplyr)
+library(ggplot2)
+library(leaflet)
+library(geojsonio)
+library(sf)
+```
+
+Przygotowanie ramki danych dotyczącej spożycia alkoholu:
+```{r, eval = FALSE}
+drinking_age <- read.csv("drinking-age-by-country-2024.csv", sep = ",")
+alcohol_cons <- read.csv("alcohol-consumption-by-country-2024.csv", sep = ",")
+
+alcohol <- alcohol_cons %>% 
+  left_join(drinking_age) %>% 
+  select(country, BothSexes, Males, Females, OnPremiseSale) %>% 
+  mutate(country = ifelse(country == "United States", "United States of America", country)) %>% 
+  mutate(country = ifelse(country == "Tanzania", "United Republic of Tanzania", country)) %>% 
+  mutate(country = ifelse(country == "DR Congo", "Democratic Republic of the Congo", country)) %>% 
+  mutate(country = ifelse(country == "North Macedonia", "Macedonia", country)) %>% 
+  mutate(country = ifelse(country == "Serbia", "Republic of Serbia", country))
+```
+
+Do pliku geojson dołączam ramkę danych za pomocą funkcji z pakietu sf.
+W efekcie otrzymuje nowy plik geojson
+```{r, eval = FALSE}
+world <- geojsonio::geojson_read("countries.geojson", what = "sp")
+world_sf <- st_as_sf(world)
+world2 <- left_join(world_sf, alcohol, by = c("ADMIN" = "country"))
+st_write(world2, "merged_data.geojson")
+world3 <- geojsonio::geojson_read("merged_data.geojson", what = "sp")
+```
+
+
+## Wizualizacja
+```{r, echo = TRUE, fig.height= 8, fig.width= 10}
+world3 <- geojsonio::geojson_read("merged_data.geojson", what = "sp")
+
+bins <- c(0, 4, 6, 8, 10, 12, 14)
+pal <- colorBin("Reds", domain = world3$BothSexes, bins = bins)
+
+labels <- sprintf(
+  "<strong>%s</strong><br/>Alcohol consumption: %g l/capita<br/>Legal age for buying: %s",
+  world3$ADMIN, world3$BothSexes, world3$OnPremiseSale
+) %>% lapply(htmltools::HTML)
+
+map <- leaflet(world3) %>%  
+  addTiles() %>% 
+  addPolygons(
+  fillColor = ~pal(BothSexes),
+  weight = 2,
+  opacity = 1,
+  color = "white",
+  dashArray = "2", 
+  fillOpacity = 0.7,
+  highlightOptions = highlightOptions(
+    weight = 3,
+    color = "#666",
+    dashArray = "",
+    fillOpacity = 0.7,
+    bringToFront = TRUE),
+  label = labels,
+  labelOptions = labelOptions(
+    style = list("font-weight" = "normal", padding = "3px 8px"),
+    textsize = "15px",
+    direction = "auto")) %>% 
+  addLegend(pal = pal, values = ~BothSexes, opacity = 0.7, title = NULL,
+            position = "bottomright")
+map
+```
+
+# 3. Podsumowanie
+
+Wizualizacja pokazuje korelację pomiędzy zamożnością kraju a spożyciem alkoholu na osobę.
+Spośród kontynentów negatywnie wyróżnia się Europa. Najwyższe spożycie alkoholu występuje na Łotwie.
+
+Planowane jest dodanie do projektu dodatkowych elementów:
+
+- ramka danych dotycząca spożycia alkoholu zawiera osobne kolumny dotyczące spożycia alkoholu ze względu na płeć. Chciałbym dodać możliwość wyświetlania na wykresie danych dotyczących spożycia alkoholu tylko przez mężczyzn lub tylko przez kobiety
+
+- dodatkowo chciałbym dodać panel, na którym możemy wybierać wiek, w którym legalna jest sprzedaż alkoholu i żeby podświetlały się tylko państwa, w których on obowiązuje
+
+

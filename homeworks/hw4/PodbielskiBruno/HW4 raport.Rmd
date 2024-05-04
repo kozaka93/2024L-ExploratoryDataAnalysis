@@ -1,0 +1,67 @@
+---
+title: "HW4 raport"
+author: "Bruno Podbielski"
+date: "2024-04-23"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: hide
+    theme: united
+---
+
+```{r setup, include=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(dplyr)
+library(leaflet)
+```
+
+# Wprowadzenie
+
+Jako temat pracy domowej wybrałem elektrownie atomowe. Dane pochodzą ze strony: <https://www.kaggle.com/datasets/ramjasmaurya/global-powerplants>
+
+Baza danych dotyczy istniejących elektrowni na świecie w 2021 roku. Obejmuje aktywne oraz wyłączone z eksploatacji siłownie (nie zawiera np: Czarnobyla, Fukushimy Daichi itp.). W pracy domowej skupiłem się tylko na umiejscowieniu elektrowni atomowych i ich mocy.
+
+# Wizualizacja
+
+Na mapie czerwonym kolorem zaznaczone zostały elektrownie atomowe. Po najechaniu na kropkę, podświetla się ona na niebiesko i wyświetlana jest informacja z nazwą siłowni, krajem oraz mocą w megawatach (MW).
+
+*Uwaga: Nazwa ramki danych jest inna niż na kagglu.*
+
+```{r message=FALSE, warning=FALSE}
+power_plants <- read.csv("power_plants.csv") %>%
+  select(2:7) %>%
+  filter(primary_fuel == "Nuclear")
+colnames(power_plants)[c(2,3)] <- c("name", "capa_in_MW")
+
+labels <- paste("<strong>", power_plants$name, "</strong><br>",
+                "Country:", power_plants$country_long, "<br>",
+                "Capacity:", power_plants$capa_in_MW, "MW <br>") %>% lapply(htmltools::HTML)
+
+pts <- leaflet(power_plants, options = leafletOptions(minZoom=2)) %>%
+  addTiles() %>%
+  addControl(html="<p style='font-size:20px'> Nuclear power plants (figures for 2021) </p>", position = "topright") %>%
+  addCircles(lng = ~longitude,
+             lat = ~latitude,
+             color = "red",
+             opacity = 0.5,
+             weight = 6,
+             highlightOptions = highlightOptions(
+                color = "blue",
+                weight = 10,
+                bringToFront = TRUE),
+             label = labels,
+             labelOptions = labelOptions(
+                 style = list("font-weight" = "normal", padding = "3px 8px"),
+                 textsize = "15px",
+                 direction = "auto")) %>%
+  setMaxBounds(lng1=-180, lat1=80, lng2=180, lat2=-80)
+pts
+```
+
+# Wnioski
+
+Najwięcej elektrowni jest w Stanach Zjednoczonych, Europie Zachodniej, Indiach, Rosji oraz na wybrzeżu Chin i Japonii. Na kontynencie afrykańskim znajduje się tylko jedna (w RPA), a w Oceanii nie ma żadnej.
+
+Elektrownią o największej mocy jest Kashiwazaki-Kariwa w Japonii (8212 MW).

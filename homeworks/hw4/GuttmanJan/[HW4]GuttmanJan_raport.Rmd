@@ -1,0 +1,112 @@
+---
+title: "PD 4"
+author: "Jan Guttman"
+date: "2024-04-20"
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
+---
+
+```{r setup, include=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(igraph)
+library(tidygraph)
+library(ggraph)
+library(stringr)
+library(dplyr)
+
+```
+
+<!-- Tworzenie grafu -->
+
+```{r, warning=FALSE, echo=FALSE}
+
+user_provider <- read_graph("user-provider.gml", format = "gml")
+tg <- tidygraph::as_tbl_graph(user_provider) %>% 
+  tidygraph::activate(nodes)
+
+
+edge_list <- tg %>%
+  activate(edges) %>%
+  data.frame()
+
+node_list <- tg %>%
+  activate(nodes) %>%
+  data.frame()
+
+node_list$degree <- rep(0, nrow(node_list))
+node_list$id <- node_list$id + 1
+
+for (i in 1:nrow(node_list)) {
+  node_list$degree[i] <- sum(edge_list$from == node_list$id[i]) + 
+    sum(edge_list$to == node_list$id[i])
+}
+
+ig <- igraph::graph_from_data_frame(d = edge_list, 
+                                    vertices = node_list, 
+                                    directed = TRUE)
+layout <- create_layout(ig, 'tree')
+
+
+layout <- layout %>% 
+  mutate(x=case_when(name=="BALCO"~-22, 
+                     name=="Greg_Anderson"~-15, 
+                     name=="Palm_Beach_Rejuvenation_Centre"~-8, 
+                     name=="New_Hope_Health_Centre"~-1, 
+                     name=="Signature_Pharmacy"~7, 
+                     name=="American_Pharmaceutical_Group"~15, 
+                     name=="Health_Rejuvenation_Centre"~22, 
+                     name=="Applied_Pharmacy_Services"~29, 
+                     name=="Arizona_AntiAging_Clinic"~36, 
+                     name=="Health_Watch_Clinic"~43, 
+                     name=="BrianMcNamee"~50,
+                     name=="Kirk_Radomski"~57,
+                     TRUE ~ 1.2*x)) %>% mutate(x=1.2*x)
+
+
+abc <- 20*log10(degree(ig)+1)
+
+graph <-ggraph(ig,layout = layout) +
+  geom_node_point(size=abc,color='purple') +
+  geom_edge_link(colour   = "grey",
+                 lineend  = "round",
+                 linejoin = 'round',
+                 n = 100,
+                 alpha = 0.65,
+                 arrow = arrow(type = "closed", 
+                 length = unit(1.9, "centimeters")))+
+  theme_graph(background = "white",
+              foreground = 'black') +
+  geom_node_text(aes(label =ifelse(degree(ig,mode = "out")==0, 
+                                   word(str_replace_all(name, "_", " "),-1),
+                                   str_replace_all(name, "_", " "))),
+                 repel         = TRUE, 
+                 colour        = "black",
+                 size=10,
+                 check_overlap = TRUE,
+                 family="Arial") +
+  labs(title = 'Dostawcy sterydów oraz baseballiści z nich korzystający w 2008 roku',
+       subtitle = "Na górze znajdują się dostawcy, na dole zawodnicy", caption="Wielkość wierzchołka zależy od ilości połączeń")+
+  theme_graph(title_size = 60, subtitle_size = 40, caption_size = 40)
+
+
+```
+
+# Graf oraz jego opis
+
+Na grafice zobrazowana jest sieć połączeń pomiędzy dostarczycielami sterydów, a zawodnikami Major League Baseball, których zaopatrywali w 2008 roku. Strzałki wychodzą od dostawcy do baseballisty, a wielkość wierzchołka zależy od jego stopnia.
+
+```{r, echo=FALSE, warning=FALSE, fig.height=20, fig.width=40}
+graph
+```
+
+# Wnioski
+
+Jak widać dostęp do sterydów był wówczas bardzo duży. Pomimo tego Kirk Radomski zaopatrywał ponad połowę zawodników przyłapanych na dopingu. Reszta dostawców albo miała mniejsze grono odbiorców, albo ich suplementy częściej umykały w wynikach testów.
+
+# Bibliografia
+
+-   <https://networks.skewed.de/net/baseball>
+-   V. Krebs, "The Spread of Steroids in Baseball.", <http://orgnet.com/steroids.html>
