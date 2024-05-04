@@ -1,0 +1,58 @@
+---
+title: "Praca domowa 4"
+subtitle: "Marta Balcerzak"
+date: "2023-04-23"
+output: 
+  html_document:
+    code_folding: hide
+    theme: journal
+---
+
+```{r setup, include=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = F, warning = F)
+```
+Tematem mojej pracy jest średnia ilość osób w gospodarstwie domowym w 2021 roku w różnych okręgach dystryktu Calderdale  
+w Wielkiej Brytanii.  
+Link do źródła danych: https://dataworks.calderdale.gov.uk/dataset/v833w/number-of-households-per-ward/  
+Stworzyłam mapę przedstawiającą zawarte w tej ramce dane, poniżej kod potrzebny do jej wygenerowania i mapa:  
+
+```{r}
+library(dplyr)
+library(leaflet)
+library(geojsonio)
+households <- geojsonio::geojson_read("households.geojson", what = "sp")
+
+map <- leaflet(households) %>%
+  setView(-1.917,  53.7, 10) %>%
+  addTiles() %>% addPolygons
+
+cols <- c("#c1ebff", "#bde3ff", "#b1cdff", "#97a4ff", "#8088ff", "#727aff", "#727aff", "#646dff", "#5460ff", "#3f54ff")
+bins <- c(2,2.15,2.3,2.45,2.6,2.75,2.9,3.05,3.3)
+pal <- colorBin(cols, domain = households$Census.2021.Number.of.usual.residents.per.household, bins = bins) 
+
+labels <- sprintf(
+  "<strong>%s</strong><br/><small>%g residents per household",
+  households$WD21NM, households$Census.2021.Number.of.usual.residents.per.household
+) %>% lapply(htmltools::HTML)
+
+map <- map %>% addPolygons(
+  fillColor = ~pal(Census.2021.Number.of.usual.residents.per.household),
+  weight = 2,
+  opacity = 0.7,
+  color = "white",
+  dashArray = "1",
+  fillOpacity = 0.7,
+  highlightOptions = highlightOptions(
+    weight = 2,
+    color = "black",
+    dashArray = "3",
+    fillOpacity = 0.7,
+    bringToFront = TRUE),
+  label = labels,
+  labelOptions = labelOptions(
+    textsize = "15px")) %>% 
+  addLegend(pal = pal, values = ~Census.2021.Number.of.usual.residents.per.household, 
+            opacity = 0.7, title = "Residents per household", position = "bottomright")
+map
+```
+Z wizualizacji jesteśmy w stanie łatwo odczytywać informacje, ponieważ po najechaniu na okręg wyświetla się jego nazwa i dokładna wartość przedstawianych danych. Możemy zatem wywnioskować, że najwięcej osób przypadających na jedno gospodarstwo domowe jest w Park, natomiast najmniej w Town. Widzimy też, że wartość ta znajduje się w przedziale [2.0; 3.2].

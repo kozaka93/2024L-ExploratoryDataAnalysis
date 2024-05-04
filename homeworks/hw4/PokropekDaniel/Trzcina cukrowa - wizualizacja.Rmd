@@ -1,0 +1,33 @@
+---
+title: "Trzcina cukrowa - wizualizacja"
+author: "Daniel Pokropek"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Produkcja trzciny cukrowej na świecie
+
+#### Tematyka
+
+
+Pochyliłem się w mojej analizie nad produkcją trzciny cukrowej, chciałem zbadać kto produkuje jej najwięcej
+
+#### Źródło danych
+
+
+Dane dotyczące produkcji trzciny cukrowej zostały pozyskane z bazy danych: <https://www.kaggle.com/datasets/rajkumarpandey02/list-of-countries-by-sugarcane-production>. Dane te obejmują informacje o produkcji trzciny cukrowej w różnych krajach na świecie.
+
+### Wizualizacja
+
+#### ![](images/laczna_trzcina-01.png)
+
+Na pierwszym wykresie przedstawiona jest łączna produkcja trzciny cukrowej w tonach w różnych krajach. Najwięcej produkuje Brazylia.
+
+#### ![](images/kgnaha_trzcina.png)
+
+Drugi wykres przedstawia jaka był średni plon trzciny cukrowej w kilogramach na jeden hektar uprawianej ziemi. Jak widać giganci produkcji wcale nie produkują najoptymalniej.

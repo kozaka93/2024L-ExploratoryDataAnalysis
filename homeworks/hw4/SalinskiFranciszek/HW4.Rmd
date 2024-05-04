@@ -1,0 +1,90 @@
+---
+title: "Zadanie domowe 4 - raport"
+date: "2023-04-23"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: hide
+    theme: united
+---
+
+```{r setup, include=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(dplyr)
+library(plotly)
+library(maps)
+library(ggplot2)
+```
+
+Autor: Franciszek Saliński
+
+## Wstęp
+
+Zadaniem jest stworzenie wizualizacji przedstawiającej mapę lub graf.
+
+Za cel postawiłem sobie stworzenie interaktywnej mapy świata, która będzie przedstawiać liczbę zwycięzców Złotej Piłki, najważniejszej indywidualnej nagrody przyznawanej co roku dla najlepszego piłkarza świata, dla różnych krajów.
+
+[Źródło danych](https://www.kaggle.com/datasets/marcellopaolo/ballon-dor-golden-ball-winners?select=BallonDor-GoldenBall_Winners_v2.csv)
+
+```{r}
+df <- read.csv("BallonDor-GoldenBall_Winners_v2.csv") %>% select(-X)
+head(df)
+```
+
+## Agregacja i transformacja danych
+
+Z racji, że w danych występowały nieistniejące obecnie kraje, należało je zamienić.
+
+```{r}
+df %>%
+  filter(Rank == "1st") %>% 
+  mutate(Country = ifelse(
+    Country == "West Germany", "Germany", Country
+  )) %>% 
+  mutate(Country = ifelse(
+    Country == "Soviet Union", "Russia", Country
+  )) %>%
+  mutate(Country = ifelse(
+    Country == "Czechoslovakia", "Czech Republic", Country
+  )) %>%
+  group_by(Country) %>% 
+  summarise(n = n()) %>% 
+  arrange(-n) -> winners
+
+# Add other countries with 0 winners
+all_countries <- map_data("world")$region
+winners <- rbind(
+  winners,
+  data.frame(Country = setdiff(all_countries, winners$Country),
+             n = rep(0, length(setdiff(all_countries, winners$Country))))
+)
+  
+winners
+```
+
+## Wizualizacja
+
+```{r}
+map <- plot_ly(
+  type = 'choropleth',
+  locations = winners$Country,
+  locationmode = 'country names',
+  z = as.factor(winners$n),
+  text = winners$Country
+) %>% 
+  layout(
+    title = 'Liczba zwycięzców Złotej Piłki dla różnych krajów',
+    geo = list(
+      showcoastlines = TRUE,
+      projection = list(type = 'orthographic')
+  ))
+
+# Wiem, że skala kolorów powinna być dyskretna, ale nie mam
+# pojęcia jak to zrobić w plotly
+
+map
+```
+
+Widzimy, że praktycznie wszyscy zwycięzcy plebiscytu pochodzili z Europy bądź Ameryki Południowej, jedynym wyjątkiem jest George Weah z Liberii. Nie jest to dziwne, gdyż na tych kontynentach piłka nożna jest najbardziej popularna.
