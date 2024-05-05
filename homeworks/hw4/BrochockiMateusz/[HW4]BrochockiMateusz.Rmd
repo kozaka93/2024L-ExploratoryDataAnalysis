@@ -1,0 +1,103 @@
+---
+title: "Analysis of the results of the US presidential election in 2020"
+---
+
+# Report purpose and data source
+
+The purpose of the report is to analyze the results of the US presidential election in 2020 at the level of individual states and appropriate visualization using an interactive map.
+
+Source: <https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/42MVDX>
+
+# Visualization
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(ggplot2)
+library(maps)
+library(mapdata)
+library(dplyr)
+library(tidyr)
+library(plotly)
+```
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+election <-
+  read.csv("1976-2020-president.csv",sep = ",")
+election <-
+  election %>% mutate(result_in_percent = round(candidatevotes / totalvotes *
+                                                  100, 2),party_detailed= gsub("DEMOCRATIC-FARMER-LABOR", "DEMOCRAT", party_detailed)) %>% filter(state != "DISTRICT OF COLUMBIA")
+election2 <-
+  election %>% filter(party_detailed == "DEMOCRAT" |
+                        party_detailed == "REPUBLICAN") %>% select(c(1, 2, 8, 9))
+election2 <-
+  pivot_wider(election2, names_from = party_detailed, values_from = candidate,values_fn = list(candidate = first))
+election3 <-
+  election %>% filter(party_simplified == "DEMOCRAT" |
+                        party_detailed == "REPUBLICAN") %>% select(c(1, 2, 15, 16))
+election3 <-
+  pivot_wider(election3, names_from = party_simplified, values_from = result_in_percent,values_fn = list(result_in_percent = first))
+
+election3<-election3 %>% mutate(DEMOCRAT_result=DEMOCRAT,REPUBLICAN_result=REPUBLICAN)
+
+election_final<-cbind(election2,election3[,c(5,6)])
+
+election_final <-
+  election_final %>% mutate(
+    DEMOCRAT = gsub(",", "", DEMOCRAT),
+    REPUBLICAN = gsub(",", "", REPUBLICAN),
+    OTHERS_result = 100 - unlist(DEMOCRAT_result) - unlist(REPUBLICAN_result)
+  )
+winners <-
+  election %>% group_by(year, state) %>%
+  slice(which.max(result_in_percent)) %>%
+  select(c("year", "state", "party_simplified"))
+
+election_final$winner<-winners$party_simplified
+
+    g <- list(
+      scope = 'usa',
+      projection = list(type = 'albers usa'),
+      lakecolor = toRGB('white')
+    )
+```
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+election_final2 <-
+      election_final %>% filter(year == 2020)
+
+plot_geo() %>%
+      add_trace(
+        fillcolor = ~ election_final2$winner,
+        span = I(0),
+        locations = state.abb,
+        text = paste0(
+          "State: ",
+          election_final2$state,
+          "<br>",
+          election_final2$DEMOCRAT,
+          " (DEMOCRAT): ",
+          election_final2$DEMOCRAT_result,
+          "%",
+          "<br>",
+          election_final2$REPUBLICAN,
+          " (REPUBLICAN): ",
+          election_final2$REPUBLICAN_result,
+          "%",
+          "<br>",
+          "OTHERS: ",
+          round(election_final2$OTHERS_result,2),
+          "%"
+        ),
+        locationmode = 'USA-states',
+        hovertemplate = paste('%{text}')
+      ) %>%
+      layout(geo = g,legend=list(title=list(text="Winner:")),hoverlabel = list(font = list(size = 9)),title ="Results of the US presidential election in 2020")
+
+```
+
+The map allows you to see which party won in a specific state in the US presidential election. When you hover over a specific state, it allows you to see more accurate results in a given state. In addition clicking on a party's name included in the legend will result in only the states in which it won remaining selected.
+
+# Conclusions
+
+-   We can see that the US has a two-party system because no party other than Democrats and Republicans received more than 5% in any state.
+-   Analysis of the data shows that the northwestern states and Hawaii favor Democrats more, while the southern and central states and Alaska favor Republicans more.
