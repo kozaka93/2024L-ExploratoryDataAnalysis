@@ -1,0 +1,64 @@
+---
+title: "Praca domowa 5"
+author: "Maria Krawczyk"
+date: "2024-05-06"
+output: 
+    html_document:
+      toc: true
+      toc_float: true
+      code_folding: hide
+      theme: flatly
+---
+
+```{=html}
+<style>
+  body {
+    font-family: 'Times New Roman';
+     font-size: 17px;
+  }
+</style>
+```
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
+
+library(plotly)
+library(forcats)
+```
+## Źródło
+
+Wizualizację wzięłam ze strony: http://www.vagla.pl/node/183 
+<br>
+Jak widać nie zawiera ona początkowo interaktywności, jednak po dokonaniu paru poprawek wprowadzimy ją w celu poprawienia czytelnośc wykresu.
+
+## Poprawiana wizualizacja
+
+![](http://www.vagla.pl/files/wydatki_komitetow_2015.jpg)
+<br>
+
+## Moja wizualizacja
+
+```{r plotly, echo=FALSE}
+
+val <- c(29.84, 29.59, 13.20, 11.62, 2.90, 0.25, 12.59)
+names <- c("PiS", "PO", "PSL", "Nowoczesna", "Kukiz'15", "Mniejszość Niem.", "Inne")
+names2 <- c("Prawo i Sprawiedliwość", "Platforma Obywatelska", "Polskie Stronnictwo Ludowe", "Nowoczesna Ryszarda Petru", "Kukiz'15", "Mniejszość Niemiecka", "Inne (pozostałe 110 komitetów)")
+
+plot_ly(x = ~fct_relevel(names, names), y = ~val, customdata = names2, type = 'bar', name = "", hovertemplate = "Komitet Wyborczy: %{customdata}<br>Odsetek wydatków: %{y}%", text = paste0(val, "%"), textposition = "outside", textfont = list(size = 12)) %>% 
+  layout(
+    title = "Wydatki komitetów w kampanii parlamentarnej w 2015",
+    xaxis = list(title = "Komitet wyborczy"),
+    yaxis = list(title = "Wydatki [%]"),
+    margin = list(l = 80, r = 80, b = 80, t = 50)
+  )
+
+```
+
+
+## Problemy i wprowadzone zmiany
+- Po pierwsze, wykres bazowy jest kołowym. Co więcej, nie jest zwykłym wykresem kołowym, lecz takim z poodsuwanymi od siebie wycinkami, co jeszcze bardziej utrudnia porównywanie wielkości danych części i ich zawartych w nich wartości. Dlatego moja wizualizacja jest w postaci wykresu słupkowego, gdzie od razu widoczne są różnice między wartościami poszczególnych kategorii.
+- Po drugie, wszystkie użyte na danym wykresie odcienie zieleni są bardzo podobne i trudne do rozróżnienia. Dużo skupienia wymaga dopasowanie wycinka wykresu do opisu w legendzie. Mając natomiast wykres słupkowy juz na pierwszy rzut oka widzimy z którym komitetem powiązanymi jest który słupek, gdyż podpisy są bezpośrednio pod nimi
+- Po trzecie, w legendzie danego wykresu przy każdym punkcie powtarzany jest zwrot "Komitret wyborczy", co moim zdaniem też jest niepotrzebne i tylko odwraca uwage od kluczowych informacji, czyli po prostu konkretnej nazwy komitetu. W mojej wizualizacji wystarcza podpisanie osi x tytułem "Komitety wyborcze" i wiadomo wtedy, że infomacja ta dotyczy każdej kategorii na tej osi (nie trzeba pisać tegoi przy każdym słupku osobno - czytelność wykresu)
+- Co daje interaktywność? Jak widizimy na osi x zapisane są jedynie skróty nazw komitetów, natomiast dodana interaktywność umożliwia odczytanie pełnych ich nazw po najechaniu na konkretny słupek. Sprzyja to czytelności wykresu, nie tracąc przy tym żadnych istotnych informacji.
+
+
+
