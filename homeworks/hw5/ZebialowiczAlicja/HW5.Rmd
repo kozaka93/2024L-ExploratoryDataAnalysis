@@ -1,0 +1,89 @@
+---
+title: "Zadanie domowe 5"
+author: "Alicja Żebiałowicz"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: hide
+    theme: united
+  pdf_document:
+    toc: true
+editor_options:
+  markdown:
+    wrap: 72
+---
+
+## Wizualizacja źródłowa
+
+Źródło:
+<https://www.andrzej-witek.pl/2023/01/03/w-biegach-gorskich-rzadzi-europa-jeszcze/>
+
+![](https://www.andrzej-witek.pl/wp-content/uploads/2023/01/image-1024x634.png)
+
+## Elementy wizualizacji wymagające poprawy
+
+Przede wszystkim, przedstawiony wykres jest wykresem kołowym (a
+właściwie pierścieniowym). Ciężko porównać jest, który kontynent ma
+procentowo większy udział w przedstawionym temacie, w szczególności
+byłoby to niemożliwe w przypadku Europy i Ameryki Północnej oraz Ameryki
+Południowej i Austalii i Oceanii, gdyby nie podpisane wartości. Już
+pomijając, że na niektórych częściach pierścienia wartości procentowe są
+podane, a na niektórych nie.
+
+Oprócz tego po przeczytaniu artykułu uważam, że tytuł wykresu powinien
+być trochę poprawiony, aby można było łatwiej zrozumieć jego
+przesłanie - autor porównuje ze sobą Mistrzostwa Świata w Lekkoatletyce
+w USA i Mistrzostwa Świata w Biegach Górskich w Tajlandii na wybranych
+dystansach, ale istotny tu jest typ biegu, a nie gdzie odbywały się
+zawody.
+
+## Poprawiona wizualizacja
+
+```{r setup, include=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(dplyr)
+library(plotly)
+```
+
+```{r}
+dane <- data.frame(kontynent = c("Afryka", "Europa", "Ameryka \n Północna", "Azja", "Ameryka \n Południowa", "Australia \n i Oceania"),
+                   kontynent_2 = c("Afryka", "Europa", "Ameryka Północna", "Azja", "Ameryka Południowa", "Australia i Oceania"),
+                   procent = c(45.7, 22.5, 19.6, 8.7, 2.2, 1.4))
+
+dane <- dane %>% 
+  arrange(- procent)
+
+dane$numer <- 1:nrow(dane)
+
+```
+
+```{r}
+wykres <- plot_ly(dane, x = ~reorder(kontynent, numer), y = ~procent, 
+                  type = 'bar',
+                  customdata = ~kontynent_2,
+                  name = "",
+                  hovertemplate = "Kontynent: %{customdata}<br>Udział procentowy zawodników: %{y}%") %>% 
+  layout(
+    title = "Procentowy udział kontynentów w TOP 20 klasyfikacji końcowej 
+    na MŚ 2022 USA w lekkoatletycznych biegach długodystanstowych",
+    xaxis = list(title = "Kontynent"),
+    yaxis = list(title = "Odsetek zawodników w %"),
+    margin = list(l = 80, r = 80, b = 80, t = 50))
+  
+wykres
+```
+
+## Uzasadnienie, dlaczego przygotowany wykres jest lepszy od oryginalnego
+
+Przede wszystkim przygotowany wykres nie jest wykresem kołowym, tylko
+słupkowym. Dzięki temu możemy z łatwością dostrzec, który kontynent ma
+największy lub najmniejszy procentowy udział zawodników w
+przedstawionej klasyfikacji.
+
+Dodatkowo identyczne kolory słupków nie zaburzają odbioru informacji.
+
+Oprócz tego, interaktywność wykresu pozwala na odczytanie dokładnej
+wartości udziału procentowego zawodników z poszczególnych kontynentów
+poprzez najechanie myszką na wybrany słupek.
