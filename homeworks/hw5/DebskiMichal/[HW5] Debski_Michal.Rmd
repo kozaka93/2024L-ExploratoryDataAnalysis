@@ -1,0 +1,68 @@
+---
+title: '[HW5]'
+author: "Michał Dębski"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+  
+
+# **Wykres do poprawy**
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(openxlsx)
+library(dplyr)
+library(ggplot2)
+library('jpeg')
+library(plotly)
+library(tidyr)
+newsweek_plot<-readJPEG('kraje_katolicy.jpg')
+```
+
+Wadliwy wykres pochodzi z Newsweek, dotyczy krajów z największą populacją katolików, podaną w mln osób.
+
+Źródło: https://www.newsweek.pl/swiat/gdzie-zyje-najwiecej-katolikow-ilu-katolikow-mieszka-w-polsce-mapa/dd1ddp1
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+plot(1:2,type="n", axes=F, xlab="", ylab="")
+rasterImage(newsweek_plot,1,1,2,2)
+```
+
+
+Już na pierwszy rzut oka widać, że powyższa wizualizacja ma wiele wad... Po pierwsze posiada porozrzucane oraz powycinane z mapy kraje, ułożone kontynentami. Co już utrudnia czytelnikowi zrozumienie wizualizacji. Co więcej na wizualizacji nie widać, aby autor trzymał się skali, przykładowo Chiny zostały zmniejszone do mikrospijnych rozmiarów (mimo, że pod względem powierzchni to trzeci największy kraj na świecie), jednak Meksyk jest nieproporcjonalnie większy od większości narodowości (mimo, że jest dopiero trzynastym największym krajem pod względem wielkości). Oczywiście czytelnik może się domyślać, że celem autora było pokazanie wielkości populacji katolików w danych państwach, jednak naruszanie skali oraz ustawienie w ten sposób narodowości może prowadzić do nieporozumień. 
+
+# **Cel**
+
+Poprawić na interaktywną mapę, tak aby czytelnik mógł sobie powiększyć obszar, który go interesuje, a także mógł otrzymać szczegółowe informacje odnośnie wielkości populacji katolików w poszczególnych państwach. Jednocześnie zachowując skalę, a także położenie poszczególnych krajów na mapie świata. 
+
+# **Propozycje wykresu**
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+panstwo<-c("Kanada", "Stany Zjednoczone", "Polska", "Meksyk", "Wenezuela","Kolumbia","Hiszpania","Ekwador","Peru",'Chile','Argentyna','Brazylia','Portugalia','Francja','Wielka Brytania','Niemcy', 'Włochy','Chiny','Indie','Filipiny','Nigeria','Angola','Uganda','Demokratyczna Republika Konga','Tanzania')
+katolicy<-c(13,75,35,96,23,38,35,12,24,12,31,134,10,38,10,28,50,9,11,75,20,11,14,31,14)
+iso<-c('CAN','USA','POL','MEX','VEN','COL','ESP','ECU','PER','CHL','ARG','BRA','PRT','FRA','GBR','DEU','ITA','CHN','IND','PHL','NGA','AGO','UGA','COD','TZA')
+df<-as.data.frame(cbind(panstwo,iso,katolicy))
+
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+g <- list(scope = 'world')
+plot_geo(df) %>%
+  add_trace(
+    z = ~katolicy,
+    locations = ~iso,
+    fill = ~katolicy,
+    colorscale = 'Jet',
+    text=~panstwo, 
+    hoverinfo='panstwo')%>%
+  colorbar(title = "w mln") %>%
+  layout(geo = g) %>%
+  layout(
+    title = 'Gdzie żyje najwięcej katolików? Top 25 krajów (w mln osób)',
+    geo = g)
+```
+
+### Uzasadnienie  
+Powyższa wizualizacja jest być może mniej artystyczna, jednak bardziej przejrzysta, ponieważ z łatwością można zaobserwoać w których państwach jest największa populacja katolików, co więcej można sprawdzić populację wierzących w milionach, nadal można otrzymać kraj w dowolnej wielkości zachowując przy tym skalę, a także położenie na mapie świata.  
+  
