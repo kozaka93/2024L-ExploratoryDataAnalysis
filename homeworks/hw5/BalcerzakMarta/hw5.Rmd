@@ -1,0 +1,64 @@
+---
+title: "Praca domowa 5"
+subtitle: "Marta Balcerzak"
+date: "2023-05-06"
+output: 
+  html_document:
+    code_folding: hide
+    theme: journal
+---
+
+```{r setup, include=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = F, warning = F, fig.dim = c(8, 6))
+```
+## Poprawiana wizualizacja
+Wadliwy wykres pochodzi z pierwszej strony gazety Rzeczpospolita.  
+link do pierwszej strony: https://archiwum.rp.pl/2024/04/19
+
+![](https://grafik.rp.pl/g4a/1514311,874774,9.jpg?_gl=1*ntcmtu*_ga*NjU5MDQwMjAyLjE3MTE1NzA4Mzc.*_ga_Q5M7845HMR*MTcxNDk5MjY0NC41LjEuMTcxNDk5MzYzOC41OC4wLjA.)  
+  
+Jest to wykres słupkowy, ale widzimy na nim również dane przedstawione tylko za pomocą napisów. Ponadto wykres pokazuje sporo informacji, a więc cieżko jest nam porównywać ze sobą te wszystkie wartości. 
+
+## Moja wizualizacja
+Moją propozycją na przedstawienie powyższych danych jest interaktywny wykres słupkowy, pogrupowany ze względu na obszar badań i rok, w którym sami możemy wybrać, które dane będziemy ze sobą porównywać.
+Poniżej kod potrzebny do jego wygenerowania i wykres:
+
+```{r}
+library(plotly)
+library(dplyr)
+
+region <- c(rep("Polska", 6), rep("Europa", 6) )
+sprzedaz23 <- c(36.8, 44.4, 9.7, 3.9, 2.7,2.5, 24.4, 37.4, 14.4, 13.9, 7.2, 2.7)
+sprzedaz24 <- c(45.7, 35.4, 9.2, 3.4, 2.8, 3.5, 29, 35.4, 12.4, 13, 7.1, 3)
+naped <- rep(c("klasyczna hybryda", "benzyna", "diesel", "elektryczny",
+           "hybryda plug-in", "inne"),2)
+
+data <- data.frame(region, sprzedaz23, sprzedaz24, naped)
+datapol <- data %>% filter(region == "Polska")
+dataeur <- data %>% filter(region == "Europa")
+
+plot <- plot_ly() %>%
+  add_trace(data = datapol, x = ~as.list(naped), y = ~sprzedaz23, type = 'bar', name = '2023 Polska') %>%
+  add_trace(data = datapol, x = ~as.list(naped), y = ~sprzedaz24, type = 'bar', name = '2024 Polska') %>%
+  add_trace(data = dataeur, x = ~as.list(naped), y = ~sprzedaz23, type = 'bar', name = '2023 Europa') %>%
+  add_trace(data = dataeur, x = ~as.list(naped), y = ~sprzedaz24, type = 'bar', name = '2024 Europa') %>%
+  layout(
+    updatemenus = list(
+      list(
+        type = "buttons",
+        direction = "right",
+        buttons = list(
+          list(method = "restyle",
+               args = list("visible", list(T, T, F, F)),
+               label = "Polska"),
+          list(method = "restyle",
+               args = list("visible", list(F, F, T, T)),
+               label = "Europa"),
+          list(method = "restyle",
+               args = list("visible", list(T, T, T, T)),
+               label = "Oba")))),  title = "Sprzedaż nowych samochodów wg rodzaju napędu (w proc.)", 
+    xaxis = list(title = 'Napęd'), 
+    yaxis = list(title = 'Odsetek', range = c(0,45)))
+plot
+```
+Na tym wykresie bez problemu możemy porównywać wszystkie wielkości i jest to zdecydowanie łatwiejsze. Jeżeli chcemy skupić się na konkretnym obszarze badań, możemy wybrać go z przycisków znajdujących się obok, dzięki czemu wizualizacja będzie prostsza w odczytywaniu.
