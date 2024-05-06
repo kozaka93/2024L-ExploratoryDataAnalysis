@@ -1,0 +1,69 @@
+---
+title: "Praca domowa 5"
+author: Łukasz Kapciak
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: show
+    theme: simplex
+---
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(dplyr)
+library(plotly)
+```
+
+# Błędna wizualizacja
+
+<font size = "4"> Niepoprawnie wykonana wizualizacja pochodzi ze strony [Flowing Data](https://flowingdata.com/2013/07/15/open-thread-what-is-wrong-with-these-charts/).
+
+Poniżej znajduje się zdjęcie wykresu:
+
+![](niepoprawnywykres.png)
+
+## Co jest nie tak?
+
+1.  **Grubość słupków**. Zaburza czytelność wykresu i utrudnia jego interpretację.
+2.  **Długość słupka**. Prawie nie widać różnicy pomiędzy 765 a 466, za to widać ogromny skok pomiędzy 380 a 466. Podobnie ma się sprawa na dole wykresu; okazuje się bowiem (porównując różnice między dwoma pierwszymi i dwoma ostatnimi słupkami), że 40 \> 261.
+3.  **Podpisy**. Statystyka chińskiego jest wyrażona w miliardach, podczas gdy pozostałe wyrażone są w milionach. Dodatkowo, przecinek może być niepoprawnie zrozumiany i mniej bystry czytelnik mógłby stwierdzić, że po chińsku mówi tysiąc miliardów ludzi (troszkę więcej niż jest na świecie). Poza tym, podpisy są zwyczajnie nieestetyczne.
+4.  **Kolory i obrazki**. Niepotrzebne w kontekście przekazywania danych, a ich efekt estetyczny jest raczej negatywny.
+
+# Jak to naprawić?
+
+Ustalimy stałą grubość słupków i poprawimy proporcje wykresu. Dodatkowo dodamy do niego nową informację - każdy słupek powie nam, ile procent świata mówi w danym języku. Zważając na datę publikacji artykułu (15.07.2013) wykorzystamy dane o populacji świata z 2013 roku.
+
+## Tworzenie danych
+
+```{r}
+pop2013 = 7229 # w milionach ludzi, tak samo jak dane na wykresie
+data = data.frame(language = as.factor(c("Chinese", "English","Spanish", "Hindi", "Arabic", "Russian", "Bengali", "Portugese", "Indonesian", "Japanese")),
+                  value = c(1026, 765, 466, 380, 353, 272, 250, 217, 163, 123)) %>% 
+  mutate(percentage = round(100 * value/pop2013, 2))
+
+data
+```
+
+## Tworzenie wykresu
+
+```{r}
+plot_ly(
+  data = data,
+  x = ~language, 
+  y = ~value,
+  customdata = ~percentage,
+  type = 'bar',
+  hovertemplate = "<b>Number of speakers:</b> %{value} mln <br><b>Percentage of the entire population:</b> %{customdata}%<extra></extra>") %>% 
+  layout(
+    title = "10 most spoken languages in the world (in 2013)",
+    xaxis = list(title = "Language",
+                 categoryorder = "total descending"),
+    yaxis = list(title = "Number of speakers (in millions)")
+    )
+```
+
+# Efekty
+
+Pracy nie było wiele, a efekt jest zauważalnie lepszy. Po pierwsze, widać różnicę między chińskim i angielskim. Dodatkowo, jest ona dużo większa niż ta między japońskim a indonezyjskim; na początku było na odwrót. Słupki nie mają już różnych szerokości, a jednakowa kolorystyka zwiększa przejrzystość. Zyskaliśmy też nowe informacje o procencie ludzi na świecie mówiącym w danym języku.
+
+</font>
