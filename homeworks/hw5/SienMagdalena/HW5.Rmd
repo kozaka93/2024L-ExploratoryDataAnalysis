@@ -1,0 +1,73 @@
+---
+title: "PRACA DOMOWA NR 5"
+date: "2023-05-07"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: hide
+    theme: united
+---
+
+```{r setup, include=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(dplyr)
+library(plotly)
+
+```
+*Magdalena Sień*
+
+\
+
+# Wizualizacja źródłowa
+![](C:\Users\magda\Documents\women-are-having-children-later-in-life..png){width=90%}
+
+## Żródło wizualizacji
+
+<https://usafacts.org/articles/how-have-us-fertility-and-birth-rates-changed-over-time/>
+
+## Ocena wizualizacji
+Wykres jest bardzo nieczytelny. Na pierwszy rzut oka trudno stwierdzić, czy nastąpił przyrost czy spadek w ilości urodzeń. Zmiana ta jest przedstawiona za pomocą strzałek, które zwrócone są w stronę odpowiadającą rokowi 2019. Lata zaznaczone są jedynie na pierwszej strzałce. Dodatkowo osie nie są podpisane. Wszystko to sprawia, iż wykres jest bardzo nieintuicyjny. 
+
+# Moja wizualizacja
+
+```{r, echo=TRUE, fig.width=10, fig.height}
+df<-data.frame(
+  year=c(rep('2019',3),rep('2006',7),rep('2019',4)),
+  number=c(10.6,57.2,90.6,102,55.3,15,3.9,26.4,92.3,117.6,103.2,62.5,21.6,7.8),
+  age=c('15-19','20-24','25-29','30-34','35-39','40-44','45-50')
+)
+
+fig <- plot_ly(
+  data = df,
+  x =  ~ year,
+  y =  ~ number,
+  type = 'bar',
+  frame =  ~ age,
+  hovertemplate = paste('%{y}', '<extra></extra>'),
+  width = 700, 
+  height = 800
+)
+
+fig %>%
+  animation_opts(7,frame=500,transition=200,easing='linear') %>%
+  animation_button(x = 0.05, y = 0.05) %>%
+  animation_slider(currentvalue = list(prefix = "AGE: ", font = list(color =
+                                                                       "grey10")))%>% 
+  layout(
+     title=toupper('Births per 1000 women by age group in 2006 and 2019'),
+      yaxis = list(title = 'number of births per 1000 women',fixedrange = TRUE),
+      xaxis = list(fixedrange = TRUE),
+      margin = list(autoexpand=TRUE,t=100),
+     autosize = F
+  ) %>% 
+  animation_button(
+    x = 0, xanchor = "left", y = -0.3, yanchor = "bottom"
+  )
+
+```
+
+## Ocena mojej wizualizacji
+
+Mój wykres jest zdecydowanie łatwiejszy w odczycie. Osie są podpisane, tytuł klarowny. Wybranie wykresu słupkowego zwiększa klarowność wizualizacji - jasno widać, czy nastąpił przyrost czy spadek. Animacje pozwalają na skupienie się na danych grupach wiekowych, a wykres nie jest zagracony. Dodatkową funckją jest możliwość najechania na słupek i zobaczenia dokładnej odpowiadającej mu wartości. 
