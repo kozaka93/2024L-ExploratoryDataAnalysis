@@ -1,0 +1,106 @@
+---
+title: "HW5"
+output: html_document
+date: "2024-05-06"
+author: "Krzysztof Maślak"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE
+)
+library(plotly)
+library(dplyr)
+```
+
+## Temat pracy domowej
+
+Zajmiemy się poprawą poniższego bohomazu:
+<br><br>
+![WYkres do poprawy](fuszerka.png){width=400}
+<br><br>
+Wykres w tej wersji znaleziono na [stronie](https://forsal.pl/gospodarka/polityka/artykuly/9313332,kto-wygra-wybory-2023-jest-nowy-sondaz-poparcia.html).
+<br><br>
+Wykresy są kołowe i osobiście uważam je za brzydkie.
+<br><br>
+```{r echo=FALSE}
+responses <- c("Zdecydowanie tak", "Raczej tak", "Nie wiem", "Raczej nie", "Zdecydowanie nie")
+percentage1 <- c(51.1, 8.1, 5.6, 12, 23.1)
+percentage2 <- c(55.9, 9.9, 2.1, 10.4, 21.7)
+
+df <- data.frame(Response = responses, Percentage09 = percentage1, Percentage10 = percentage2)
+df$responses <- factor(responses, levels = responses)
+
+df <- df %>% 
+  mutate(Change = Percentage10 - Percentage09)
+
+updatemenus <- list(
+  list(
+    active = -1,
+    type= 'buttons',
+    buttons = list(
+      list(
+        label = "Wszystkie wyniki",
+        method = "update",
+        args = list(list(visible = c(TRUE, TRUE, TRUE)),
+                    list(title = "Porównanie deklaracji udziału w wyborach na przestrzeni 2 tygodni"
+                         ))),
+      list(
+        label = "Zmiana",
+        method = "update",
+        args = list(list(visible = c(FALSE, FALSE, TRUE)),
+                    list(title = "Procentowa zmiana deklaracji udziału względem 19 września"
+                         )))
+)))
+
+fig <- plot_ly(df) %>% 
+  add_trace(
+    x = ~Response,
+    y = ~Percentage09,
+    type = 'bar',
+    name = '19 września',
+    hoverinfo = 'text',
+    hovertext = ~paste0("19 września<br>", Response,
+                  ": ", Percentage09, "%"),
+    hoverlabel = list(bgcolor = "white", font = list(color = "black"))
+  ) %>% 
+  add_trace(
+    x = ~Response,
+    y = ~Percentage10,
+    type = 'bar',
+    name = '2 października',
+    marker = list(color = 'lightblue'),
+    hoverinfo = 'text',
+    hovertext = ~paste0("2 października<br>", Response,
+                  ": ", Percentage10, "%"),
+    hoverlabel = list(bgcolor = "white", font = list(color = "black"))
+  ) %>% 
+  add_trace(
+    x=~ Response,
+    y =~ Change,
+    type = 'bar',
+    name = 'zmiana',
+    marker = list(color = ifelse(df$Change < 0, "red", "green")),
+    hoverinfo = 'text',
+    hovertext = ~paste0("Procentowa zmiana: ", Change, "%"),
+    showlegend = FALSE
+  ) %>%
+  layout(
+    title = "Porównanie deklaracji udziału w wyborach parlamentarnych 2023",
+    xaxis = list(title = "Odpowiedź",  categoryorder = "array", categoryarray = responses),
+    yaxis = list(title = "Procent"),
+    updatemenus = updatemenus
+  )
+fig
+```
+
+## Wnioski
+
+Z wykresu widzimy, że na krótko przed wyborami mobilizacja Polaków znacząco wzrosła.
+
+
+
+
+
