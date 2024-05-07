@@ -1,0 +1,55 @@
+---
+title: "HW5"
+author: "Oliwia Wojtkowiak"
+output: html_document
+---
+
+## Wizualizacja źródłowa
+
+Źródło:
+<https://pap-mediaroom.pl/zdrowie-i-styl-zycia/juz-23-polakow-uprawia-sport-ktore-aktywnosci-z-najwyzszym-ryzykiem-kontuzji>
+Wykres:
+<https://pap-mediaroom.pl/sites/default/files/styles/open_article_750/public/2022-08/1_9.jpg?itok=fH6N_XL_>
+
+## Elmenty wizualizacji, które należy poprawić
+
+Wybrany przeze mnie wykres jest wykresem kołowym, na którym ciężko odczytać zwizualizowane wartości, na przykład ciężko dostrzec różnicę między kawałkiem ukazującym 3, 6 oraz 7 procent.
+Dodatkowo użyte kolory mylą - kolor czerwony użyty do fragmentu przedstawiającego osoby uprawiające sport 2-3 razy  tygodniu jest kojarzony ze złem/niebezpieczeństwem, więc jak już powinien zostać użyty do fragmentu odpowiadającego osobom biernym fizycznie.
+Na dodatek tytuł nie jest do końca prawidłowy - brzmi "Ile razy w tygodniu uprawiasz sport?", zaś kilka z odpowiedzi odnosi się nie do tygodnia, a miesiąca.
+
+## Poprawiona wizualizacja
+
+```{r setup, include=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(plotly)
+```
+
+```{r}
+ramka <- data.frame(czestosc = c("Codziennie lub \n prawie codziennie", "2-3 razy \n w tygodniu", "Raz \n w tygodniu", "2-3 razy \n w miesiącu", "Raz \n w miesiącu", "Rzadziej niż \n raz w miesiącu", "W ogóle nie \n uprawiam sportu"),
+                   procenty = c(12, 25, 12, 6, 3, 7, 34))
+ramka <- ramka %>% 
+  arrange(- procenty)
+
+```
+
+
+```{r}
+wykres <- plot_ly(ramka, x = ~ czestosc, y = ~ procenty, color = ~ czestosc,
+                  colors = c("green", "lightgreen","yellow", "gold", "orange", "red", "darkred"),
+                  type = 'bar',
+                  name = "", showlegend = FALSE) %>% 
+  layout(
+    title = "Jak często uprawiasz sport?",
+    xaxis = list(title = "Częstość"),
+    yaxis = list(title = "Odsetek ankietowanych w %"),
+    margin = list(l = 90, r = 90, b = 90, t = 90))
+
+wykres
+```
+
+## Uzasadnienie poprawności wizualizacji
+
+Utworzony wykres jest słupkowy, a nie kołowy, co znacznie ułatwia porównywanie ilości ankietowanych w każdej z kategorii. Tytuł wykresu "nie gryzie się" z odpowiedziami, które nie dotyczą jedynie częstości w tygodniu. Poza tym dzięki interaktywności wykresu możliwe jest odczytanie dokładnej wartości procentowej.
+
+Wiem, że różne kolory słupków są zbędne, jednak dobrałam kolorystykę tak, aby uwidocznić wpływ stylu życia na ankietowanych udzielających odpowiedzi (kulturowe wartościowanie: zielony - dobrze, czerwony - źle). Dodatkowo kolorowe słupki zdecydowanie przyciągają oko, a jest to kluczowe, gdyż wykres pochodzi z artykułu internetowego.
