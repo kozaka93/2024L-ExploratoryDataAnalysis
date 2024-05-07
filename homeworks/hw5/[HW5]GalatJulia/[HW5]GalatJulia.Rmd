@@ -1,0 +1,68 @@
+---
+title: "HW5"
+author: "Julia Gałat"
+date: "2024-05-07"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: hide
+    theme: united
+---
+
+```{r setup, include=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(plotly)
+library(ggplot2)
+
+```
+
+## Wizualizacja źródłowa
+
+![](https://uh.edu/hobby/txprimary2024/images/picture51.png)
+
+Link do strony zawierającej wizualizacje : <https://uh.edu/hobby/txprimary2024/>
+
+Powyższy wykres jest wykresem 3D, więc zaburza on prawidłowe postrzeganie wysokości słupków. Ponadto słupek z 14 % jest na wysokości 10 %.
+
+## Poprawiona wizualizacja
+
+```{r}
+
+rpv <- c(26,56,18)
+dpv <- c(77,14,9)
+o <- c("Convict","Acquit","Don't Know")
+r <- rep("Republican Primary Voters",3)
+d <- rep("Democratic Primary Voters",3)
+d1 <- data.frame(voters = c(r,d),votes = c(rpv,dpv),statement = c(o,o))
+
+
+mrg <- list(l = 50, r = 50,
+            b = 70, t = 80,
+            pad = 4)
+
+p <-plot_ly(
+  data = d1,
+  x =  ~statement,
+  y =  ~votes,
+  color =  ~ voters,
+  type = "bar",
+  hovertemplate = paste("Votes: %{y}%")
+) %>% layout(
+  title = list(text = 'How Republican and Democratic Primary Voters Would
+  Have Voted Had They Served as a Juror in the Impeachment 
+  Trial of Texas Attorney General Ken Paxton (%)',y=0.94, yref='container'),
+  xaxis = list(title = "Answer"),
+  yaxis = list(title = ""),
+  legend=(list(x=1,y=0.5)),
+  margin = mrg
+  ) 
+
+```
+
+```{r pressure, echo=FALSE,warning= FALSE}
+p
+```
+
+Powyższa wizualizacja jest wizualizacja 2D i proporcje słupków zą zachowane. Interaktywność na wykresie to dokładna liczba procentów po najechaniu na słupek oraz możliwość oglądania wykresu tylko dla wyborców jedej partii po kliknięciu na legende.
