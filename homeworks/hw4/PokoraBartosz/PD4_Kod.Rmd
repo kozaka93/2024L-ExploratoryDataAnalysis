@@ -1,0 +1,92 @@
+---
+title: "PD4"
+author: "BartoszPokora"
+date: "2024-04-23"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: hide
+    theme: united
+  pdf_document:
+    toc: true
+---
+
+```{r setup, include=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(ggplot2)
+library(dplyr)
+library(leaflet)
+library(geojsonio)
+
+# importing country and Netflix prices data
+world.countries <- geojson_read("countries.geo.json", what = "sp")
+GDPCountries <- read.csv("gdp-per-capita-world-bank-constant-usd.csv") %>%
+  filter(Year == 2021)
+Netflix <- read.csv("Netflix subscription fee Dec-2021.csv")
+head(Netflix)
+Netflix %>%
+  select(Country, Cost.Per.Month...Basic....)
+
+# merging the datasets
+world.countries@data$iso_a2_eh <- tolower(world.countries@data$iso_a2_eh)
+world.countries@data <- left_join(world.countries@data, Netflix, by = c("iso_a2_eh" = "Country_code"))
+world.countries@data <- left_join(world.countries@data, GDPCountries, by = c("iso_a3_eh" = "Code"))
+```
+
+# Cena Netflixa w różnych krajach na świecie w roku 2021
+
+```{r}
+# creating a color palette for the Netflix basic plan price variable
+bins <- c(0, 2, 4, 6, 8, 10, 12, Inf)
+pal <- colorBin("YlOrRd", domain = Netflix$Cost.Per.Month...Basic...., bins = bins)
+
+# creating labels for the map
+labels = sprintf(paste0("Country: ", world.countries@data$name, "<br>",
+                        "Netflix Basic Plan Price: ", world.countries@data$Cost.Per.Month...Basic...., " USD<br>",
+                        "Titles avaliable: ", world.countries@data$Total.Library.Size, "<br>",
+                        "Cost per title: ", round(world.countries@data$Cost.Per.Month...Basic..../world.countries@data$Total.Library.Size*100, 4), " cents<br>",
+                        "GDP per capita: ", round(world.countries@data$GDP.per.capita..constant.2015.US.., 0), " USD<br>")) %>%
+  lapply(htmltools::HTML)
+
+# creating the map
+leaflet(world.countries) %>%
+  setView(20, 50, 1) %>%
+  addTiles() %>%
+  addPolygons(
+    fillColor = ~pal(Cost.Per.Month...Basic....),
+    color = "white",
+    weight = 1,
+    opacity = 1,
+    dashArray = "",
+    fillOpacity = 0.8,
+    highlight = highlightOptions(
+      weight = 4,
+      color = "#666",
+      dashArray = "",
+      fillOpacity = 0.9,
+      bringToFront = TRUE
+    ),
+    label = labels
+  ) %>% addLegend(pal = pal, values = ~Cost.Per.Month...Basic....,
+                title = "Netflix Basic Plan Price (USD)",
+                opacity = 0.8,
+                position = "bottomright")
+```
+
+## Opis
+
+Mapka przedstawia cenę (na miesiąc) podstawowego planu Netflixa w różnych krajach na świecie. Dane pochodzą z 2021 roku. Im bardziej intensywny kolor, tym wyższa cena. (Szarym kolorem oznaczone są państwa, dla których nie było danych.) Dodatkowo po najechaniu na dany kraj wyświetlają się informacje o cenie, liczbie dostępnych tytułów na Netfliksie, stosunku ceny do liczby dostępnych tytułów oraz GDP per capita.
+
+### Wnioski
+
+Można zauważyć, że najdroższy Netflix jest w Szwajcarii, a najtańszy w Turcji. Istnieje ogólny trend, że w bogatszych krajach cena Netflixa jest wyższa, ale można znaleźć parę wyjątków. Polska cena Netflixa jest jedną z najniższych w Europie.
+
+## Źródła
+
+-   Geojson państw świata: <https://geojson-maps.kyd.au/>
+
+-   Dane na temat Netflixa: <https://www.kaggle.com/datasets/prasertk/netflix-subscription-price-in-different-countries>
+
+-   Dane o GDP: <https://ourworldindata.org/grapher/gdp-per-capita-world-bank-constant-usd>

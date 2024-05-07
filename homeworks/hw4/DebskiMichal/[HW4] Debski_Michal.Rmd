@@ -1,0 +1,53 @@
+---
+title: '[HW4]'
+author: "Michał Dębski"
+date: "2024-04-20"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+### Mediana wieku w krajach europejskich
+Wizualizacja przedstawia medianę wieku dla poszczególnych krajów europejskich w latach 2012- 2023. Wizualizacja jest wykonana przy pomocy pakietu 'plotly'. Po najechaniu na dany kraj wyświetli się jego nazwa wraz z dokładną medianą wieku w latach. 
+  
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(dplyr)
+library(openxlsx)
+library(plotly)
+library(tidyr)
+Age <- read.xlsx("eurostat.xlsx")
+# przerabiamy ramke danych tak aby rok byl rowniez kolumna
+age <-Age%>%
+  pivot_longer(!c(Country,ISO), names_to = "Rok", values_to = "Wiek")%>%
+  mutate(info=paste0(Country))
+
+```
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+g <- list(scope = 'europe')
+plot_geo(age,frame= ~Rok) %>%
+  add_trace(
+    z = ~Wiek,
+    locations = ~ISO,
+    color = ~Wiek,
+    colorscale = 'Jet',
+    text=~info, 
+    hoverinfo='info')%>%
+  colorbar(title = "Wiek w latach") %>%
+  layout(geo = g) %>%
+  layout(
+    title = 'Mediana wieku w Europie w latach 2012-2023',
+    geo = g)
+```
+
+
+
+
+### Wnioski 
+Łatwo zauważyć, że na przestrzeni lat Włochy i Niemcy mają najwyższą medianę wieku, a co za tym idzie można wnioskować, że mają najstarsze społeczeństwo wśród państw europejskich. Z drugiej strony można uznać, że kraje takie jak Islandia, Albania oraz Irlandia mają najmłodsze społeczeństwa wśród państw europejskich. Co więcej obserwując Polskę można spostrzec, że nasze społeczeństwo się starzeje, gdyz z roku na rok mediana wieku wzrasta. 
+  
+### Źródła 
+Źródło: https://ec.europa.eu/eurostat/databrowser/view/eq_pop04/default/map?lang=en&category=eq.eq_demo.eq_pop1

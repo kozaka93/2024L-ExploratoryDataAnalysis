@@ -1,0 +1,107 @@
+---
+title: "HW4 Oliwia Wojtkowiak"
+date: "2024-04-24"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: hide
+    theme: united
+---
+##Wstęp
+
+Wizualizacja, którą przygotowałam ukazuje procent ludności chorej na depresję w krajach. Dane pochodzą z ramki csv i zawierają informacje na rok 2024.
+
+Źródło danych:
+
+<https://worldpopulationreview.com/country-rankings/depression-rates-by-country>
+
+### Kod
+```{r setup, include=FALSE, message=FALSE}
+
+library(rvest)
+library(dplyr)
+library(ggplot2)
+library(plotly)
+
+#pobieramy dane
+
+depression <- read.csv("C:/Users/oliwi/Downloads/depression-rates-by-country-2024.csv")
+
+
+#modyfikujemy dane, aby pasowały do wizji mapy
+
+depress <- depression %>% 
+  rename(region = country, rate = depressionRatesByCountry_prevalence) %>%
+  mutate(rate = replace(rate, rate == "2.9", "2.9-3.6"),
+         rate = replace(rate, rate == "3", "2.9-3.6"),
+         rate = replace(rate, rate == "3.1", "2.9-3.6"),
+         rate = replace(rate, rate == "3.2", "2.9-3.6"),
+        rate = replace(rate, rate == "3.3", "2.9-3.6"),
+        rate = replace(rate, rate == "3.4", "2.9-3.6"),
+        rate = replace(rate, rate == "3.5", "2.9-3.6"),
+        rate = replace(rate, rate == "3.6", "2.9-3.6"),
+        rate = replace(rate, rate == "3.7", "3.7-4.3"),
+        rate = replace(rate, rate == "3.8", "3.7-4.3"),
+        rate = replace(rate, rate == "3.9", "3.7-4.3"),
+        rate = replace(rate, rate == "4", "3.7-4.3"),
+        rate = replace(rate, rate == "4.1", "3.7-4.3"),
+        rate = replace(rate, rate == "4.2", "3.7-4.3"),
+        rate = replace(rate, rate == "4.3", "3.7-4.3"),
+        rate = replace(rate, rate == "4.4", "4.4-5.0"),
+        rate = replace(rate, rate == "4.5", "4.4-5.0"),
+        rate = replace(rate, rate == "4.6", "4.4-5.0"),
+        rate = replace(rate, rate == "4.7", "4.4-5.0"),
+        rate = replace(rate, rate == "4.8", "4.4-5.0"),
+        rate = replace(rate, rate == "4.9", "4.4-5.0"),
+        rate = replace(rate, rate == "5", "4.4-5.0"),
+        rate = replace(rate, rate == "5.1", "5.1-5.7"),
+        rate = replace(rate, rate == "5.2", "5.1-5.7"),
+        rate = replace(rate, rate == "5.3", "5.1-5.7"),
+        rate = replace(rate, rate == "5.4", "5.1-5.7"),
+        rate = replace(rate, rate == "5.5", "5.1-5.7"),
+        rate = replace(rate, rate == "5.6", "5.1-5.7"),
+        rate = replace(rate, rate == "5.7", "5.1-5.7"),
+        rate = replace(rate, rate == "5.8", "5.8-6.3"),
+        rate = replace(rate, rate == "5.9", "5.8-6.3"),
+        rate = replace(rate, rate == "6", "5.8-6.3"),
+        rate = replace(rate, rate == "6.1", "5.8-6.3"),
+        rate = replace(rate, rate == "6.2", "5.8-6.3"),
+        rate = replace(rate, rate == "6.3", "5.8-6.3"))
+        
+#Tworzymy mapę
+
+mapka <- map_data("world")
+mapka <- left_join(mapka, depress, by = "region")
+?scale_fill_brewer
+
+mapeczka <- ggplot(mapka, aes(x = long, y = lat, group = group)) +
+  geom_polygon(aes(fill = as.factor(rate)), color = "white", linewidth= 0.1) +
+  scale_fill_manual(values = c("#A3CCE1","#4C5FB2","#232C9D","#000058","#000027", "grey")) +
+  coord_fixed(1.5) +
+  labs(title = "Rate of depression in countries (as for 2024)",
+       fill = "Depression rate (in %)") +
+  theme(
+    plot.title = element_text(size = 16),  
+    legend.title = element_text(size = 14), 
+    legend.text = element_text(size = 12))
+
+
+#czynimy mapę interaktywną
+
+mapeczka_new <- ggplotly(mapeczka, tooltip = c("region", "n"))
+print(mapeczka_new)
+
+```
+
+### Wizualizacja
+
+```{r setup, include=FALSE, message=FALSE}
+mapeczka
+print(mapeczka_new)
+
+```
+
+### Wnioski
+
+Odsetek ludzi chorych na depresję w krajach na świecie na rok 2024 wynosi od 2.9 do 6.3%. W krajach europejskich, azjatyckich oraz w Australii zaobserwować można stosunkowo duży odsetek chorych(z rekordowym wynikiem 6.3% na Ukrainie), zaś w krajach afrykańskich odsetek chorych na depresję jest najmniejszy (w tym najmniej na Wyspach Samolona - 2.9%).
