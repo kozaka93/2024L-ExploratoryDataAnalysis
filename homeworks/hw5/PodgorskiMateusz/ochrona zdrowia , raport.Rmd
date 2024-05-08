@@ -1,0 +1,100 @@
+---
+title: "Ochrona zdrowia tvp"
+author: "Mateusz Podgórski"
+date: "2024-05-08"
+output: html_document
+---
+
+# Poprawa wykresu o wydatkach na ochronę zdrowia z dodaniem interaktywności
+
+*Autor: Mateusz Podgórski*
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(plotly)
+library(dplyr)
+```
+
+## Wykres z błędnnie zaprezentowanymi danymi danymi
+
+Wykres, który znalazłem znajdował się na Okręgowej Izby Lekarskiej, a dane pochodziły z wydania Wiadomości TVP. Są to dane z 2020 roku, co jest ważne w dalszych rozważaniach.
+
+
+
+## Co tu nie gra w tym wykresie?
+
+
+
+1.dane są prezentowane w formacie 3D w doatku pod kątem co zabuża rozmiary
+
+2.dane z lat 2023 to dane prognozowane, nie mające pokrycia z tematyką wykresu
+
+3.używane są różne kolory które również mogą wpłynąć na naszą percepcję.
+
+4.wyszczególnione są procenty w miescach które autor chce podkreślić.
+
+5.łatwo mogą się pomylić dane i prognozy
+## Utworzmy animowany, poprawiony wykres
+
+Wykres zawiera poprawione dane, rozszerzone do interaktywności wykresu. Są to:
+
+```{r}
+# Dane
+years <- c(2009:2025)
+percentages <- c(4.8, 4.7, 4.5, 4.4, 4.6, 4.4, 4.4, 4.5, 4.73, 4.8, 4.86, 5, 5.3, 5.5, 5.7, 5.8, 6.0)
+data <- data.frame(years, percentages)
+
+data$type <- ifelse(data$years <= 2020, "Historyczne", "Prognoza")
+
+```
+
+```{r warning=FALSE, message=FALSE}
+
+fig <- plot_ly(data, x = ~years, y = ~percentages, color = ~type, colors = c("Light Sky Blue", "6495ED"), type = 'bar', 
+               marker = list(line = list(color = 'black', width = 0.5))) %>%
+  layout(
+    title = list(text = "Wydatki na ochronę zdrowia jako % PKB ", font = list(size = 16)),
+    xaxis = list(title = "Rok", tickangle = 45),
+    yaxis = list(title = "Wydatki (% PKB)"),
+    barmode = 'group',
+    bargap = 0.3,      
+    bargroupgap = 0.1  
+  )
+
+buttons <- list(
+  list(method = "restyle", args = list("type", "bar"), label = "Słupkowy"),
+  list(method = "restyle", args = list("type", "scatter", "mode", "lines+markers"), label = "Liniowy")
+)
+
+fig <- fig %>%
+  layout(
+    updatemenus = list(
+      list(
+        x = 0.0,
+        y = 0.0,        # Przeniesienie przycisków na dół
+        yanchor = "bottom", # Zakotwiczenie przycisków na dole
+        buttons = buttons
+      )
+    )
+  ) %>%
+  layout(
+    xaxis = list(fixedrange = TRUE),
+    yaxis = list(fixedrange = TRUE)
+  ) %>%
+  config(displayModeBar = FALSE)
+
+fig
+
+```
+
+## Dlaczego ten wykres jest lepszy
+
+1.  jest interaktywny :)
+
+2.  nie jest 3D
+3.  posiada drugą wersję która lepiej odaje zmiany jakie następowały na przestrzeni lat
+4. Są wyrażnie podzielone dane na te które są faktami , a na te które są prognozą
+
+## Dlaczego ten wykres jest lepszy
+
+Źródła: <https://izba-lekarska.pl/numer/numer-3-2020/sprawdzam-ile-pieniedzy-na-zdrowie/> <https://stat.gov.pl/>
