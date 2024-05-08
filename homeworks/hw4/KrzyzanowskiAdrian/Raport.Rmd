@@ -1,0 +1,107 @@
+---
+title: "Raport"
+author: "*Adrian Krzyżanowski*"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: hide
+    theme: united
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(maps)
+library(dplyr)
+library(plotly)
+
+crime <- read.csv("state_crime.csv")
+states_codes<-read.csv("states.csv")
+
+```
+
+# **Raport - Zbrodnie w USA**
+
+## 1. Wstęp
+
+Celem raportu jest zbadanie w jakich obszarach Stanów Zjednoczonych dochodzi do największej liczby zbrodni. Czy będą to obszary, w których znajdują się metropolie, takie jak Nowy Jork, czy może bardziej południowe rejony?
+
+## 2. Dane
+
+Po odpowiednim zmodyfikowaniu danych źródłowych (podanych na końcu) otrzymaliśmy tabelę z nazwami poszczególnych stanów oraz średnią roczną liczbę popełnionych zbrodni na podstawie lat 1960-2019. Przestępstwa zostały podzielone na majątkowe (włamania, kradzieże) oraz z użyciem przemocy (napaści, zabójstwa, gwałty).
+
+```{r}
+crime_mod <- crime %>% 
+  mutate(all_crime_rate=Data.Rates.Property.All+Data.Rates.Violent.All) %>% 
+  group_by(State) %>% 
+  summarise(Średnia_wszystkich=round(mean(all_crime_rate)),
+            Średnia_majątkowych=round(mean(Data.Rates.Property.All)),
+            Średnia_przemocowych=round(mean(Data.Rates.Violent.All)))
+
+crime_data <- states_codes %>% 
+  left_join(crime_mod, by="State") %>% 
+  rename(Stan=State, Skrót=Abbreviation)
+```
+
+Tabela wygląda następująco:
+
+```{r, echo=FALSE}
+crime_data %>% DT::datatable()
+```
+
+## 3. Wizualizacja
+
+Oczywiście najlepszym sposobem prezentacji tych danych jest mapa. W poniższej wizualizacji możemy wybrać rodzaj popełnionych przestępstw. 
+
+```{r}
+crimes_map <- plot_geo(crime_data, locationmode = "USA-states") %>% 
+  add_trace(
+    z = ~crime_data$Średnia_wszystkich, 
+    text = paste0("Stan: ", crime_data$Stan),
+    locations = ~crime_data$Skrót,
+    color = ~crime_data$Średnia_wszystkich, colors = "YlOrRd"
+  ) %>% 
+  colorbar(title = "Średia roczna liczba zbrodni\nna 100,000 mieszkańców\nw latch 1960-2019") %>%
+  layout(
+    title = list(text = "Zbrodnie w Stanach Zjednoczonych", font = list(size = 20), x=0.1, y=0.9),
+    geo=list(scope = "usa",
+      projection = list(type = "albers usa")),
+    updatemenus = list(
+      list(
+        buttons = list(
+          list(
+            method = "restyle",
+            args = list("z", list(~crime_data$Średnia_wszystkich)),
+            label = "Średnia wszystkich"
+          ),
+          list(
+            method = "restyle",
+            args = list("z", list(~crime_data$Średnia_majątkowych)),
+            label = "Średnia majątkowych"
+          ),
+          list(
+            method = "restyle",
+            args = list("z", list(~crime_data$Średnia_przemocowych)),
+            label = "Średnia przemocowych"
+          )
+        ),
+        x = 0.1,
+        xanchor = "left",
+        y = 0.9,
+        yanchor = "top"
+      )
+    ),
+    margin = list(l = 50, r = 50, t = 50, b = 0)
+    )
+crimes_map
+```
+
+## 4. Wnioski
+
+Jak można odczytać z mapy w przypadku wszystkich zbrodni najgorzej wypadają stany: District of Columbia, Arizona oraz Florida. Widzimy też, że na terenach południowo-zachodnich rocznie średnio jest popełnianych więcej zbrodni. Co ciekawe ropatrując tylko przestępstwa majątkowe sytuacja wygląda prawie identycznie. Natomiast biorąc pod uwagę tylko zbrodnie z użyciem przemocy wartości średnich aż tak bardzo się nie różnią (poza 1 stanem) i tutaj najgorzej wypadają: District of Columbia, Florida i New York. Widać wtedy też najlepiej, że District of Columbia jest outlierem wśród tych danych. Dochodzi tam średnio do około 7641 wszystkich przęstepstw rocznie.
+
+## 5. Źródła
+
+- https://corgis-edu.github.io/corgis/csv/state_crime/
+- https://github.com/jasonong/List-of-US-States/blob/master/states.csv
+

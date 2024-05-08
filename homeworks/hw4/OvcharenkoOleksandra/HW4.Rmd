@@ -1,0 +1,90 @@
+---
+title: "HW4"
+output:
+  html_document:
+    df_print: paged
+date: "2024-04-22"
+---
+
+# Praca domowa 4
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r include=FALSE}
+library(igraph)
+library(tidygraph)
+library(ggraph)
+library(RColorBrewer)
+```
+
+## Źródło danych i tematyka
+
+Rozważymy graf ze strony $https://neurodata.io/project/connectomes/$, który pokazuje związki pomiędzy małą siecią neuronów w korze mózgu myszy. Każdy wierzchołek, czyli rozważana grupa neuronów, należy do jednego z trzech rodzajów komórek: **Cell body in EM volume** (ciało komórki nerwowej w mikroskopie elektronowym), **Characterized pyramidal neuron** (neuron piramidowy) albo **Dendritic fragment** (komórka dendrytyczna). Waga każdej krawędzi odpowiada liczbie synaps pomiędzy odpowiednimi grupami neuronów.
+
+```{r}
+mouse_graph <- read_graph("mouse_visual.cortex_1.graphml", format = "graphml")
+```
+
+## Przygotowanie danych
+
+```{r}
+mouse_graph <- as_tbl_graph(mouse_graph) %>% activate(nodes)
+
+edge_list <- mouse_graph %>%
+  activate(edges) %>%
+  data.frame()
+
+node_list <- mouse_graph %>%
+  activate(nodes) %>%
+  data.frame()
+
+node_list$degree <- rep(0, nrow(node_list))
+node_list$id <- as.numeric(sub('.', '', node_list$id)) + 1
+node_list <- node_list[c("id", "type1", "type2", "degree")]
+
+for (i in 1:nrow(node_list)) {
+  node_list$degree[i] <- sum(edge_list$from == node_list$id[i]) +
+    sum(edge_list$to == node_list$id[i])
+}
+```
+
+```{r}
+mouse_graph <- graph_from_data_frame(d = edge_list, vertices = node_list, 
+                                    directed = FALSE)
+```
+
+## Wizualizacja
+
+Oznaczymy różne rodzaje komórek na grafie różnymi kolorami, a też uzależnimy rozmiar wierczhołka od jego stopnia i szerokość krawędzi od jej wagi.
+
+```{r fig.height=8, fig.width=10, message=FALSE, warning=FALSE}
+mouse_graph %>%
+  ggraph(layout = "linear", circular = TRUE) +
+  geom_edge_arc(aes(width = weight),
+                 color = "snow3",
+                 n = 100,
+                 lineend = "butt", 
+                 linejoin = "round") +
+  scale_edge_width(range = c(0.8, 3.3)) +
+  geom_node_point(aes(size = degree, color = type1),
+                  alpha = 0.9) +
+  scale_size(range = c(2.5, 6)) +
+  scale_colour_brewer(palette = "Dark2", name = "Type of neurons", 
+                      labels = c("Cell body in EM volume", 
+                                 "Characterized pyramidal neuron",
+                                 "Dendritic fragment")) +
+  theme_graph(background = "white",
+              foreground = "snow3") +
+  guides(edge_width = FALSE,
+         edge_alpha = FALSE,
+         size = FALSE,
+         scale = "none") +
+  labs(title = "Local network of cerebral cortex neurons \n in a mouse's brain") +
+  coord_fixed()
+```
+
+## Wnioski
+
+Możemy zauważyć, że neurony w korze mózgu myszy komunikują się między sobą nie tylko w obrębie komórek tego samego rodzaju, ale też komórek różnych rodzajów. Najwięcej połączeń z innymi komórkami mają neurony piramidowe.

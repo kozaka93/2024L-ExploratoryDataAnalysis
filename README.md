@@ -114,9 +114,9 @@ Wstęp do eksploracji danych składa się z:
     <td>11</td>
     <td>08-05</td>
     <td>The International Business Communication Standards</td>
-    <td>R: Shiny - część 2</td>
+    <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/tree/main/labs/lab11">R: Shiny - część 2</a></td>
     <td>Eksploracja danych, konkretne pomysły na wykresy, prototypy wykresów</td>
-    <td>HW5 (7p)<br>P2 (2p)</td>
+    <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/issues/309">HW5</a> (7p)<br>P2 (2p)</td>
   </tr>
   <tr>
     <td>12</td>
