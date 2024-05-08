@@ -1,0 +1,52 @@
+---
+title: "Homework 5"
+author: "Mikolaj Ryll"
+date: "2024-05-06"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Wizualizacja źródłowa
+
+Wykres został opublikowany na platformie X (dawniej Twitter) 27 marca 2024r przez Robina Delta ([@heyrobinal](https://twitter.com/heyrobinai)). Oryginalna wizualizacja wygląda następująco:
+
+![Źródło: [https://twitter.com/heyrobinai/status/1772983162718625942](https://twitter.com/heyrobinai/status/1772983162718625942)](https://pbs.twimg.com/media/GJrmwu-WUAAY7Pa?format=jpg&name=large)
+
+
+## Elementy wymagające poprawy
+
+Użycie kolorów nie ma sensu, nie dostarczają dodatkowych informacji. Legenda jest nieczytelna, kolory dla odpowiednich lat różnią się od tych na wykresie, co jest mylące. Dodatkowo wykres nie jest interaktywny, co spróbuję zmienić.
+
+
+## Poprawiona wizualizacja
+Dane z lat 2015-2023 pochodzą z portalu [GOOD CAR BAD CAR](https://www.goodcarbadcar.net/tesla-us-sales-figures/). Na portalu nie ma danych dla roku 2014, dlatego wykres będzie zaczynał się od roku 2015. Ilość sprzedanych aut dla lat 2024-2025 była prognozowana za pomocą mojej intuicji.
+
+```{r, message=FALSE, warning=FALSE}
+library(dplyr)
+library(plotly)
+
+prediction_2024 <- 1050000
+prediction_2025 <- 980000
+
+years <- c(2015,  2016,  2017,  2018,   2019,   2020,   2021,   2022,   2023,   2024,   2025)
+sales <- c(18742, 26725, 50067, 197517, 195125, 292902, 301998, 536069, 498000, prediction_2024, prediction_2025)
+data <- data.frame(years, sales)
+
+data <- data %>% 
+  mutate(Source = if_else(years < 2024, "Actual data", "Prediction"))
+
+# Tworzenie interaktywnego wykresu za pomocą plotly
+plot_ly(data, x = ~factor(years), y = ~sales / 1000000, color = ~Source, type = 'bar') %>%
+  layout(title = "Tesla Sales Data & Predictions",
+         xaxis = list(title = "Year"),
+         yaxis = list(title = "Sales (10^6)"),
+         barmode = 'group')
+
+```
+
+## Uzasadnienie zmian
+
+Przygotowany przeze mnie wykres jest lepszy, ponieważ użyte kolory informują, czy dane są faktyczne czy prognozowane. Dodatkowo legenda w prosty sposób tłumaczy kolory, które zostały użyte na wizualizacji. Wykres jest interaktywny, po najechaniu na słupek można w wygodny sposób odczytać dokładną wartość.
