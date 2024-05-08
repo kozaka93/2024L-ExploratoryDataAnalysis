@@ -1,0 +1,89 @@
+---
+title: "Praca domowa 5."
+output:
+  html_document: default
+  pdf_document: default
+date: "2024-05-06"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Wizualizacja źródłowa
+
+Analizowanym wykresem jest porównanie wartości odżywczych mleka krowiego i roślinnego opublikowane przez The Washington Post:
+
+![](images/chujowa%20wizualizacja%202..jpeg){style="display: block; margin: 1em auto;" width="340"}
+
+Głównym problemem jest tutaj wybrany typ wykresu, który przy porównaniu czterech wizualizacji lekko zaburza proporcje, powodując, że wykres może być źle odczytany.
+
+Ponadto wybór kolorów jest niefortunny: podział na czerwony i zielony automatycznie wywołuje reakcje pozytywne/negatywne. Ponadto nie są to dobrze dobrane kolorów dla osób mających problemy z ich rozróżnianiem.
+
+Dalej zostanie on zamieniony na wykres kolumnowy z zastosowaniem interaktywności, która pozwoli wybrać analizowany składnik odżywczy.
+
+```{r, message = FALSE, warning=FALSE, include=FALSE}
+# BIBLIOTEKI
+library(dplyr)
+library(plotly)
+```
+
+```{r, message = FALSE, warning=FALSE, include=FALSE}
+# PRZYGOTOWANIE ZBIORU
+data <- data.frame(
+  milk_type = c("Diary milk", "Almond", "Oat", "Soy"),
+  potassium = c(387, 163, 184, 280),
+  riboflavin = c(0.33, 0.02, 0.55, 0.45),
+  phosphorus = c(252, 22, 170, 176),
+  vitaminD = c(0.0027, 0.0024, 0.0023, 0.0027)
+)
+```
+
+##  Wizualizacja
+
+```{r, message = FALSE, warning=FALSE, echo = FALSE}
+plot_ly(data, 
+        x = factor(data$milk_type, levels = c("Diary milk", "Almond", "Soy", "Oat")), type = "bar") %>%
+  add_trace(y = ~potassium, name = "Potassium", visible = TRUE,
+            marker = list(color = c("#E3ECF2", "#D0DAAE", "#D0DAAE", "#D0DAAE")),
+            showlegend = FALSE) %>%
+  add_trace(y = ~riboflavin, name = "Riboflavin", visible = FALSE,
+            marker = list(color = c("#E3ECF2", "#D0DAAE", "#D0DAAE", "#D0DAAE")),
+            showlegend = FALSE) %>%
+  add_trace(y = ~phosphorus, name = "Phosphorus", visible = FALSE,
+            marker = list(color = c("#E3ECF2", "#D0DAAE", "#D0DAAE", "#D0DAAE")),
+            showlegend = FALSE) %>%
+  add_trace(y = ~vitaminD, name = "Vitamin D", visible = FALSE,
+            marker = list(color = c("#E3ECF2", "#D0DAAE", "#D0DAAE", "#D0DAAE")),
+            showlegend = FALSE) %>%
+  layout(
+    xaxis = list(title = "Type of Milk"),
+    yaxis = list(title = "mg"),
+    updatemenus = list(
+      list(
+        buttons = list(
+          list(method = "restyle",
+               args = list("visible", list(FALSE, TRUE, FALSE, FALSE, FALSE)),
+               label = "Potassium"),
+          list(method = "restyle",
+               args = list("visible", list(FALSE, FALSE, TRUE, FALSE, FALSE)),
+               label = "Riboflavin"),
+          list(method = "restyle",
+               args = list("visible", list(FALSE, FALSE, FALSE, TRUE, FALSE)),
+               label = "Phosphorus"),
+          list(method = "restyle",
+               args = list("visible", list(FALSE, FALSE, FALSE, FALSE, TRUE)),
+               label = "Vitamin D")
+        )
+      )
+    )
+  )
+```
+
+## Podsumowanie
+
+W przygotowanej wizualizacji zamieniliśmy typ wykresu na barplot, który jest łatwiejszy w odczycie. Ponadto rozdzieliliśmy jeden wspólny wykres na cztery ze względu na analizowany składnik odżywczy.
+
+Ponadto kolorystyka została zamieniona na spokojniejszą, milszą dla oka.
+
+Dzięki zmianom wizualizacja wydaje się być czytelniejsza i łatwiejsza do analizy.
