@@ -1,0 +1,80 @@
+---
+title: "HW4"
+author: "Izabela Łuczkiewicz"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(readxl)
+library(leaflet)
+library(dplyr)
+```
+# Źródło danych
+Ramka danych z informacjami o powierzchni i populacji:
+https://www.kaggle.com/datasets/rathiankit/european-city-population-and-area
+
+Współrzędne geograficzne częściowo są wzięte z ramki `city_coords` z pakietu `europop`, braki uzupełnione ze strony:
+https://www.wspolrzedne-gps.pl/map/country/SE
+```{r data, include=FALSE}
+cities <- read_xlsx("C:\\Users\\malgo\\Documents\\WED\\PopulatinandArea.xlsx")
+lat <- c(52.37403, 38, 41.38879, 52.52330, 48.1485965, 50.85045, 47.4978789, 
+         55.67594, 53.38046, 55.94834, 46.20222, 53.57532, 60.1674881, 50.06143,
+         38.71667, 46.0500268, 51.50726, 49.8158683, 45.74846, 40.41650, 
+         45.46427, 48.13743, 41.1494512, 59.91273, 48.85341, 50.08804, 41.89474,
+         59.3251172, 48.20849, 52.22977, 47.36667)
+long <- c(4.889690, 23.716667, 2.158990, 13.413770, 17.1077477, 4.348780, 19.0402383,
+          12.565530, -6.271130, -3.193272, 6.145690, 10.015340, 24.9427473, 19.9365800,
+          -9.1333300, 14.5069289, -0.1278328, 6.1296751, 4.8467100, -3.7025600, 
+          9.1895100, 11.5754900, -8.6107884, 10.7460900, 2.3488000, 14.4207600,
+          12.4839000, 18.0710935, 16.3720800, 21.0117800, 8.5500000)
+
+
+cities %>% 
+  mutate(Area = `Area in km2`,
+         Pop_km_2 = Population/Area,
+         Lat = lat,
+         Lng = long) %>% 
+  select(City, Pop_km_2, Population, Area, Lat, Lng) -> cities_c
+```
+# Wizualizacja
+Mapa przedstawia wybrane miasta europejskie (nie tylko stolice). Wielkość punktu uzależniona jest od gęstości zaludnienia w danym mieście, promień jest wprost proporcjonalny do gęstości zaludnienia. Po najechaniu na konkretny punkt dostępne są informacje: jakie to miasto, powierzchnia w kilometrach kwadratowych, liczność populacji w tysiącach, gęstość zaludnienia w tysiącach ludzi na kilometr kwadratowy.
+```{r map, echo=FALSE}
+labels <- sprintf(
+  "<strong>%s</strong><br/>Area: %g km<sup>2</sup><br/>Population: %g k</br>Density: %g k ppl / km<sup>2</sup>",
+  cities_c$City, cities_c$Area, cities_c$Population/1e3,
+  round(0.001*cities_c$Population/cities_c$Area, digits = 2))%>%
+  lapply(htmltools::HTML)
+
+
+leaflet() %>%
+  addTiles() %>%
+  setView(13, 50, 4) %>% 
+  addCircles(
+    data = cities_c,
+    lng = ~Lng,
+    lat = ~Lat,
+    color = "#AA50FF",
+    radius = ~Pop_km_2 * 10,
+    weight = 3,
+    opacity = 0.8,
+    fillOpacity = 0.6,
+    fill = "#AA50FF",
+    highlightOptions = highlightOptions(weight = 5,
+                                        color = "#81009E",
+                                        fillColor = "#81009E",
+                                        opacity = 0.8,
+                                        fillOpacity = 0.6,
+                                        bringToFront = TRUE),
+    label = labels,
+    labelOptions = labelOptions(
+    style = list("font-weight" = "normal", padding = "3px 8px"),
+    textsize = "15px",
+    direction = "auto")
+  ) %>% 
+  addControl(htmltools::HTML("<strong>POPULATION DENSITY</strong>"), position = "topleft")
+```
+
+# Wnioski
+Kilka miast wyróżnia się na tle pozostałych: Paryż, Londyn, Bracelona, Genewa, Lyon. W przypadku Londynu to odstawanie jest spowodowane bardzo dużą liczbą mieszkańców, natomiast w pozostałych miastach wymienionych wcześniej sytuacja jest odwrotna. Populacja Paryża i Barcelony nie jest drastycznie większa niż np. populacja Warszawy ale powierzchnie tych miast są prawie dokładnie pięć razy mniejsze niż powierzchnia Warszawy.

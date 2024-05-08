@@ -1,0 +1,118 @@
+---
+title: "Restauracje Chipotle w USA"
+author: "Maciej Koczorowski"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: hide
+    theme: united
+---
+
+```{r setup, include=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+
+library(leaflet)
+library(dplyr)
+library(ggplot2)
+library(maps)
+
+```
+
+# Rozkład restuaracji Chipotle w USA
+
+W tym raporcie skupię się na tym w jaki sposób rozmieszczone są restauracje Chipotle w Stanach Zjednoczonych. Najeżdżając na każdy ze stanów zobaczyć możemy ile restauracji Chipotle przypada średnio na 10 000 mil kwadratowych (amerykański temat więc amerykańska jednostka). Ponadto po najechaniu na prawy górny róg mapy możemy zaznaczyć poszczególne stany. Kiedy to zrobimy wyświetlą się pinezki z dokładnymi lokalizacjami wszystkich restauracji w tym stanie wraz z krótkim opisem pod jakim adresem dana restauracja sie znajduje
+
+## Dane
+
+Źródło danych: [https://www.kaggle.com/datasets/jeffreybraun/chipotle-locations](https://www.kaggle.com/datasets/jeffreybraun/chipotle-locations "Restauracje Chipotle")
+
+
+```{r data,include=FALSE}
+mapStates = map("state", fill = TRUE, plot = FALSE)
+chipotle <- read.csv("chipotle_stores.csv")
+
+states <- as.data.frame(cbind(state.name, state.area))
+
+chipotle_size <- left_join(chipotle, states, by = join_by(state == state.name))
+
+mutate(chipotle_size, size_km2 = as.numeric(state.area) * 2.58998811) %>% 
+  group_by(state) %>% 
+  mutate(count = n()) %>% 
+  summarise(density = 10000*count/as.numeric(state.area)) -> chipotle_density
+unique(chipotle_density) -> summarized 
+summarized %>% 
+  mutate(state = ifelse(state == "Washington DC", "District of Columbia", state)) %>% 
+  arrange(state) -> summarized2
+```
+
+<!-- Cała zabawa poniżej spowodowana jest faktem, że w źródłowej ramce danych zabrakło stanu 
+South Dakota, oraz ponieważ dane do narysowania mapy miały inną liczbę grup niż faktycznie 
+jest stanów, (np było 5 regionów Nowego Jorku) -->
+
+```{r adding_sd+dup,include=FALSE}
+summarized2[nrow(summarized2) + 1,] <- list("South Dakota", NA)
+
+summarized3 <- arrange(summarized2, state)
+
+duptimes <- c(1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,2,1,1,1,1,1,1,1,1,1,4,3,1,1,1,1,1,1,1,1,1,1,1,1,3,5,1,1,1)
+
+idx <- rep(1:nrow(summarized3), times = duptimes)
+
+final <- summarized3[idx,]
+```
+
+```{r finaldf+palette,include=FALSE}
+arrange(final, state) %>% 
+  mutate(density = signif(density,3)) -> final2
+
+labels <- ifelse(is.na(final2$density),
+                 lapply(sprintf("No restaurants in <strong>%s</strong>",final2$state),htmltools::HTML), 
+                 lapply(sprintf("<strong>%s</strong><br/>%g restaurants / 10 000 mi<sup>2</sup>",
+  final2$state, final2$density), htmltools::HTML))
+
+pal <- colorBin("YlOrRd", domain = final2$density, bins = 9)
+```
+
+## Wizualizacja
+
+```{r leaflet}
+leaflet() %>% 
+  addTiles() %>% 
+  addPolygons(data = mapStates,
+              fillColor = pal(final2$density),
+              weight = 1,
+              opacity = 1,
+              color = "black",
+              dashArray = "3",
+              fillOpacity = 0.7,
+              highlightOptions = highlightOptions(
+                weight = 5,
+                color = "#666",
+                dashArray = "",
+                fillOpacity = 0.7,
+                bringToFront = TRUE),
+              label = labels,
+              labelOptions = labelOptions(
+                style = list("font-weight" = "normal", padding = "3px 8px"),
+                textsize = "15px",
+                direction = "auto")) %>% 
+  addMarkers(data = chipotle_size,
+             lng = ~longitude,
+             lat = ~latitude,
+             group = ~state,
+             popup = lapply(sprintf("<strong>Restaurant's address</strong>:<br> %s", chipotle_size$address),htmltools::HTML)) %>% 
+  addLayersControl(overlayGroups = chipotle_size$state,
+                   options=layersControlOptions(collapsed=TRUE)) %>% 
+  hideGroup(chipotle_size$state) %>% 
+  addLegend(pal = pal, values = final2$density, opacity = 0.7,
+            title = lapply("Number of restaurants<br> Per 10 000 mi <sup>2</sup>", htmltools::HTML),
+            position = "bottomleft")
+
+```
+
+## Wnioski
+
+Restauracji Chipotle są najgęściej umiejscowione na wschodnim wybrzerzu, lecz jest ich również bardzo dużo np. w Kalifornii. Szczególnie wyróżniają się stany Maryland i New Jersey, w których znajduje się prawie 90 restauracji chipotle na 10 000 mil kwadratowych (około 26 000 km<sup>2</sup>)
+

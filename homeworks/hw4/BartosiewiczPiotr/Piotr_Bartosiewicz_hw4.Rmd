@@ -1,0 +1,80 @@
+---
+title: "Szczepienia na COVID-19 w Stanach Zjednoczonych"
+author: Piotr Bartosiewicz
+output:
+  html_document:
+    df_print: paged
+    css: styl.css    
+---
+
+## Wprowadzenie
+
+<p> Postanowiłem zilustrować jak w zależności od stanu wyglądał odsetek populacji w Stanach Zjednoczonych, który został w pełni zaszczepiony przeciwko COVID-19, dwa lata po szczytowym okresie pandemii(stan na 10 maja 2023 roku). Dane zostały wzięte z strony: https://github.com/owid/covid-19-data/blob/master/public/data/vaccinations/README.md, która bazowała na raportach United States Centers for Disease Control and Prevention. </p>
+
+
+```{r}
+
+# loading libraries
+
+library(ggplot2)
+library(maps)
+library(mapdata)
+library(dplyr)
+
+# loading data 
+
+data <- read.csv("us_state_vaccinations.csv")
+
+# filtration data
+
+last_day <- max(data$date)
+
+map_d <- map_data("state")
+
+usa_states <- unique(map_d$region)
+
+usa_states[31] <- "new york state"
+
+filtered_data <- data %>%
+  filter(date==last_day) %>%
+  mutate(location = tolower(location)) %>%
+  filter(location %in% usa_states) %>%
+  select(location, people_fully_vaccinated_per_hundred)
+
+filtered_data$location[[31]] <- "new york"
+
+# preparing map data 
+
+map_d <- map_data("state")
+
+map_d <- left_join(x=map_d, y=filtered_data, join_by(region==location))
+
+```
+
+Z przygotowanymi danymi możemy stworzyć wykres:
+
+```{r}
+ggplot(data = map_d, mapping = aes(x = long, y = lat, group = group)) + 
+  coord_map("mollweide") +
+  geom_polygon(color = "black", fill = "gray") +
+  geom_polygon(data = map_d, aes(fill = people_fully_vaccinated_per_hundred), color = "white") +
+  geom_polygon(color = "black", fill = NA) +
+  scale_fill_gradient2(low = "#ABF5BE", mid = "#5E9D88" ,high = "#5C3680", midpoint = 65) +
+  theme_void() +
+  labs(title = "Odsetek osób w pełni zaszczepionych w Stanach Zjednoczonych w zależności od stanu",
+       subtitle = "stan na 10 maja 2023",
+       fill = "odsetek")+
+  theme(
+    text = element_text(color = "black"),
+    plot.background = element_rect(fill = "#f5f5f2", color = NA),
+    panel.background = element_rect(fill = "#f5f5f2", color = NA),
+    legend.background = element_rect(fill = "#f5f5f2", color = NA),
+    legend.position = "right")
+
+```
+
+Widzimy, że najlepiej szczepienia wypadają na północej części wschodniego wybrzeża (blisko 90% populacji jest zaszczepionych), a w większości kraju odsetek wynosi między 65 a 70 %.
+
+W ramach czystej ciekowostki podam, że mapa odsetek szczepień w pewien sposób pokrywa się z mapą elektoratu w wyborach prezydenckich z 2020 roku:
+![](Elektorat2020.png)
+źródło zdjęcia: https://en.wikipedia.org/wiki/2020_United_States_presidential_election
