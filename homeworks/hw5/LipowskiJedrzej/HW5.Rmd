@@ -1,0 +1,60 @@
+---
+title: "Praca Domowa 5"
+author: "Jędrzej Lipowski"
+date: "2024-05-07"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(plotly)
+library(dplyr)
+```
+
+## Wizualizacja źródłowa
+
+Wizualizacja danych, którą poprawiłem, została opublikowana w artykule
+Dziennika Gazety Prawnej:
+<https://www.gazetaprawna.pl/wiadomosci/kraj/artykuly/9313329,kto-wygra-wybory-2023-mamy-najnowszy-sondaz.html>.
+
+![](sondaz.png)
+
+Sondaż preferencji wyborczych został przedstawiony w taki sposób, że trudno
+porównuje się wyniki poszczególnych partii i zmiany w poparciu względem poprzedniego
+sondażu. Umieszczenie Lewicy jako trzeciej może wprowadzać w błąd przy pobieżnym
+rzucie okiem na wykres, ponieważ wydaje się że partie umieszczone są malejąco względem
+ich poparcia, co nie jest jednak prawdą, gdyż Trzecia Droga ma wyższe poparcie
+od Lewicy w obu sondażach.
+
+## Moja Wizualizacja
+
+```{r}
+dane <- data.frame(
+  data_sondazu =  rep(c("19 Września","2 Października"), times = 7),
+  partia = c("PiS", "PiS", "KO", "KO", "Trzecia Droga", "Trzecia Droga", "Lewica", "Lewica", 
+             "Konfederacja", "Konfederacja", "Bezpartyjni Samorządowcy", "Bezpartyjni Samorządowcy",
+             "Nie wiem", "Nie wiem"),
+  poparcie = c(31.6, 32, 27, 28.2, 10.1, 11, 9.8, 10.2, 9.3, 10, 3.5, 3.5, 8.7, 5.1)
+)
+
+dane$partia <- factor(dane$partia, levels = c("PiS", "KO", "Trzecia Droga", "Lewica",
+                                              "Konfederacja", "Bezpartyjni Samorządowcy",
+                                              "Nie wiem"))
+
+plot_ly(data = dane, x = ~partia, y = ~poparcie, color = ~partia, frame = ~data_sondazu,
+        type = "bar", colors = c("blue", "orange", "yellow", "red", "darkblue", "darkgrey", "grey"),
+        text =  paste0(dane$partia, " ", dane$poparcie, "%"),
+        hoverinfo = 'text') %>% 
+  animation_slider(y = -0.1, currentvalue = list(prefix = "Data Sondażu: ", font = list(color="black"))) %>%
+  animation_button(y = -0.1) %>% 
+  layout(title = "Sondaż poparcia w wyborach parlamentarnych 2023", 
+         xaxis = list(title = ""), 
+         yaxis = list(title = "Poparcie w procentach"), 
+         showlegend = FALSE)
+```
+
+Mój wykres jest lepszy od oryginalnego, ponieważ wykres słupkowy pozwala nam na 
+łatwiejsze porównanie ze sobą wartości poparcia ugrupowań politycznych w sondażach.
+Animacja przy zmianie daty sondażu dobrze wizualizuje zmiany w opiniach wyborców.
+Widzimy drastycznie zmniejszający się słupek niezdecydowanych i rosnące słupki
+poparcia partii. Najechanie na słupek pokazuje dokładny wynik sondażu danego ugrupowania.
