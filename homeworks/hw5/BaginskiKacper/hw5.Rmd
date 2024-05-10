@@ -1,0 +1,61 @@
+---
+title: "Praca domowa 5"
+date: "2024-05-07"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: hide
+    theme: united
+---
+
+```{=html}
+<style>
+  body {
+    font-family: 'Times New Roman', sans-serif;
+     font-size: 16px;
+  }
+</style>
+```
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
+
+library(plotly)
+library(forcats)
+```
+
+*Kacper Bagiński*
+
+## Źródło
+
+Link do strony z wykresem:
+
+<https://www.espncricinfo.com/story/2019-world-cup-kane-williamson-s-is-the-hand-that-steadies-new-zealand-s-ship-1193354>
+
+Będę poprawiać wykres przedstawiający jaki procent wszystkich punktów zdobył czołowy strzelec dla swojej drużyny w mistrzostwach świata krykieta w 2015. Poniżej zrzut ekranu:
+
+![](wykres_zrodlowy.png)
+
+Jest on interaktywny, ale jedyna interakcja to wygaszenie innych wycinków pierścienia po najechaniu na jeden poszczególny. Ponadto interpretacja pierścieniowa nie ma tu za bardzo sensu, gdyż owszem dane są procentowe. Ale te procenty odnoszą się do różnych drużyn i w całości nie sumują się do 100%.
+
+## Moja propozycja wizualizacji
+
+```{r plotly}
+players <- c('Williamson', 'Rohit', 'Shakib', 'Warner', 'Babar', 'Du Plessis', 'Pooran', 'Root', 'Kusal Perera', 'Rahmat Shah')
+values <- c(30.23, 29.05, 28.25, 25.02, 24.51, 21.06, 20.01, 19.07, 18.16, 14.8)
+countries <- c('Nowej Zelandii', 'Indii', 'Bangladeszu', 'Australii', 'Pakistanu', 'Arabii Saudyjskiej', 'Trynidadu i Tobago', 'Anglii', 'Sri Lanki', 'Afganistanu')
+
+df <- data.frame(Player = players, Value = values, Country = countries)
+
+plot_ly(data = df, x = ~fct_relevel(Player, Player), y = ~Value, type = 'bar', name = "", hovertemplate = "%{x} zdobył %{y}% ogółu<br>punktów dla %{hovertext}", hovertext = ~Country, text = paste0(values, "%"), textposition = "outside", textfont = list(size = 14)) %>%
+  layout(title = "<b>Porównanie najaktywniejszych strzelców</b><br>w mistrzostwach krykieta w 2015",
+         subtitle = "w mistrzostwach krykieta w 2015",
+         xaxis = list(title = 'Gracz'),
+         yaxis = list(title = '% punktów dla swojej drużyny'),
+         margin = list(l = 80, r = 80, b = 120, t = 50),
+         height = 500, width = 500
+  )
+
+```
+
+Myślę, że pokazanie tych danych na wykresie słupkowym ma większy sens, bo nie są one przeznaczone do sumowania. Jak się najedzie na dany słupek jest zdanie streszczające wkład danego gracza i podające informacje o państwie dla którego grał.
