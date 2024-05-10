@@ -1,0 +1,109 @@
+---
+title: "Poprawa wykresu"
+---
+
+## Wykres do poprawy i jego źródło 
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library("dplyr")
+library("ggplot2")
+library("tidyr")
+library("plotly")
+```
+
+Wykres: https://infogram.com/1pdz0jq2l7ezpwsmg2x53n00weukgwjx371 (część 1)
+
+Źródło: https://www.rp.pl/polityka/art40266321-sondaz-kto-wygra-wybory-do-parlamentu-europejskiego-polacy-wskazuja-wyraznego-faworyta
+
+Data publikacji: 28-04-2024
+
+## Co do poprawy?
+
+<div style="text-align: justify;">
+
+Oczywistą rzeczą do poprawy jest wykres kołowy, który, gdyby nie podpisy, 
+uniemożliwia porównanie wyników poszczególnych partii (nie sposób tak naprawdę
+porównać wyniku Nowej Lewicy, Konfederacji i Trzeciej Drogi). Ponadto etykiety danych 
+i legenda pokrywają się z danymi przekazawynami za pomocą "ramek" pojawiającymi się po
+najechaniu na wykres. Ostatnim mankamentem jest fakt, że w wykresach z podziałem na płeć
+wyniki nie sumują się do 100%
+</div>
+
+## Poprawiony wykres
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+# Tworzymy dane odpowiadające tym na wykresie
+
+partie <- c(
+  "Koalicja Obywatelska",
+  "Prawo i Sprawiedliwość",
+  "Konfederacja",
+  "Trzecia Droga",
+  "Nowa Lewica",
+  "Ktoś inny",
+  "Nie mam zdania"
+  
+)
+
+wyniki_og <- (c(40.6, 22.7, 5.4, 4.9, 3.3, 0.6, 16.5 ))
+wyniki<- c(47.6, 26.7, 7.8, 3.9, 2.0, 1.1, 10.9 ,45.7, 19.1, 3.3, 5.8, 4.4, 0.2, 21.5)
+plec<-rep(c("Mężczyźni","Kobiety"),each=7)
+
+dfo <- data.frame(cbind(partie, wyniki_og))
+df<- data.frame(cbind(partie, wyniki,plec))
+
+dfo$wyniki_og <- as.numeric(dfo$wyniki_og)
+df$wyniki <- as.numeric(df$wyniki)
+
+dfo$partie <- factor(dfo$partie, levels = partie)
+df$partie<-factor(df$partie, levels = partie)
+df$plec<-factor(df$plec,levels=c("Mężczyźni","Kobiety"))
+
+```
+
+### Kto Pani/Pana zdaniem wygra wybory do Parlamentu Europejskiego?
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+plot_ly(
+  data = dfo,
+  x =  ~ partie,
+  y =  ~ wyniki_og,
+  type = "bar",
+  hovertemplate = paste("Wynik:", '%{y}', "%<extra></extra>")
+) %>% layout(
+  title = "Ogółem",
+  xaxis = list(title = "Odpowiedź"),
+  yaxis = list(title = "Wynik w %")
+)
+```
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+plot_ly(
+  data = df,
+  x =  ~ partie,
+  y =  ~ wyniki,
+  color =  ~ plec,
+  type = "bar",
+  hovertemplate = paste("Wynik:", '%{y}', "%<extra></extra>")
+) %>% layout(
+  title = "Z podziałem na płeć",
+  xaxis = list(title = "Odpowiedź"),
+  yaxis = list(title = "Wynik w %"),
+  legend=(list(x=1,y=0.5)
+))
+```
+
+## Co poprawiliśmy ?
+
+<div style="text-align: justify;">
+
+Zmieniliśmy typ wykresu na kolumnowy, co umożliwia łatwiejsze porównanie poszczególnych 
+wyników między sobą. Ponadto usunęliśmy powtarzające się informacje z "ramek" pojawiających się po najechaniu na wykres. Teraz informacje o typie odpowiedzi można odczytać z osi OX, a informacje o dokładnym wyniku pojawiają się po najechaniu na wykres.
+Dokonaliśmy także korekty wyników dla poszczególnych płci tak, aby sumowały się do 
+100%. Zachowaliśmy też interaktywność drugiego wykresu, gdyż kliknięcie na wybraną płeć
+w legendzie umożliwia zachowanie tylko tej drugiej na wykresie.
+
+</div>
+
