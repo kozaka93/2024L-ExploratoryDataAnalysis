@@ -1,0 +1,63 @@
+---
+title: "Raport Piotr Bartosiewicz"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Wykres do poprawy
+Wykres, który wybrałem do poprawy ukazał się w wydaniu "Wiadmości" na jesieni 2019 roku. 
+
+Prezentuje się następująco:
+![](wykres_do_poprawy.png)
+
+Moim zdaniem na tym wykresie poprawy wymaga przede wszytskim oś OY, która nie zaczyna się od 0, a od 35 co sprawia, że wizualnie 49.7 wydaje się około 3 razy większe niż 39.2. Ponadto kolory słupków w zależności od lat w których rządziła dana partia, dzielą się na czerwony i zielony co moim zdaniem w przypadku, kiedy mamy do czynienia z danami finansowymi kojarzy się kolejno z słabym i dobrym wynikiem, co może manipulować widzem.
+
+
+## Wykres poprawiony
+
+```{r cars, echo=FALSE, warning=FALSE, message=FALSE}
+# pobranie bibilotek
+
+library(plotly)
+library(dplyr)
+
+# wczytanie danych
+
+lata <- c(2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020)
+
+wydatki <- c(39.2, 39.5, 39.5, 40.4, 41.5, 41.9, 43.1, 46.9, 49.7)
+wydatki_lag <- c(36.7, 39.2, 39.5, 39.5, 40.4, 41.5, 41.9, 43.1, 46.9)
+
+wzrost <- round((wydatki-wydatki_lag)/wydatki_lag*100, 2)
+```
+```{r pressure, echo=FALSE, warning=FALSE, message=FALSE}
+wykres <- plot_ly(x = lata, y = wydatki, type = 'bar', name = 'Subwencja oświatowa w latach 2012-2020',
+                  text = "",
+                  hoverinfo = "text",
+                  hovertext = paste("Rok: ", lata, "<br>Wydatki: ", wydatki,
+                                    " mld<br>Wzrost:", wzrost ,"%"),
+                  marker = list(color = "#DD8e75")) %>%
+  layout(title = list(text = "Subwencja oświatowa w latach 2012-2020", 
+                      font = list(size = 24, color = "#37514d"),
+                      y = 0.95,
+                      pad = list(b = 100)),
+         xaxis = list(title = "Lata", tickfont = list(size = 14, color="#37514d"), titlefont = list(color="#37514d"), showgrid=TRUE,  tickangle = 45),
+         yaxis = list(title = "Wydatki (w mld zł)", tickfont = list(size = 14, color="#37514d"), titlefont = list(color="#37514d"), showgrid=TRUE),
+         hoverlabel = list(bgcolor = "white", font = list(color = "#37514d")),
+         hovermode = "closest",
+         bargap = 0.1,
+         barmode = "group",
+         paper_bgcolor = 'white',
+           #"#eee6de", 
+         plot_bgcolor = 'white'
+           #"#eee6de"
+           ) 
+
+wykres
+```
+
+Wykres zrobiony przeze mnie posiada oś OY zaczynająca się od 0 co sprawia, że wizualnie jest zachowana proporcja między danymi. Wykres posiada również wszystkie słupki w jednym kolorze, co poprawia go wizualnie oraz potencjalnie nie manipuluje widza. 
+Również po najechaniu na słupek pojawia się procentowy wzrost względem poprzedniego roku.
