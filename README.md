@@ -113,7 +113,7 @@ Wstęp do eksploracji danych składa się z:
   <tr>
     <td>11</td>
     <td>08-05</td>
-    <td>The International Business Communication Standards</td>
+    <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/blob/main/lectures/L11-IBCS.pdf">The International Business Communication Standards</a></td>
     <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/tree/main/labs/lab11">R: Shiny - część 2</a></td>
     <td>Eksploracja danych, konkretne pomysły na wykresy, prototypy wykresów</td>
     <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/issues/309">HW5</a> (7p)<br>P2 (2p)</td>
@@ -122,7 +122,7 @@ Wstęp do eksploracji danych składa się z:
     <td>12</td>
     <td>22-05</td>
     <td>History of Statistical Graphics</td>
-    <td>Python: pandas, numpy</td>
+    <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/tree/main/labs/lab12">Python: pandas, numpy</a></td>
     <td>Konsultacje</td>
     <td></td>
   </tr>
