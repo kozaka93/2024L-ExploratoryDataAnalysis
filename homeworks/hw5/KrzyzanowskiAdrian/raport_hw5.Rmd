@@ -1,0 +1,64 @@
+---
+title: "Raport"
+author: "*Adrian Krzyżanowski*"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: hide
+    theme: united
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(readxl)
+library(tidyr)
+library(plotly)
+library(dplyr)
+
+Life_Expectancy_Total <- read_excel("Life-Expectancy-Total.xlsx")
+
+life_total<-gather(Life_Expectancy_Total, Year, Life_exp, -Countries)
+
+life_total$Life_exp[life_total$Life_exp==":"]<-NA
+life_total$Life_exp<-as.numeric(life_total$Life_exp)
+
+```
+
+# **Raport - Praca domowa 5**
+
+## 1. Wizualizacja źródłowa
+
+Poniższy wykres przedstawia długość życia obywateli dla poszczególnych krajów europejskich na przestrzeni lat.
+
+![an image caption Source: Ultimate Funny Dog Videos Compilation 2013.](life_exp.png)
+Źródło: https://publiclens.org/european-countries-life-expectancy-analysis/
+
+**Komentarz**
+<br>Jedynym problemem na tym wykresie jest to, że mamy za dużo krajów. Przez to linie nachodzą na siebie i gdy chcemy odczytać wartości np. dla Austrii możemy mieć z tym niemały problem. 
+
+
+## 2. Poprawiony wykres
+
+```{r, warning=FALSE, fig.width=9, fig.height=6}
+plot_ly(
+  data=life_total,
+  x = ~Year,
+  y = ~Life_exp,
+  color = ~Countries,
+  colors = "Set1",
+  type = "scatter",
+  mode = "lines+markers",
+  marker = list(size = 7),
+  text=paste0( "<b>Country: </b>", life_total$Countries,
+               "<br><b>Year: </b>", life_total$Year),
+  hoverinfo="text+y") %>% 
+  layout(
+    title="<b>European Countries - Life Expectancy</b>",
+    xaxis = list(title = "Year", tickangle = 40),
+    yaxis = list(title = "Life Expectancy")
+  )
+```
+
+**Komentarz**
+<br>Zaletą powyższego wykresu jest interaktywność. Tutaj jeśli chcemy odczytać dokładne dane, możemy wykres sobie przybliżyć, wybrać inny zakres lat lub długości życia. Do tego po najechaniu myszką etykieta wyświetla nam wszystkie potrzebne informacje. Poza tym z legendy obok możemy wybrać interesujące nas kraje.
