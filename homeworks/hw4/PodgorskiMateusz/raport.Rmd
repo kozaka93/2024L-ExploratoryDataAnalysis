@@ -1,0 +1,96 @@
+---
+title: "Mapa szczęścia 2019"
+author: "Mateusz Podgórski"
+date: "2024-04-23"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(leaflet)
+library(dplyr)
+library(sf)
+library(maps)
+library(mapdata)
+library(htmltools)
+
+```
+
+## Wstęp
+
+Niniejszy raport jest poświęcony analizie globalnego poziomu szczęścia w roku 2019, opartej na danych zgromadzonych w ramach World Happiness Report, dostępnych na stronie World Happiness Report. Celem tej analizy jest zrozumienie, które czynniki mają największy wpływ na poziom szczęścia w różnych krajach oraz jak te czynniki korelują z innymi wskaźnikami społeczno-ekonomicznymi.
+
+## Przygotowanie danych
+
+Dane dotyczące szczęścia zostały wczytane z publicznie dostępnych źródeł i poddane procesowi wstępnego czyszczenia i normalizacji. Wszystkie operacje przetwarzania danych zostały wykonane przy użyciu narzędzi z pakietu tidyverse, co zapewniło większą efektywność.
+
+```{r cars}
+# Import danych dotyczących szczęścia
+data_happiness <- read.csv("C:/Users/mateu/OneDrive/Dokumenty/R laby/hap_word_2019.csv", header = TRUE, sep = ",")
+
+# Przygotowanie mapy świata
+global_map <- st_as_sf(map("world", fill = TRUE, plot = FALSE))
+
+# Modyfikacja i ujednolicenie nazw krajów
+data_happiness <- data_happiness %>%
+  rename(nation = Country.or.region) %>%
+  mutate(nation = case_when(
+    nation == "United States" ~ "USA",
+    nation == "United Kingdom" ~ "UK",
+    nation == "Congo (Brazzaville)" ~ "Democratic Republic of the Congo",
+    nation == "Congo (Kinshasa)" ~ "Republic of Congo",
+    TRUE ~ nation
+  ))
+
+# Łączenie danych z mapą świata
+world_happiness <- global_map %>%
+  left_join(data_happiness, by = c("ID" = "nation")) %>%
+  st_transform(crs = 4326) %>% 
+  rename(nation=ID) 
+
+# Ustawienie palety kolorów
+color_scheme <- colorNumeric(palette = "Blues", domain = world_happiness$Score)
+
+labels <- sprintf("<strong>Country: </strong>%s<br><strong>Score: </strong>%g", world_happiness$nation, world_happiness$Score) %>% lapply(htmltools::HTML)
+
+```
+
+## Wizualizacja danych
+
+Mapa szczęścia, która została wygenerowana w ramach tego projektu, wykorzystuje odcienie kolorów niebieskich do przedstawienia poziomu szczęścia w różnych krajach. Im ciemniejszy odcień niebieskiego, tym wyższy poziom zadeklarowanego szczęścia.Dodatkowo wprowadzono elementy interaktywne takie jak pojawianie się etykiet z poziomem szczęścia przy najechaniu na dane państwo.Wizualizacja ta pozwala na szybką ocenę globalnego rozkładu szczęścia i jest kluczowym narzędziem do dalszej analizy trendów i zależności.
+
+```{r happiness-map, message=FALSE, warning=FALSE}
+
+
+# Tworzenie mapy z danymi na temat szczęścia
+happiness_map <- leaflet(world_happiness) %>%
+  setView(lng = 0, lat = 30, zoom = 2) %>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(
+    fillColor = ~color_scheme(Score),
+    fillOpacity = 0.8,
+    color = "gray",
+    weight = 1.5,
+    highlightOptions = highlightOptions(
+      weight = 5,
+      color = "#555",
+      fillOpacity = 0.9,
+      bringToFront = TRUE
+    ),
+    label = labels,
+    labelOptions = labelOptions(style = list("font-weight" = "normal"), textsize = "14px", direction = "auto")
+  ) %>%
+  addLegend(title = "Happiness Score", pal = color_scheme, values = ~Score, position = "bottomright") %>%
+  addMarkers(lng = 27, lat = 62, popup = "<strong>Top rated: </strong> Finland")
+
+# Wyświetlenie gotowej mapy
+happiness_map
+
+```
+
+## Analiza wyników
+
+Na podstawie przeprowadzonej analizy i wizualizacji danych można zaobserwować wyraźne zróżnicowanie poziomu szczęścia między różnymi regionami świata. Kraje skandynawskie, takie jak **Finlandia**, **Norwegia** i **Dania**, zdecydowanie zajmują czołowe pozycje w rankingu, co świadczy o wysokim poziomie życia, rozbudowanych systemach wsparcia społecznego oraz stabilności ekonomicznej tych krajów. W przeciwieństwie do tego, kraje z regionów takich jak Afryka Subsaharyjska często znajdują się na niższych miejscach w rankingu, co może być odzwierciedleniem trudniejszych warunków ekonomicznych i społecznych.
+
+Wnioski płynące z tej analizy wskazują na silną korelację między poziomem szczęścia a czynnikami takimi jak PKB per capita, wsparcie społeczne, oczekiwana długość życia w zdrowiu, wolność do podejmowania życiowych wyborów, hojność oraz percepcje korupcji. Te wyniki podkreślają znaczenie polityki społecznej i ekonomicznej w kształtowaniu warunków, które sprzyjają szczęściu i dobrobytowi obywateli.
