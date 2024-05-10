@@ -1,0 +1,187 @@
+---
+title: "Praca domowa 5"
+subtitle: "Wstęp do Ekploracji Danych"
+author: "Patrycja Gromada"
+date: "2024-05-08"
+output: html_document
+---
+
+```{r, warning = FALSE, message = FALSE, echo=FALSE}
+library(dplyr)
+library(plotly)
+```
+
+## Poprawiana wizualizacja
+
+### Krótkie uzasadnienie
+
+Wizualizacja pochodzi ze strony Eurostat. Wizualizacja sama w sobie nie jest bardzo niepoprawna - niepotrzebne są linie pionowe oraz trudno odczytać jest konkretne wartości dla sektora, usług i produkcji ITC. 
+
+### Źródło
+Link do wizualizacji:
+<https://ec.europa.eu/eurostat/en/web/products-eurostat-news/w/ddn-20240423-3>
+
+### Definicja ITC
+Pod pojęciem technologii informacyjnych i komunikacyjnych (w skrócie ICT, z ang. information and communication technologies, nazywanych zamiennie technologiami informacyjno-telekomunikacyjnymi, teleinformatycznymi lub technikami informacyjnymi) kryje się rodzina technologii przetwarzających, gromadzących i przesyłających informacje w formie elektronicznej.
+
+(Źródło: <https://pfr.pl/slownik/slownik-itict.html>)
+
+Wizualizacja:
+```{r echo=FALSE, out.width = "100%", fig.align = "center"}
+knitr::include_graphics("value-added-for-the-ICT-sector-2021.jpg")
+```
+
+## Poprawiona wizualizacja
+
+```{r echo=FALSE}
+
+#Przygotowanie danych
+
+df1 <- read.csv("https://ec.europa.eu/eurostat/api/dissemination/sdmx/3.0/data/dataflow/ESTAT/isoc_bde15ag/1.0?compress=false&format=csvdata&formatVersion=2.0&lang=en&labels=name")
+
+df1 <- df1 %>% filter( TIME_PERIOD == 2021) %>% 
+  mutate(Geo = Geopolitical.entity..reporting.) %>% 
+  select(nace_r2, Geo, OBS_VALUE) 
+
+df1[c(14, 47, 80), "Geo"] <- "EU"
+
+df1 <- df1 %>%  filter((Geo %in% c("EU", "Malta", "Cyprus", "Bulgaria",
+                                   "Sweden", "Luxembourg", "Latvia", "Hungary", "Estonia",
+                                   "Netherlands", "Croatia", "Czechia", "Germany", "Finland",
+                                   "Slovakia", "Portugal", "Romania", "Slovenia", "France",
+                                   "Denmark", "Belgium", "Lithuania", "Poland", "Austria", "Spain", "Greece", 
+                                   "Italy", "Switzerland", "Norway"))) %>% 
+  mutate(OBS_VALUE = if_else(is.na(OBS_VALUE), 0, OBS_VALUE)) %>% 
+  arrange((-OBS_VALUE)) 
+
+
+
+df1[88,] <- list("ICT", " ", 0)
+df1[89,] <- list("ICT", "  ", 0)
+df1[90,] <- list("G-U_ICT", " ", 0)
+df1[91,] <- list("G-U_ICT", "  ", 0)
+df1[92,] <- list("C_ICT", " ", 0)
+df1[93,] <- list("C_ICT", "  ", 0)
+
+df1 <- df1 %>% arrange(factor(Geo,
+                              levels = c("EU", " ", "Malta", "Cyprus", "Bulgaria",
+                                         "Sweden", "Luxembourg", "Latvia", "Hungary", "Estonia",
+                                         "Netherlands", "Croatia", "Czechia", "Germany", "Finland",
+                                         "Slovakia", "Portugal", "Romania", "Slovenia", "France",
+                                         "Denmark", "Belgium", "Lithuania", "Poland", "Austria", "Spain", "Greece", 
+                                         "Italy","  ", "Switzerland", "Norway"))) %>% 
+  mutate(Geo = toupper(Geo))
+df1$Geo <- as.list(df1$Geo)
+
+```
+
+
+```{r echo=FALSE}
+#Przygotowanie danych i tekstu
+
+dataICT <- df1 %>% filter(nace_r2 == "ICT") 
+dataICTGU <- df1 %>% filter(nace_r2 == "G-U_ICT")
+dataICTC <- df1 %>% filter(nace_r2 == "C_ICT")
+
+title <- paste0("<b>Value added for the ICT sector, 2021</b><br>",
+                "<sub><i>(% relative to gross value added)</i></sub>")
+
+#ITC - ITC Sector 
+#G-U_ICT - ITC services
+#C_ITC - ITC Manufacturing
+
+
+textICT <- paste0("Country: ", dataICT$Geo," <br>", "ITC Sector: ", dataICT$OBS_VALUE, "%")
+textICTGU <- paste0("Country: ", dataICT$Geo, " <br>", "ITC Services: ", dataICTGU$OBS_VALUE, "%")
+textICTC <- paste0("Country: ", dataICT$Geo," <br>", "ITC Manufacturing: ", dataICTC$OBS_VALUE, "%")
+
+
+```
+
+
+```{r echo=FALSE}
+p <- plot_ly() %>% 
+  add_trace(x = dataICTGU$Geo,
+            y = dataICTGU$OBS_VALUE,
+            type = "bar", visible = T,
+            marker = list(color = "steelblue4"),
+            name = "ICT Services",
+            text = textICTGU,
+            hoverinfo = 'text',
+            textposition = 'none') %>% 
+  add_trace(x = dataICT$Geo,
+            y = dataICT$OBS_VALUE,
+            type = "scatter",
+            mode = "markers", visible = T,
+            marker = list(color = "orange",
+                          symbol = "diamond",
+                          size = 10*(dataICT$OBS_VALUE>0)),
+            name = "ITC Sector",
+            text = textICT,
+            hoverinfo = 'text',
+            textposition = 'none') %>% 
+  add_trace(x = dataICTC$Geo,
+            y = dataICTC$OBS_VALUE,
+            type = "bar", visible = T,
+            marker = list(color = "purple"),
+            name = "ITC Manufacturing", 
+            text = textICTC,
+            hoverinfo = 'text',
+            textposition = 'none') 
+
+
+p <- p %>%
+  layout(
+    title = list(text = title, x = 0.02, xanchor = 'left', y =0.97),
+    xaxis = list(tickangle = 300,
+                 categoryorder = "trace", title = " ",
+                 x = 0.02, xanchor = 'left'),
+    legend = list(y = 0.7, yanchor = 'bottom'),
+    margin = list(t = 40, b = 60),
+    
+    updatemenus = list(
+      list(
+        buttons = list(
+          list(
+            method = "restyle",
+            args = list("visible", list(TRUE, TRUE, TRUE)), 
+            label = "All"  
+          ),
+          list(
+            method = "restyle",
+            args = list("visible", list(TRUE, FALSE, FALSE)),
+            label = "ITC services"
+          ),
+          list(
+            method = "restyle",
+            args = list("visible", list(FALSE, TRUE, FALSE)),
+            label = "ITC Sector"
+          ),
+          list(
+            method = "restyle",
+            args = list("visible", list(FALSE, FALSE, TRUE)),
+            label = "ITC Manufacturing")
+        ),
+        showactive = TRUE,  
+        x = 1.02,  
+        xanchor = "left",
+        y = 0.5,  
+        yanchor = "top"
+      )
+    )
+    
+  )
+
+```
+
+```{r echo = FALSE, out.width = "100%", fig.align = "center"}
+#Wyswietlanie wykresu
+p
+```
+### Krótkie uzasadnienie
+Wizualizacja jest lepsza od oryginalnego, ponieważ po najechaniu możemy odczytać konkretne wartości dla konkretnych punktów i słupków. Nie zawiera także niepotrzebnych linii siatki. Dodatkowo dodałam rozwijaną listę, aby odbiora mógł porównać osobno poszczególne wykresy. 
+
+### Komentarz
+Dodałam nazwę państw do każdej etykiety i powtórzyłam tą samą informację, ponieważ uważam, że w ten sposób poprawiam czytelność. Wiemy, jaki procent należy do danego państwa - w małym formacie w pliku Rmd plotly usuwa część podpisów osi x, w html ten problem raczej nie występuje. 
+
+Zostawiam także sekcje na osi x - EU nie jest państwem, Norwegia i Szwajcaria nie należą do EU, ale pierwsze należy do Europejskiego Obszaru Gospodarczego, a drugie państwo jest stowarzyszone z EU. Autor je umieścił i odseparował od reszty, ma to dużo sensu, więc także zostawiłam te państwa i sekcje. 
