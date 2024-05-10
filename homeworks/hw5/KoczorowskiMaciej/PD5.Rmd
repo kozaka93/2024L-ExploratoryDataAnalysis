@@ -1,0 +1,100 @@
+---
+title: "Wybory prezydenckie w USA w latach 2004,2008 i 2012"
+author: "Maciej Koczorowski"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: hide
+    theme: united
+---
+
+```{r setup, include=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+
+library(plotly)
+library(dplyr)
+
+```
+
+## Błędy w wykresie
+Szczerze powiedziawszy, wykres jest wykonany dość dobrze, jedynym zastrzeżeniem może być fakt, że niektóre informacje są zakodowane "podwójnie" (chodzi o to, że każda z ras pomimo osobnego miejsca na osi y jest również zaznaczona unikatowym kolorem, co nie jest potrzebne)
+
+## Dane
+
+Źródło danych: [https://www.brookings.edu/articles/voting-rights-minority-turnout-and-the-next-election/](https://www.brookings.edu/articles/voting-rights-minority-turnout-and-the-next-election/ "Wyborcy w latach 2004,2008 i 2012")
+
+## Oryginalny wykres
+
+![][graph]
+
+[graph]: https://www.brookings.edu/wp-content/uploads/2016/06/thumb-4.jpg?quality=75&amp;w=1152 "Oryginalny wykres"
+
+## Poprawiony wykres z dodaną interaktywnością
+
+```{r graph}
+data <- as.data.frame(cbind(rep(c("Whites", "Blacks", "Hispanics", "Asians"), each = 3), rep(c(2004, 2008, 2012), times = 4),
+              c(67,66,64,60,65,66,47,50,48,44,48,47)))
+colnames(data) <- c("Race", "Year", "Turnout")
+
+fig <- plot_ly(data, x = ~filter(data, Year == 2004)$Race,
+               y = as.numeric(filter(data, Year == 2004)$Turnout),
+               type = "bar",
+               name = "2004",
+               visible = TRUE,
+               hovertemplate = paste('Race: %{x}', "<br>Turnout: %{y}%<br>",
+                                     'Year:', unique(filter(data, Year == 2004)$Year),
+                                     '<extra></extra>')
+               ) %>% 
+  add_trace(y = as.numeric(filter(data, Year == 2008)$Turnout),
+            name = "2008",
+            visible = TRUE,
+            hovertemplate = paste('Race: %{x}', "<br>Turnout: %{y}%<br>",
+                                  'Year:', unique(filter(data, Year == 2008)$Year),
+                                  '<extra></extra>')) %>%
+  add_trace(y = as.numeric(filter(data, Year == 2012)$Turnout),
+            name = "2012",
+            visible = TRUE,
+            hovertemplate = paste('Race: %{x}', "<br>Turnout: %{y}%<br>",
+                                  'Year:', unique(filter(data, Year == 2012)$Year),
+                                  '<extra></extra>')) %>% 
+  layout(
+    title = list(text = "Turnout in presidential elections by race",
+                 y = 0.99),
+    xaxis = list(title = "Race of voters"),
+    yaxis = list(title = "Turnout", range = c(0,70)),
+    updatemenus = list(
+      list(
+        buttons = list(
+          list(
+            method = "restyle",
+            args = list("visible", list(TRUE,TRUE,TRUE)),
+            label = "Show All"),
+          list(
+            method = "restyle",
+            args = list("visible", list(TRUE,FALSE,FALSE)),
+            label = "Show 2004"),
+          list(
+            method = "restyle",
+            args = list("visible", list(FALSE,TRUE,FALSE)),
+            label = "Show 2008"),
+          list(
+            method = "restyle",
+            args = list("visible", list(FALSE,FALSE,TRUE)),
+            label = "Show 2012")
+        )
+      )
+    )
+  )
+
+fig
+```
+
+## Dlaczego wykres jest lepszy?
+
+* Nie mamy podwójnego kodowania informacji
+* Poprzez dodanie interaktywności możemy spojrzeć zarówno na rozkład frekwencji na przestrzeni wszystkich trzech wyborów jak i tylko w poszczególnych latach
+* Sformatowane informacje podczas najeżdżania sprawiają, że nie musimy w ogóle patrzeć na osie aby odczytać wszystkie potrzebne informacje
+
+
