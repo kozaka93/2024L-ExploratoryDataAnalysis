@@ -121,7 +121,7 @@ Wstęp do eksploracji danych składa się z:
   <tr>
     <td>12</td>
     <td>22-05</td>
-    <td>History of Statistical Graphics</td>
+    <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/blob/main/lectures/L12-history.pdf">History of Statistical Graphics</a></td>
     <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/tree/main/labs/lab12">Python: pandas, numpy</a></td>
     <td>Konsultacje</td>
     <td></td>
