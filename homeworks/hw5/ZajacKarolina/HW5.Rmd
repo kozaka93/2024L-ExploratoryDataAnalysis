@@ -1,0 +1,56 @@
+---
+title: "Praca Domowa nr 5"
+author: "Karolina Zając"
+date: "2024-05-07"
+output: html_document
+---
+### Znaleziony wykres z Ministerstwa Finansów:
+![](C:/Users/User/Desktop/wizualizacja/wykres1.jpg)
+
+### Komentarz do prezentowanego wykresu:
+
+Na wykresie brakuje osi pionowej, co utrudnia odczytanie wartości. Dodatkowo, użyto dwóch różnych form prezentacji tych samych zależności dla danych jakościowych od ilościowych na jednym wykresie, co może sprawiać trudności w zrozumieniu prezentowanych informacji. Wizualizacja nie zachowuje również skali, naniesienie słupków jeden na drugim utrudnia zrozumienie wykresu. Dodatkowo, dobór kolorów (szczególnie ciemniejszego niebieskiego) dla różnych zmiennych może być mylący i nieczytelny dla odbiorcy.
+
+Źródło danych: [Stan Polskich Finansów Publicznych 2016-2023 - Biała Księga](https://www.gov.pl/web/finanse/stan-polskich-finansow-publicznych-2016-2023-biala-ksiega2) 
+STRONA 26/138
+
+### Kometarz do poprawionego wykresu:
+Poprawnie dobrany wykres dla danych jakościowych (nazwy wydatków) - ilościowych (wartości procentowe) w zależności od lat 2019-2023. Czytelność gwarantują istotnie różniące się kolory wykresów dla 5 zmiennych jakościowych. Po najechaniu kursorem na na wykres możliwe jest odczytanie dokładnych wartości. 
+
+### Kod:
+
+```{r, message = FALSE, warning = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# Pakiety
+library(plotly)
+library(dplyr)
+
+# Dane
+nazwy <- c("inwestycje", "działania", "wydatki sektora ogólem", "wydatki sektora bez <br>działań Funduszu Pomocy, <br>Funduszu Przeciwdziałania COVID-19,<br> działań energetycznych", "wydatki sektora<br> bez inwestycji")
+lata <- c(2019, 2020, 2021, 2022, 2023)
+war_inw <- c(4.3, 4.5, 4.1, 3.8, 5.0)
+war_dzial <- c(0, 4.5, 2.4, 2.0, 1.8)
+war_bi <- c(37.6, 39.3, 37.6, 39.8, 41.8)
+war_bd <- c(41.9, 43.7, 41.7, 41.6, 45.0)
+war_so <- c(41.9, 48.2, 44.1, 43.6, 46.7)
+
+# Tworzenie wykresu
+fig <- plot_ly() %>%
+  add_trace(x = as.integer(lata), y = war_inw, type = 'scatter', mode = 'lines+markers', name = nazwy[1], line = list(color = 'blue'), text = rep(nazwy[1], length(lata))) %>%
+  add_trace(x = as.integer(lata), y = war_dzial, type = 'scatter', mode = 'lines+markers', name = nazwy[2], line = list(color = 'red'), text = rep(nazwy[2], length(lata))) %>%
+  add_trace(x = as.integer(lata), y = war_bi, type = 'scatter', mode = 'lines+markers', name = nazwy[5], line = list(color = 'green'), text = rep(nazwy[5], length(lata))) %>%
+  add_trace(x = as.integer(lata), y = war_bd, type = 'scatter', mode = 'lines+markers', name = nazwy[4], line = list(color = 'orange'), text = rep(nazwy[4], length(lata))) %>%
+  add_trace(x = as.integer(lata), y = war_so, type = 'scatter', mode = 'lines+markers', name = nazwy[3], line = list(color = 'purple'), text = rep(nazwy[3], length(lata))) %>%
+  layout(title = "Wydatki sektora instytucji rządowych<br> i samorządowych w latach 2019-2023 (% PKB)",
+         xaxis = list(title = "Lata"),
+         yaxis = list(title = "Wartości", range = c(0, 50)),
+         hoverinfo = "text",
+         showlegend = TRUE,
+         height = 600,
+         width = 800)
+
+fig
+```
+
+
+
