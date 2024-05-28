@@ -130,7 +130,7 @@ Wstęp do eksploracji danych składa się z:
     <td>13</td>
     <td>29-05</td>
     <td>Analiza EDA przed modelowanie.</td>
-    <td>Python: matplotlib, seaborn</td>
+    <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/tree/main/labs/lab13">Python: matplotlib, seaborn</a></td>
     <td>Gotowe wykresy, prototyp wyglądu aplikacji</td>
     <td>P2 (2p)</td>
   </tr>
@@ -140,7 +140,7 @@ Wstęp do eksploracji danych składa się z:
     <td>Znani w świecie wizualizacji, wizualizacje modeli, co dalej?</td>
     <td>Python: plotly</td>
     <td>Konsultacje</td>
-    <td>HW6 (6p)</td>
+    <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/issues/360">HW6</a> (6p)</td>
   </tr>
   <tr>
     <td>15</td>
