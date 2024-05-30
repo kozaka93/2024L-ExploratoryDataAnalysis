@@ -1,0 +1,176 @@
+---
+title: "Praca domowa 5"
+author: "Kacper Cholewiński"
+date: "2024-05-07"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(dplyr)
+library(tidyr)
+library(plotly)
+```
+
+# Wizualizacja źródłowa
+Wizualizacja źródłowa pochodzi ze strony 
+https://tvn24.pl/wybory-parlamentarne-2023/wybory-parlamentarne-2023-wyniki-exit-poll-w-poszczegolnych-wojewodztwach-st7392626
+przedstawiony tam wykres jest w 3D, co utrudnia jego odbiór.
+
+## Wyodrębnienie danych
+Dane na wykresie pochodzą ze strony
+https://sejmsenat2023.pkw.gov.pl/sejmsenat2023/pl/dane_w_arkuszach
+
+```{r, echo=FALSE}
+data <- read.csv("wyniki_gl_na_listy_po_wojewodztwach_proc_sejm_utf8.csv", sep = ";", dec = ",") %>%
+  gather(KOMITET, Procent_glosow, -Województwo, -Liczba.komisji, -Liczba.uwzględnionych.komisji, -Frekwencja, 
+         -Procent.głosów.nieważnych, -W.tym.z.powodu.postawienia.znaku..X..obok.nazwiska.dwóch.lub.większej.liczby.kandydatów.z.różnych.list,
+         -W.tym.z.powodu.niepostawienia.znaku..X..obok.nazwiska.żadnego.kandydata,
+         -W.tym.z.powodu.postawienia.znaku..X..wyłącznie.obok.nazwiska.kandydata.na.liście..której.rejestracja.została.unieważniona,
+         -Procent.głosów.ważnych.oddanych.łącznie.na.wszystkie.listy.kandydatów) %>%
+  mutate(Procent_glosow = as.numeric(Procent_glosow)) %>%
+  select(KOMITET, Procent_glosow, Województwo) %>%
+  filter(KOMITET %in% c("KOALICYJNY.KOMITET.WYBORCZY.TRZECIA.DROGA.POLSKA.2050.SZYMONA.HOŁOWNI...POLSKIE.STRONNICTWO.LUDOWE", 
+                                     "KOMITET.WYBORCZY.NOWA.LEWICA",
+                                     "KOMITET.WYBORCZY.PRAWO.I.SPRAWIEDLIWOŚĆ",
+                                     "KOMITET.WYBORCZY.KONFEDERACJA.WOLNOŚĆ.I.NIEPODLEGŁOŚĆ",
+                                     "KOALICYJNY.KOMITET.WYBORCZY.KOALICJA.OBYWATELSKA.PO..N.IPL.ZIELONI",
+                                     "KOMITET.WYBORCZY.BEZPARTYJNI.SAMORZĄDOWCY")) %>% 
+  mutate(KOMITET = case_when(
+    KOMITET == "KOALICYJNY.KOMITET.WYBORCZY.TRZECIA.DROGA.POLSKA.2050.SZYMONA.HOŁOWNI...POLSKIE.STRONNICTWO.LUDOWE" ~ "Trzecia Droga", 
+    KOMITET == "KOMITET.WYBORCZY.NOWA.LEWICA" ~ "Nowa Lewica",
+    KOMITET == "KOMITET.WYBORCZY.PRAWO.I.SPRAWIEDLIWOŚĆ" ~ "Prawo i Sprawiedliwość",
+    KOMITET == "KOMITET.WYBORCZY.KONFEDERACJA.WOLNOŚĆ.I.NIEPODLEGŁOŚĆ" ~ "Konfederacja",
+    KOMITET == "KOALICYJNY.KOMITET.WYBORCZY.KOALICJA.OBYWATELSKA.PO..N.IPL.ZIELONI" ~ "Koalicja Obywatelska",
+    KOMITET == "KOMITET.WYBORCZY.BEZPARTYJNI.SAMORZĄDOWCY" ~ "Bezpartyjni Samorządowcy"
+  ))
+```
+
+## Tworzenie wizualizacji
+
+```{r, echo=FALSE}
+plot_ly(
+  x = data[data$Województwo == "dolnośląskie", "KOMITET"], 
+  y = data[data$Województwo == "dolnośląskie", "Procent_glosow"],
+  type = "bar") %>% 
+  layout(
+    title = "Wyniki wyborów",
+    yaxis = list(range = c(0, 140)),
+    updatemenus = list(
+      list(
+        x = 1, y = 1,
+        buttons = list(
+          list(method = "restyle",
+               args = list(
+                 list(y = list(data[data$Województwo == "dolnośląskie", "Procent_glosow"]))
+               ),
+               label = "Dolnośląskie"),
+          
+          list(method = "restyle",
+               args = list(
+                 list(y = list(data[data$Województwo == "kujawsko-pomorskie", "Procent_glosow"]))
+               ),
+               label = "Kujawsko-Pomorskie"),
+          
+          
+          list(method = "restyle",
+               args = list(
+                 list(y = list(data[data$Województwo == "lubelskie", "Procent_glosow"]))
+               ),
+               label = "Lubelskie"),
+          
+          
+          list(method = "restyle",
+               args = list(
+                 list(y = list(data[data$Województwo == "lubuskie", "Procent_glosow"]))
+               ),
+               label = "Lubuskie"),
+          
+          
+          list(method = "restyle",
+               args = list(
+                 list(y = list(data[data$Województwo == "łódzkie", "Procent_glosow"]))
+               ),
+               label = "Łódzkie"),
+          
+          
+          list(method = "restyle",
+               args = list(
+                 list(y = list(data[data$Województwo == "małopolskie", "Procent_glosow"]))
+               ),
+               label = "Małopolskie"),
+          
+          
+          list(method = "restyle",
+               args = list(
+                 list(y = list(data[data$Województwo == "mazowieckie", "Procent_glosow"]))
+               ),
+               label = "Mazowieckie"),
+          
+          
+          list(method = "restyle",
+               args = list(
+                 list(y = list(data[data$Województwo == "opolskie", "Procent_glosow"]))
+               ),
+               label = "Opolskie"),
+          
+          list(method = "restyle",
+               args = list(
+                 list(y = list(data[data$Województwo == "podkarpackie", "Procent_glosow"]))
+               ),
+               label = "Podkarpackie"),
+          
+          
+          list(method = "restyle",
+               args = list(
+                 list(y = list(data[data$Województwo == "podlaskie", "Procent_glosow"]))
+               ),
+               label = "Podlaskie"),
+          
+          
+          list(method = "restyle",
+               args = list(
+                 list(y = list(data[data$Województwo == "pomorskie", "Procent_glosow"]))
+               ),
+               label = "Pomorskie"),
+          
+          
+          list(method = "restyle",
+               args = list(
+                 list(y = list(data[data$Województwo == "śląskie", "Procent_glosow"]))
+               ),
+               label = "Śląskie"),
+          
+          
+          list(method = "restyle",
+               args = list(
+                 list(y = list(data[data$Województwo == "świętokrzyskie", "Procent_glosow"]))
+               ),
+               label = "Świętokszyskie"),
+          
+          
+          list(method = "restyle",
+               args = list(
+                 list(y = list(data[data$Województwo == "warmińsko-mazurskie", "Procent_glosow"]))
+               ),
+               label = "Warmińsko-Mazurskie"),
+
+          
+          list(method = "restyle",
+               args = list(
+                 list(y = list(data[data$Województwo == "wielkopolskie", "Procent_glosow"]))
+               ),
+               label = "Wielkopolskie"),
+          
+          
+          list(method = "restyle",
+               args = list(
+                 list(y = list(data[data$Województwo == "zachodniopomorskie", "Procent_glosow"]))
+               ),
+               label = "Zachodniopomorskie")
+        ))
+    ))
+```
+
+Przedstawiona wizualizacja nie zawiera wykresów w 3D, co pozwala na poprawną interpretację, dodana możliwość wyboru województwa daje więcej danych do porównania.
