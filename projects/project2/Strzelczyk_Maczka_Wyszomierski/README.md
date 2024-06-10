@@ -16,6 +16,8 @@ On this page, you can see in which districts most of the trips started, or ended
 
 Data comes from: [Chicago Data Portal](https://data.cityofchicago.org/Transportation/Taxi-Trips-2013-2023-/wrvz-psew/about_data)
 
+Summary video is also here: [Taxis in Chicago](https://youtu.be/IeitgDwixck)
+
 ## App appearance:
 
 ![App appearance](./images/Information_page.png)
