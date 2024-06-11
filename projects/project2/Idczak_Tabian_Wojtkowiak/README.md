@@ -26,7 +26,7 @@ Najpopularniejsze Międzynarodowe Destynacje:
 U dołu strony znajduje się tabela pokazująca 50 najpopularniejszych międzynarodowych lotnisk w wybranym roku pod względem liczby pasażerów podróżujących z i do Londynu. Wybrano rok 2015.
 Obok tabeli znajduje się mapa z zaznaczonymi 20 najpopularniejszymi trasami lotniczymi z tabeli, gdzie grubość linii wskazuje na popularność danej trasy.
 
-![app1](app-screen-1.png)
+![app1](zdjecia/app-screen-1.png)
 
 ### Zakładka Means of transport
 Zakładka Means of transport zawiera dwie sekcje. W pierwszej z nich możemy porównać popularność różnych 
@@ -35,9 +35,9 @@ Zakładka Means of transport zawiera dwie sekcje. W pierwszej z nich możemy por
 Druga część zawiera wykres, ktory przedstawia najstacje (metra, kolejki naziemnej, koleji DLR i koleji TfL), 
 które obsłużyły największą ilość pasażerów. Dodatkowo możemy wybrać ich ilość oraz sprawdzić ich lokalizację na mapie. 
 
-![app2](app-screen-2.png)
+![app2](zdjecia/app-screen-2.png)
 
 ### Zakładka Various statistics
 Zakładka Various statistics zawiera trzy wykresy, każdy dotyczy innego londyńskiego środka transportu. Pierwszy z nich ukazuje ilość przejazdów autobusami miejskimi w różnych strefach. Kolejny wykres przedstawia ilość wypożyczonych rowerów w kolejnych miesiącach dla wybranych przez użytkownika lat. Ostatnia grafika demonstruje zależność pomiędzy poszczególnymi stacjami metra a panującymi w nich temperaturami.
 
-![app3](app-screen-3.png)
+![app3](zdjecia/app-screen-3.png)
