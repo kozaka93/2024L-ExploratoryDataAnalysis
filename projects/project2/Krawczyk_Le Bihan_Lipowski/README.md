@@ -13,7 +13,7 @@ odwołań kursów pociągów.
 
 ## Poniżej znajdują się zrzuty ekranu naszego raportu
 
-![ScreenShot]([screenshot.jpg](https://github.com/szef666/2024L-ExploratoryDataAnalysis/blob/main/projects/project2/Krawczyk_Le%20Bihan_Lipowski/images/IMAGE1.PNG))
+![](./images/IMAGE1.PNG)
 https://github.com/szef666/2024L-ExploratoryDataAnalysis/blob/main/projects/project2/Krawczyk_Le%20Bihan_Lipowski/images/IMAGE2.PNG
 https://github.com/szef666/2024L-ExploratoryDataAnalysis/blob/main/projects/project2/Krawczyk_Le%20Bihan_Lipowski/images/IMAGE3.PNG
 https://github.com/szef666/2024L-ExploratoryDataAnalysis/blob/main/projects/project2/Krawczyk_Le%20Bihan_Lipowski/images/IMAGE4.PNG
