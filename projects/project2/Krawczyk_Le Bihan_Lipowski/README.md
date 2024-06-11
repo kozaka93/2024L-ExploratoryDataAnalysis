@@ -13,5 +13,5 @@ odwołań kursów pociągów.
 
 ## Poniżej znajdują się zrzuty ekranu naszego raportu
 
-![](IMAGE1.png) ![](IMAGE2.png) ![](IMAGE3.png) ![](IMAGE4.png)
-![](IMAGE5.png) ![](IMAGE6.png) ![](IMAGE7.png) ![](IMAGE8.png)
+![](./images/IMAGE1.png) ![](./images/IMAGE2.png) ![](./images/IMAGE3.png) ![](./images/IMAGE4.png)
+![](./images/IMAGE5.png) ![](./images/IMAGE6.png) ![](./images/IMAGE7.png) ![](./images/IMAGE8.png)
