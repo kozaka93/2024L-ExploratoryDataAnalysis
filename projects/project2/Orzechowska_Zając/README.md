@@ -1,15 +1,3 @@
----
-title: "README"
-output: html_document
-date: "2024-06-11"
----
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-## README
-
 Projekt opierał się na analizie prefernecji nowojorczyków przy podróżach rowerem.
 
 Dane zostały pobrane ze strony:
