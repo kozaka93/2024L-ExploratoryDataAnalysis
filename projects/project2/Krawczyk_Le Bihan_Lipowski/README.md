@@ -14,10 +14,10 @@ odwołań kursów pociągów.
 ## Poniżej znajdują się zrzuty ekranu naszego raportu
 
 ![](./images/IMAGE1.PNG)
-https://github.com/szef666/2024L-ExploratoryDataAnalysis/blob/main/projects/project2/Krawczyk_Le%20Bihan_Lipowski/images/IMAGE2.PNG
-https://github.com/szef666/2024L-ExploratoryDataAnalysis/blob/main/projects/project2/Krawczyk_Le%20Bihan_Lipowski/images/IMAGE3.PNG
-https://github.com/szef666/2024L-ExploratoryDataAnalysis/blob/main/projects/project2/Krawczyk_Le%20Bihan_Lipowski/images/IMAGE4.PNG
-https://github.com/szef666/2024L-ExploratoryDataAnalysis/blob/main/projects/project2/Krawczyk_Le%20Bihan_Lipowski/images/IMAGE5.PNG
-https://github.com/szef666/2024L-ExploratoryDataAnalysis/blob/main/projects/project2/Krawczyk_Le%20Bihan_Lipowski/images/IMAGE6.PNG
-https://github.com/szef666/2024L-ExploratoryDataAnalysis/blob/main/projects/project2/Krawczyk_Le%20Bihan_Lipowski/images/IMAGE7.PNG
-https://github.com/szef666/2024L-ExploratoryDataAnalysis/blob/main/projects/project2/Krawczyk_Le%20Bihan_Lipowski/images/IMAGE8.PNG
+![](./images/IMAGE2.PNG)
+![](./images/IMAGE3.PNG)
+![](./images/IMAGE4.PNG)
+![](./images/IMAGE5.PNG)
+![](./images/IMAGE6.PNG)
+![](./images/IMAGE7.PNG)
+![](./images/IMAGE8.PNG)
