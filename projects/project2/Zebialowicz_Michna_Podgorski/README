@@ -1,0 +1,20 @@
+# Warsaw Public Transport
+
+Authors: Alicja Żebiałowicz, Jakub Michna, Mateusz Podgórski
+
+## Project Description
+DESCRIPTION
+
+The "Warsaw Public Transport Analysis" project analyzes public transportation in Warsaw. 
+Through various interactive visualizations, we present data on aspects such as waiting times at stops and the number of lines. 
+Users can select different types of transport and line categories to view detailed data.
+
+
+Data comes from: [MKuran](https://mkuran.pl/)
+
+## App appearance:
+
+![App appearance](./images/nazwa_1.png)
+![App appearance](./images/nazwa_2.png)
+![App appearance](./images/nazwa_3.png)
+![App appearance](./images/nazwa_4.png)
