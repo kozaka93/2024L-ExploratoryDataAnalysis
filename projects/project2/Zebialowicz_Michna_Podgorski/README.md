@@ -14,7 +14,7 @@ Data comes from: [MKuran](https://mkuran.pl/)
 
 ## App appearance:
 
-![](./Zdjecia/bez_nazwy_1.png)
-![](./Zdjecia/bez_nazwy_2.png)
-![](./Zdjecia/bez_nazwy_3.png)
-![](./Zdjecia/bez_nazwy_4.png)
+![](./Zdjecia/Bez nazwy_1.png)
+![](./Zdjecia/Bez nazwy_2.png)
+![](./Zdjecia/Bez nazwyy_3.png)
+![](./Zdjecia/Bez nazwy_4.png)
