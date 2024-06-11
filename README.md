@@ -146,7 +146,7 @@ Wstęp do eksploracji danych składa się z:
     <td>15</td>
     <td>12-06</td>
     <td>Oddanie Projektu 2</td>
-    <td>Python: Przygotowanie EDA przed modelowaniem</td>
+    <td><a href="https://github.com/kozaka93/2024L-ExploratoryDataAnalysis/tree/main/labs/lab15">Python: Przygotowanie EDA przed modelowaniem</a></td>
     <td>Oddanie Projektu 2</td>
     <td>P2 (15p)</td>
   </tr>
