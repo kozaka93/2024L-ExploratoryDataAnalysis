@@ -1,0 +1,20 @@
+---
+title: "Projekt2"
+output: html_document
+date: "2024-06-11"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Temat projektu
+
+W ramach projektu skupiłyśmy się na analizie prefernecji nowojorczyków przy odbywaniu podróży rowerem.
+
+Dane pobrałyśmy ze strony <https://citibikenyc.com/system-data> i wybrałyśmy do analizy rok 2020
+
+## Obszary analizy
+
+1.  Preferencje użytkowników: rozkłady czasów podróży w zależności od różnych czynników oraz analiza liczby wypożyczeń
+2.  Prefenrecje wyborów stacji początkowych i końcowych
