@@ -35,7 +35,7 @@ dane_autobusy <- dane_autobusy %>%
     )
   )
 
-tygodniowe <- autobusy_data %>%
+tygodniowe <- dane_autobusy %>%
   mutate(Week = cut(Data, breaks = "week", start.on.monday = TRUE)) %>%
   group_by(Week) %>%
   summarise(Total_Boardings = sum(`Liczba osób które wsiadły`)) %>%
